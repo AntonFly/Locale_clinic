@@ -14,13 +14,12 @@ public class SimpleClientRegistration {
 
     @NotNull
     @NotEmpty
-    private SimplePersonRegistration personData;
+    private SimplePersonRegistration person;
 
     @NotNull
     @NotEmpty
     private String email;
-    @NotNull
-    @NotEmpty
+
     private String comment;
 
 }

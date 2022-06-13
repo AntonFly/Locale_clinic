@@ -2,7 +2,7 @@
 
 /create_user POST
 {
-	"personData":
+	"person":
 	{
 		"passport" : 1231231,
 		"name" : "asd",
@@ -30,7 +30,7 @@
 /create_client POST
 
 {
-    "personData":
+    "person":
     {
         "passport" : 425234524,
         "name" : "asd",

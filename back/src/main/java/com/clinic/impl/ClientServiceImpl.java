@@ -1,19 +1,14 @@
 package com.clinic.impl;
 
 import com.clinic.dto.SimpleClientRegistration;
-import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.entities.Client;
 import com.clinic.entities.Person;
-import com.clinic.entities.User;
 import com.clinic.exceptions.ClientConflictException;
 import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.repositories.ClientRepository;
-import com.clinic.repositories.RoleRepository;
-import com.clinic.repositories.UserRepository;
 import com.clinic.services.ClientService;
 import com.clinic.services.PersonService;
-import com.clinic.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +32,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client save(SimpleClientRegistration clientData)
             throws PersonConflictException, ClientConflictException {
-        Person person = personService.save(clientData.getPersonData());
+        Person person = personService.save(clientData.getPerson());
 
         Client client = new Client();
         client.setPerson(person);

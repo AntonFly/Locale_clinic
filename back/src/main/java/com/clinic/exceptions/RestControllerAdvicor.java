@@ -20,7 +20,7 @@ public class RestControllerAdvicor {
                     ModSpecConflictException.class
             })
     @ResponseStatus(CONFLICT)
-    public ErrorResponse handleConfictException(Exception exception) {
+    public ErrorResponse handleConflictException(Exception exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(CONFLICT)

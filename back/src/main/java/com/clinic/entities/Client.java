@@ -29,7 +29,6 @@ public class Client {
     @NotEmpty
     private String email;
 
-    @NotEmpty
     private String comment;
 
     @JsonIgnore
