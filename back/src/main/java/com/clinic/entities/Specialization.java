@@ -27,4 +27,8 @@ public class Specialization {
     @OneToMany(mappedBy = "specialization")
     private Set<Order> orders;
 
+    @JsonBackReference
+    @OneToMany(mappedBy = "specialization")
+    private Set<Scenario> scenarios;
+
 }
