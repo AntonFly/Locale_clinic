@@ -16,6 +16,13 @@ export class ClientsComponent implements OnInit {
   AdvancedDialogRef: MatDialogRef<AdvancedSearchDialogComponent>;
   clientItems: Client[];
 
+  // constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private dialog: MatDialog) {
+  //   http.get<QueueItem[]>(baseUrl + 'download').subscribe(result => {
+  //     this.queueItems = result;
+  //     console.log(this.queueItems);      
+  //   }, error => console.error(error));
+  // }
+
   constructor(private dialog: MatDialog, private clientService: ClientsService) { }
 
   ngOnInit() {
