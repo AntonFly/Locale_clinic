@@ -1,12 +1,21 @@
 package com.clinic.entities;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Table(name = "person")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class Person {
 
     @Id
@@ -19,46 +28,25 @@ public class Person {
     @Temporal(TemporalType.DATE)
     Date dateOfBirth;
 
-    public Person() {
-    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
 
-    public long getId() {
-        return id;
-    }
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Person)) {
+            return false;
+        }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+        // typecast o to Complex so that we can compare data members
+        Person c = (Person) o;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+        return id == c.id &&
+                Objects.equals(name, c.name) &&
+                Objects.equals(surname, c.surname) &&
+                Objects.equals(patronymic, c.patronymic) &&
+                dateOfBirth == c.dateOfBirth;
     }
 }

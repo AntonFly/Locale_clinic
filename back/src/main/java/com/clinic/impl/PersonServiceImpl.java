@@ -40,7 +40,7 @@ public class PersonServiceImpl implements PersonService {
 
         Optional<Person> optionalPerson = personRepository.getPersonById(person.getId());
         if (optionalPerson.isPresent())
-            if (optionalPerson.get().equals(person))
+            if (!optionalPerson.get().equals(person))
                 throw new PersonConflictException(
                         "There is already a person with this passport: " +
                                 person.getId() +
