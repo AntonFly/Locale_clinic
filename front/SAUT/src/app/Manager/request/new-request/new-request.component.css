@@ -1,0 +1,18 @@
+.formContainer{
+    padding-top: 20px;
+}
+
+.Requestform{
+    margin: 0 auto;
+    min-width: 150px;
+    max-width: 520px;
+    width: 100%;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+
+  .RequestButtons {
+      margin: 5px;
+  }

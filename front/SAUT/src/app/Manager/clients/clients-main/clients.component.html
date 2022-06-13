@@ -1,0 +1,56 @@
+<h1 id="tableLabel">Клиенты</h1>
+<div class="clientsHead">
+  <div>
+    <button mat-raised-button class="client-btn" color="primary" (click)="openClientDialog()">  
+      Создать клиента
+    </button>
+  </div>
+  
+  <div class="right-hand">
+    <div class="search">
+      <mat-form-field class="no-wrapper" >
+        <input matInput placeholder="Поиск...">      
+      </mat-form-field> 
+      <div class="div-search-icon">
+        <mat-icon class="search-icon" [inline]="true">search</mat-icon>        
+      </div>
+    </div>
+
+    <div>
+      <button mat-raised-button [matMenuTriggerFor]="menu">Еще</button>
+
+      <mat-menu #menu="matMenu">
+        <button (click)="openAdvancedDialog()" mat-menu-item>Расширенный поиск</button>        
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="quit()">ыы 313</button>
+      </mat-menu>
+      
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!clientItems" class="container">
+  Загрузка....
+</div>
+
+
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="clientItems">
+  <thead>
+    <tr>
+      <th>№</th>
+      <th>Ф.И.О.</th>
+      <th>Дата рождения</th>
+      <th>Email</th>      
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let queueItem of clientItems">
+      <td>{{ queueItem.Id }}</td>
+      <td>{{ queueItem.FIO }}</td>
+      <!--<td>{{ queueItem.endTime }}</td>-->
+      <td>{{ queueItem.Date | date:'shortDate'}}</td>
+      <td>{{ queueItem.Email }}</td>
+    </tr>
+  </tbody>
+</table>

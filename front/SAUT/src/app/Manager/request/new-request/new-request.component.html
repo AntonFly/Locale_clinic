@@ -1,0 +1,57 @@
+<div class="formContainer">
+<form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">
+  <h3>Введите идентификатор клиента</h3>
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Идентификатор клиента" formControlName="Id" required>
+    <mat-error *ngFor="let validation of validation_messages.Id">
+      <mat-error class="error-message" *ngIf="formControlId.hasError(validation.type) && (formControlId.dirty || formControlId.touched)">{{validation.message}}</mat-error>
+    </mat-error>
+  </mat-form-field>
+  
+  <h3>Выберете специализацию</h3>
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Специализация...</mat-label>
+      <input type="text"
+          placeholder="Выберете одну"
+          aria-label="Специализация"
+          matInput
+          formControlName="Specialization"
+          [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptionsSpec | async" [value]="option">
+          {{option}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngFor="let validation of validation_messages.Specialization">
+      <mat-error class="error-message" *ngIf="formControlSpec.hasError(validation.type) && (formControlSpec.dirty || formControlSpec.touched)">{{validation.message}}</mat-error>
+    </mat-error>
+  </mat-form-field>
+
+  <h3>Выберете модификацию</h3>
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Модификацию...</mat-label>
+      <input type="text"
+          placeholder="Выберете одну"
+          aria-label="Модификация"
+          matInput
+          formControlName="Modification">
+          <!-- [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptionsSpec | async" [value]="option">
+          {{option}}
+      </mat-option>
+    </mat-autocomplete> -->
+    <mat-error *ngFor="let validation of validation_messages.Modification">
+      <mat-error class="error-message" *ngIf="formControlMod.hasError(validation.type) && (formControlMod.dirty || formControlMod.touched)">{{validation.message}}</mat-error>
+    </mat-error>
+  </mat-form-field>
+
+    <div>
+      <button class="RequestButtons" mat-raised-button color="primary" type="submit" [disabled]="!RequestForm.valid">Создать заявку</button>      
+      <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить стоимость</button>
+      <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить риски</button>
+    <!-- <button mat-button >Отмена</button> -->
+    </div>
+  </form>
+  
+</div>

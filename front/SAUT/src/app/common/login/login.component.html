@@ -1,0 +1,23 @@
+<h1 id="tableLabel">Вход</h1>
+<mat-divider></mat-divider>
+<form [formGroup]="fileDetailsForm" (ngSubmit)="onSubmitFileDetails(fileDetailsForm.value)">
+
+<mat-form-field class="full-width">
+    <mat-select placeholder="Роль" formControlName="eventType">
+      <mat-option *ngFor="let eventType of eventTypes" [value]="eventType">
+        {{ eventType }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngFor="let validation of validation_messages.eventType">
+      <mat-error class="error-message" *ngIf="formControlEvent.hasError(validation.type) && (formControlEvent.dirty || formControlEvent.touched)">{{validation.message}}</mat-error>
+    </mat-error>
+  </mat-form-field>
+
+  <button class="submit-btn" color="primary" mat-raised-button type="submit" [disabled]="!fileDetailsForm.valid">
+    Залогиниться
+  </button>
+  
+</form>
+<button class="submit-btn" color="red" mat-raised-button (click)="logout($event)">
+    Разлогиниться 
+  </button>

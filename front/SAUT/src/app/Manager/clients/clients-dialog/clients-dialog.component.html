@@ -1,0 +1,60 @@
+<div mat-dialog-title class="dialog-header">
+  <div><h3>Создание клиента</h3></div>
+  <div mat-dialog-close style="float: right;"><mat-icon [inline]="true">close</mat-icon></div>
+  <mat-divider></mat-divider>
+</div>
+
+<!-- 
+FIO
+Email
+BirthDate
+Pasport
+Address
+Note -->
+<form [formGroup]="ClientForm" (ngSubmit)="onSubmitClient(ClientForm.value)">
+  <div mat-dialog-content>
+    
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Ф.И.О." formControlName="FIO" required>
+      <mat-error *ngFor="let validation of validation_messages.FIO">
+        <mat-error class="error-message" *ngIf="formControlFIO.hasError(validation.type) && (formControlFIO.dirty || formControlFIO.touched)">{{validation.message}}</mat-error>
+      </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Email" formControlName="Email" required>
+      <mat-error *ngFor="let validation of validation_messages.Email">
+        <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [matDatepicker]="picker" placeholder="Дата рождения" formControlName="Date" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngFor="let validation of validation_messages.date">
+        <mat-error class="error-message" *ngIf="formControlDate.hasError(validation.type) && (formControlDate.dirty || formControlDate.touched)">{{validation.message}}</mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Паспортные данные" formControlName="Passport" required>
+      <mat-error *ngFor="let validation of validation_messages.Passport">
+        <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput formControlName="Note" #note maxlength="256" placeholder="Примечания">
+      <mat-hint align="start"><strong>Поле для дополнительной информации</strong> </mat-hint>
+      <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
+    </mat-form-field>
+
+  </div>
+  
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!ClientForm.valid" mat-dialog-close>Создать</button>
+    <button mat-button mat-dialog-close>Отмена</button>
+  </div>
+
+</form>
