@@ -27,14 +27,14 @@ public class Order {
 
     @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "id_spec")
+    @JoinColumn(name = "spec")
     private Specialization specialization;
 
     @ManyToMany
     @JoinTable(
             name = "orders_modifications",
             joinColumns = @JoinColumn(name = "id_order"),
-            inverseJoinColumns = @JoinColumn(name = "id_mod"))
+            inverseJoinColumns = @JoinColumn(name = "mod"))
     Set<Modification> modifications;
 
 }

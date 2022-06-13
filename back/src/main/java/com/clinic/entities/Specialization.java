@@ -7,14 +7,9 @@ import net.minidev.json.annotate.JsonIgnore;
 import javax.persistence.*;
 import java.util.Set;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "modifications"})
 @Table(name = "specializations")
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -22,8 +17,6 @@ import java.util.Set;
 public class Specialization {
 
     @Id
-    private Long id;
-
     private String name;
 
     @JsonIgnore

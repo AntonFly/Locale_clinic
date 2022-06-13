@@ -9,10 +9,6 @@ import net.minidev.json.annotate.JsonIgnore;
 import javax.persistence.*;
 import java.util.Set;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "specializations", "orders"})
 @Table(name = "modifications")
 @Entity
@@ -23,8 +19,6 @@ import java.util.Set;
 public class Modification {
 
     @Id
-    Long id;
-
     private String name;
 
     private int price;
@@ -34,8 +28,8 @@ public class Modification {
     @ManyToMany
     @JoinTable(
             name = "modification_specialization",
-            joinColumns = @JoinColumn(name = "id_mod"),
-            inverseJoinColumns = @JoinColumn(name = "id_spec"))
+            joinColumns = @JoinColumn(name = "mod"),
+            inverseJoinColumns = @JoinColumn(name = "spec"))
     Set<Specialization> specializations;
 
     @JsonIgnore
