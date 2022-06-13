@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,5 +23,5 @@ public class SimpleOrderRegistration {
 
     @NotEmpty
     @NotNull
-    private String modName;
+    private List<String> modNames;
 }

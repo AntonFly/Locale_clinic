@@ -99,7 +99,8 @@ public class ManagerController {
         order.setSpecialization(specialization);
 
         Set<Modification> modifications = new HashSet<>();
-        modifications.add(modificationService.getModificationByName(orderData.getModName()));
+        for (String modName : orderData.getModNames())
+            modifications.add(modificationService.getModificationByName(modName));
 
         List<Modification> allowedModifications = modificationService.getAllModificationsBySpec(new SimpleSpecializationRegistration(specialization.getName()));
         if (!new HashSet<>(allowedModifications).containsAll(modifications))
