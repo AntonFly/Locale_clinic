@@ -1,0 +1,73 @@
+/administrator
+
+/create_user POST
+{
+	"personData":
+	{
+		"passport" : 1231231,
+		"name" : "asd",
+		"surname" : "dsa",
+		"patronymic" : "sad",
+		"dateOfBirth" : "1999-02-19"
+	},
+	"role" : "ROLE_MEDIC",
+	"email" : "ads",
+	"password" : "das"
+}
+
+/manager
+
+/get_specs GET
+
+/get_mods GET
+
+/get_clients GET
+
+/get_client_by_passport GET
+
+123
+
+/create_client POST
+
+{
+    "personData":
+    {
+        "passport" : 425234524,
+        "name" : "asd",
+        "surname" : "dsa",
+        "patronymic" : "sad",
+        "dateOfBirth" : "1999-02-19"
+    },
+    "email" : "ads",
+    "comment": "424"
+}
+
+/get_mods_by_spec GET
+
+{
+    "name": "Мастер-пилот"
+}
+
+/get_orders GET
+
+/create_order POST
+
+{
+    "passport": 912830123,
+    "specName" : "Мастер-пилот",
+    "modName": "Дальномер в глазах"
+}
+
+
+
+/medic
+
+/get_orders_by_client_id GET
+
+123
+
+/get_scenarios_by_spec
+
+{
+    "name": "Мастер-пилот"
+}
