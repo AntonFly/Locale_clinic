@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -6,17 +6,20 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class AdminService {
-  constructor(private http: HttpClient, private router: Router) { }
+  baseUrl: string;
+  constructor(private http: HttpClient, private router: Router, @Inject('BASE_URL') baseUrl: string) { this.baseUrl = baseUrl; }
 
-  AddUser(user: any) {
-    console.log('Adding new user: '+ JSON.stringify(user));
+  AddUser(user: any) {    
+    
+    let personData = {"passport":user.passport, "name":user.name, "surname":user.surname, "patronymic":user.patronymic, "dateOfBirth": user.dateOfBirth };
+    let body = {"personData":personData, "role":user.role, "email":user.email, "password":user.password};
     
     let headers = new HttpHeaders({
         'Content-Type': 'application/json'});
       let options = { headers: headers };
     
   
-      return this.http.post(`http://192.168.43.162:7313/admin/create_user`,  JSON.stringify(user), options);
+      return this.http.post<any>(this.baseUrl + `admin/create_user`,  JSON.stringify(body), options);
     // let headers = new HttpHeaders({
     // 'Content-Type': 'application/x-www-form-urlencoded'});
     // let options = { headers: headers };

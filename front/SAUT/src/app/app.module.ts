@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { environment } from '@env/environment';
+
 
 /* MATERIAL */
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -31,7 +33,6 @@ import { LoginComponent } from './common/login/login.component'
 import {ManagerModule} from './Manager/manager.module';
 import {AdministratorModule} from './Administrator/administrator.module';
 import {MedicsModule} from './Medics/medics.module';
-
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import {MedicsModule} from './Medics/medics.module';
   ],
   providers: [
     AuthenticationService,
-    { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
+    { provide: 'BASE_URL', useValue: environment.apiRoot }
   ],
   bootstrap: [AppComponent]
 })

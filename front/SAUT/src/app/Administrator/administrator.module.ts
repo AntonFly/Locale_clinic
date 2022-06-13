@@ -15,13 +15,12 @@ import {MatDividerModule} from '@angular/material/divider';
 import {NewUserComponent} from './users/new-user/new-user.component';
 import { PassRecoveryComponent } from './users/pass-recovery/pass-recovery.component'
 import { AdminService } from './_services/admin.service'
+import { DatePipe } from '@angular/common';
 
   
 const routes: Routes = [
     {   path: 'addUser',   component: NewUserComponent   },
-    {   path: 'recoverPass',   component: PassRecoveryComponent },
-    // {   path: 'requests',   component: RequestComponent   },
-    // {   path: 'services',   component: ServicesComponent   },
+    {   path: 'recoverPass',   component: PassRecoveryComponent },    
 ];
  
 @NgModule({
@@ -44,7 +43,8 @@ const routes: Routes = [
   ],
   providers: [
     AdminService,
-    { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
+    DatePipe    
   ]
 //   entryComponents: [ClientsDialogComponent]
 })

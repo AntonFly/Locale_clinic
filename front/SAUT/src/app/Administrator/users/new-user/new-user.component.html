@@ -4,6 +4,22 @@
     <div mat-dialog-content>
       
       <mat-form-field class="full-width">
+        <input matInput placeholder="Паcпорт" formControlName="passport" required>
+        <mat-error *ngFor="let validation of validation_messages.Passport">
+          <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="picker" placeholder="Дата рождения" formControlName="dateOfBirth" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngFor="let validation of validation_messages.dateOfBirth">
+          <mat-error class="error-message" *ngIf="formControlDate.hasError(validation.type) && (formControlDate.dirty || formControlDate.touched)">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
         <input matInput placeholder="Почта" formControlName="email" required>
         <mat-error *ngFor="let validation of validation_messages.Email">
           <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
@@ -48,17 +64,14 @@
           <mat-error class="error-message" *ngIf="formControlPassword.hasError(validation.type) && (formControlPassword.dirty || formControlPassword.touched)">{{validation.message}}</mat-error>
         </mat-error>
       </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Паcпорт" formControlName="passport" required>
-        <mat-error *ngFor="let validation of validation_messages.Passport">
-          <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
-        </mat-error>
-      </mat-form-field>
   
     </div>
-    <div mat-dialog-actions>
+    <!-- mat-dialog-actions -->
+
+    <div>      
       <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>      
+      <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+      <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
     </div>
   
   </form>

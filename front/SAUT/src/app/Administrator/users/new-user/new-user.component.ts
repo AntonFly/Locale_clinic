@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import {AdminService} from '../../_services/admin.service'
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-new-user',
@@ -10,6 +11,8 @@ import {AdminService} from '../../_services/admin.service'
 export class NewUserComponent implements OnInit {
 
   UserForm: FormGroup;   
+  formMsg: string;
+  formError: boolean;
 
   RolesToBd ={
     "Администратор":"ROLE_ADMIN",
@@ -52,10 +55,17 @@ export class NewUserComponent implements OnInit {
     ],
     'Passport': [
       { type: 'required', message: 'Требуется паспорт' },      
-    ]
+    ],
+    'dateOfBirth': [
+      { type: 'required', message: 'Пожалуйста, укажите дату рождения' },
+    ]    
   };
 
-  constructor(private fb: FormBuilder, private adminService:AdminService) { }
+  myDatepipe: any;
+
+  constructor(private fb: FormBuilder, private adminService:AdminService, datepipe: DatePipe) { 
+    this.myDatepipe = datepipe;
+  }
 
   ngOnInit() {
     this.createForms();
@@ -64,6 +74,10 @@ export class NewUserComponent implements OnInit {
     /*FORM's GETTERS*/
     get formControlEmail() {
       return this.UserForm.get('email');
+    }
+
+    get formControlDate() {
+      return this.UserForm.get('dateOfBirth');
     }
   
     get formControlName() {
@@ -87,7 +101,7 @@ export class NewUserComponent implements OnInit {
     }
 
     get formControlPassport() {
-      return this.UserForm.get('password');
+      return this.UserForm.get('passport');
     }
   /*FORM's GETTERS*/
   
@@ -103,7 +117,8 @@ export class NewUserComponent implements OnInit {
         patronymic : ['', Validators.required],
         role : new FormControl(this.Roles[0], Validators.required),
         password : ['', Validators.required],
-        passport : ['', Validators.required]  
+        passport : ['', Validators.required],
+        dateOfBirth: ['', Validators.required],
       })
     }
   
@@ -111,19 +126,55 @@ export class NewUserComponent implements OnInit {
   
     onSubmitClient(event: any) {      
       event.role = this.RolesToBd[event.role];
+      event.dateOfBirth = this.myDatepipe.transform(this.UserForm.value.dateOfBirth, 'yyyy-MM-dd');
       console.log(event);
+
       this.adminService.AddUser(event).subscribe(
         (data: any) => {
           console.log(JSON.stringify(data));
-          // this.delete.emit(this.fileObj);
-        },
-        error => console.log(error)
-      );
+          
+          this.formMsg = "Пользователь успешно добавлен";
+          this.formError = false;
 
-      this.UserForm.reset();
-      this.UserForm.clearValidators();
-      
-      
+          setTimeout( () =>
+            this.formMsg = ""
+          , 5000);
+                      
+          this.clearForm(this.UserForm);          
+        },
+        
+        error => {                    
+          this.formError = true;
+          if(error.error.status === "CONFLICT")
+            this.formMsg = error.error.message;
+          else
+          this.formMsg = "Не удалось добавить пользователя";
+
+          setTimeout(() => {
+            this.formMsg = "";
+            this.formError = false;
+          }, 5000);
+
+            
+        }
+
+      );
+            
+    }
+
+    clearForm(f:any){    
+      Object.keys(f.controls).forEach(key => {
+        f.controls[key].reset();
+        f.controls[key].clearValidators();
+        f.controls[key].markAsPristine();
+        f.controls[key].markAsUntouched();
+        f.controls[key].updateValueAndValidity();                    
+      })  
+      f.reset();
+      f.clearValidators();
+      f.markAsPristine();
+      f.markAsUntouched();
+      f.updateValueAndValidity();                  
     }
 
 }
