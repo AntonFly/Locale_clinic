@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ModificationServiceImpl implements ModificationService {
@@ -41,6 +42,18 @@ public class ModificationServiceImpl implements ModificationService {
     @Override
     public void delete(Modification modification) {
         modificationRepository.delete(modification);
+    }
+
+    @Override
+    public Modification getModificationByName(String name)
+            throws ModificationMissingException {
+        Optional<Modification> modification = modificationRepository.findByName(name);
+        if (modification.isPresent())
+            return modification.get();
+
+        throw new ModificationMissingException(
+                "There is no modification associated with name: " +
+                name);
     }
 
     @Override

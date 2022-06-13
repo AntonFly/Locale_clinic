@@ -20,6 +20,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String comment;
+
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "id_client")

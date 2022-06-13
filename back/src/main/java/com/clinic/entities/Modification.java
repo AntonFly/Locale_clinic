@@ -35,4 +35,10 @@ public class Modification {
     @JsonIgnore
     @ManyToMany(mappedBy = "modifications")
     Set<Order> orders;
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        return prime + (name == null ? 0 : name.hashCode());
+    }
 }

@@ -16,4 +16,6 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
+    List<Order> getAllOrdersByClientId(Long id);
+
 }

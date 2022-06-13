@@ -43,4 +43,8 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
+    @Override
+    public List<Order> getAllOrdersByClientId(Long id) {
+        return orderRepository.findAllByClient_Person_Id(id);
+    }
 }

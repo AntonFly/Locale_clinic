@@ -12,7 +12,13 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class RestControllerAdvicor {
 
-    @ExceptionHandler({ClientConflictException.class, UserConflictException.class, PersonConflictException.class})
+    @ExceptionHandler(
+            {
+                    ClientConflictException.class,
+                    UserConflictException.class,
+                    PersonConflictException.class,
+                    ModSpecConflictException.class
+            })
     @ResponseStatus(CONFLICT)
     public ErrorResponse handleConfictException(Exception exception) {
         return ErrorResponse.builder()
@@ -22,7 +28,12 @@ public class RestControllerAdvicor {
                 .build();
     }
 
-    @ExceptionHandler({SpecializationMissingException.class})
+    @ExceptionHandler(
+            {
+                    SpecializationMissingException.class,
+                    ModificationMissingException.class,
+                    ClientNotFoundException.class
+            })
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleMissingException(Exception exception) {
         return ErrorResponse.builder()

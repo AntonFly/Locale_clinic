@@ -17,6 +17,9 @@ public interface ModificationService {
     @Transactional
     void delete(Modification specialization);
 
+    Modification getModificationByName(String name)
+        throws ModificationMissingException;
+
     List<Modification> getAllModifications();
 
     List<Modification> getAllModificationsBySpec(SimpleSpecializationRegistration specializationData)

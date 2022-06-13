@@ -6,6 +6,7 @@ import com.clinic.entities.Client;
 import com.clinic.entities.Person;
 import com.clinic.entities.User;
 import com.clinic.exceptions.ClientConflictException;
+import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.repositories.ClientRepository;
 import com.clinic.repositories.RoleRepository;
@@ -60,6 +61,19 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.delete(user);
     }
 
+    @Override
+    public Client getClientByPassport(Long passport)
+            throws ClientNotFoundException
+    {
+        Optional<Client> client = clientRepository.findByPerson_Id(passport);
+        if (client.isPresent())
+            return client.get();
+
+        throw new ClientNotFoundException(
+                "There is no client associated with " +
+                passport +
+                " passport number");
+    }
     @Override
     public List<Client> getAllClients() {
         return clientRepository.findAll();

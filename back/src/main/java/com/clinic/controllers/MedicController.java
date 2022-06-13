@@ -2,7 +2,6 @@ package com.clinic.controllers;
 
 import com.clinic.dto.SimpleClientRegistration;
 import com.clinic.dto.SimpleOrderRegistration;
-import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Client;
 import com.clinic.entities.Modification;
@@ -13,16 +12,17 @@ import com.clinic.services.ClientService;
 import com.clinic.services.ModificationService;
 import com.clinic.services.OrderService;
 import com.clinic.services.SpecializationService;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController()
-@RequestMapping("/manager")
-public class ManagerController {
+@RequestMapping("/medic")
+public class MedicController {
 
     private SpecializationService specializationService;
     private ModificationService modificationService;
@@ -30,7 +30,7 @@ public class ManagerController {
     private OrderService orderService;
 
     @Autowired
-    public ManagerController(
+    public MedicController(
             SpecializationService ss,
             ModificationService ms,
             ClientService cs,
@@ -78,10 +78,10 @@ public class ManagerController {
         return modificationService.getAllModificationsBySpec(specializationData);
     }
 
-    @GetMapping("/get_orders")
-    public List<Order> getOrders()
+    @GetMapping("/get_orders_by_client_id")
+    public List<Order> getOrdersByClientId(@RequestBody Long passport)
     {
-        return orderService.getAllOrders();
+        return orderService.getAllOrdersByClientId(passport);
     }
 
     @PostMapping("/create_order")

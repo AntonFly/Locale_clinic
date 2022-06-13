@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface ModificationRepository extends JpaRepository<Modification, Long> {
 
-    Optional<Modification> findFirstByName(String name);
+    Optional<Modification> findByName(String name);
 
     List<Modification> findBySpecializations_Name(String name);
     List<Modification> findBySpecializations(Specialization specialization);

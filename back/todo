@@ -7,12 +7,12 @@
 
 +getAllSpecializations() - done
 +getModificationsBySpec() - done
-+addOrder(clientId, Speza, modification (хз есть ли там обьект который все это содержит))
++addOrder(clientId, Speza, modification (хз есть ли там обьект который все это содержит)) - done
 +getAllOrdersMb() - done
 
 ++++
-clientExists(passportID)
+clientExists(passportID) - done
 
 /medic
-+GetSpezsByClientId(int/str whatever clientId)
++GetSpezsByClientId(int/str whatever clientId) - done
 +BySpezIdGenerateScenario(int/str spezId)
