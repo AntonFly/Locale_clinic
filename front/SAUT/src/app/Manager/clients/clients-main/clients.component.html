@@ -29,16 +29,16 @@
   </div>
 </div>
 
-<div *ngIf="!clientItems" class="container">
-  Загрузка....
+<div *ngIf="!clientItems&&!clientError" class="container" style="padding-left: 50%;">
+  <mat-icon style="font-size: 60px;">access_time</mat-icon>
 </div>
 
 
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="clientItems">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="clientItems&&!clientError">
   <thead>
     <tr>
-      <th>№</th>
+      <th>Пасспорт</th>
       <th>Ф.И.О.</th>
       <th>Дата рождения</th>
       <th>Email</th>      
@@ -46,11 +46,17 @@
   </thead>
   <tbody>
     <tr *ngFor="let queueItem of clientItems">
-      <td>{{ queueItem.Id }}</td>
-      <td>{{ queueItem.FIO }}</td>
-      <!--<td>{{ queueItem.endTime }}</td>-->
-      <td>{{ queueItem.Date | date:'shortDate'}}</td>
-      <td>{{ queueItem.Email }}</td>
+      <td>{{ queueItem.person.id }}</td>
+      <td>{{ getFIO(queueItem.person) }}</td>      
+      <td>{{ queueItem.person.dateOfBirth | date:'shortDate'}}</td>
+      <td>{{ queueItem.email }}</td>
     </tr>
   </tbody>
 </table>
+
+<div class="errorBox" *ngIf="clientError"> 
+  <div class="errorItem" style="padding-left: 50%;">
+    <mat-icon style="font-size: 60px;">warning</mat-icon>
+  </div>
+  <div class="errorItem" style="font-size: 30px;padding-left: 25%;">Не удалось получить список пользователей</div>
+</div>

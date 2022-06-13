@@ -15,6 +15,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { DatePipe } from '@angular/common';
 
 
 import { ClientsComponent } from './clients/clients-main/clients.component';
@@ -24,7 +25,7 @@ import { ContractsComponent } from './contracts/contracts.component';
 import { ServicesComponent } from './services/services.component';
 
 import { ManagerGuard } from '../_guards/manager.guard'
-import { ClientsService, RequestService } from './_services/index';
+import { ClientsService, OrderService } from './_services/index';
 import { AdvancedSearchDialogComponent } from './clients/advanced-search-dialog/advanced-search-dialog.component';
 import { NewRequestComponent } from './request/new-request/new-request.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
@@ -68,8 +69,9 @@ const routes: Routes = [
     MatAutocompleteModule
   ],
   providers: [
+    DatePipe,
     ClientsService,
-    RequestService,
+    OrderService,
     ManagerGuard,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],

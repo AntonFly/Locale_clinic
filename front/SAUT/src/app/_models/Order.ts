@@ -1,7 +1,20 @@
+import {Client} from './Client'
+
 export interface Order {
-    clientId: number,
-    FIO: string,
-    SpezId:number,
-    SpezName: string;
-  }
-  
+  id: number,
+  comment:string,
+  client: Client,
+  specialization: Spec,
+  modifications: Mod[]
+}
+
+export interface Spec {
+name: string, 
+}
+
+export interface Mod {
+name: string,
+price: number,
+currency: string
+}
+

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Order } from 'src/app/_models/Order';
+import { OrderService } from '../../_services'
 
 @Component({
   selector: 'app-request-list',
@@ -7,9 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequestListComponent implements OnInit {
 
-  constructor() { }
+  orders: Order[];
+  clientError: boolean;
+
+  constructor(private orderService:OrderService) { this.updateOrders() }
 
   ngOnInit() {
+  }
+
+  updateOrders(){
+    this.orderService.getAllOrders().subscribe(
+      result =>{
+        this.orders = result;
+        this.clientError = false;
+        console.log(result);
+      },
+      error =>{
+        this.clientError = true;
+      });
+  }
+
+  getFIO(client:any){    
+    return client.surname+' '+client.name.substring(0,1)+'. '+client.patronymic.substring(0,1)+'.'
   }
 
 }

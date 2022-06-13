@@ -1,33 +1,38 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { Injectable, Inject } from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
-import { Client } from '../../_models/Client';
+import { Client, Person } from '../../_models/Client';
 import {map} from 'rxjs/operators';
 import {FnParam} from '@angular/compiler/src/output/output_ast';
 
 @Injectable()
-export class ClientsService {
-    zatychka: Client[];
-    curId = 0;
-    constructor(private http: HttpClient) {
-        this.zatychka = [{Id:this.curId++,FIO:"Вася петькин",Date:"12.12.1999",Email:"me@nowhere.wow", Note:"Crazy dude", Password:"PSWD313"},
-        {Id:this.curId++,FIO:"Петя Васькин",Date:"12.10.1990",Email:"хм@yandex.lmao", Note:"Even crazierCrazy dude", Password:"PSWD313"}]
+export class ClientsService {    
+    baseUrl: string;
+
+    constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { 
+        this.baseUrl = baseUrl;         
      }
 
     getAll() {
-        //return this.http.get<Client[]>(`/users`);
-        return this.zatychka
+        return this.http.get<Client[]>(this.baseUrl+"manager/get_clients");        
     }
 
-    createClient(client: Client) {
-        // let headers = new HttpHeaders({
-        //   'Content-Type': 'application/x-www-form-urlencoded'});
-        // let options = { headers: headers };
-        // var body = "name=" + user.name + "&surname=" + user.surName + "&login=" + user.login + "&password=" + user.password;
+    createClient(client: any) {
+        let personData = {"passport":client.passport, "name":client.name, "surname":client.surname, "patronymic":client.patronymic, "dateOfBirth": client.dateOfBirth };
+        let body = {"person":personData, "email":client.email, "comment":client.comment};
     
-        var tmp = client;
-        tmp.Id = this.curId++;
-        // return this.http.post(`http://localhost:8080/MultHubnew_war_exploded/resources/user/signUp`,  body, options);
-        this.zatychka.push(client);
-      }
+        let headers = new HttpHeaders({
+        'Content-Type': 'application/json'});
+        let options = { headers: headers };
+        
+        console.log(JSON.stringify(body));
+        return this.http.post<any>(this.baseUrl + `manager/create_client`,  JSON.stringify(body), options);            
+    }
+
+    getClient(pass: number) {
+        // let params = new HttpParams();
+        // params.append("",pass.toString());
+        // return this.http.get<Client>(this.baseUrl+"manager/get_client_by_passport" + pass);        
+        return {"id":2,"email":"TEST@TEST.com","comment":"comment","person":{"id":123,"name":"divan","surname":"sur","patronymic":"patr","dateOfBirth":"1903-04-13"}};
+    }
 }

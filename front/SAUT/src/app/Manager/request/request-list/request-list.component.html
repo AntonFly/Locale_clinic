@@ -1,1 +1,31 @@
-<p>request-list works!</p>
+<div *ngIf="!orders&&!clientError" class="container" style="padding-left: 50%;">
+    <mat-icon style="font-size: 60px;">access_time</mat-icon>
+  </div>
+  
+  
+  
+  <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="orders&&!clientError">
+    <thead>
+      <tr>
+        <th>Пасспорт</th>
+        <th>Ф.И.О.</th>
+        <th>Специализация</th>
+        <th>Комментарий</th>      
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let queueItem of orders">
+        <td>{{ queueItem.client.person.id }}</td>
+        <td>{{ getFIO(queueItem.client.person) }}</td>      
+        <td>{{ queueItem.specialization.name}}</td>
+        <td>{{ queueItem.comment }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="errorBox" *ngIf="clientError"> 
+    <div class="errorItem" style="padding-left: 50%;">
+      <mat-icon style="font-size: 60px;">warning</mat-icon>
+    </div>
+    <div class="errorItem" style="font-size: 30px;padding-left: 25%;">Не удалось получить список пользователей</div>
+  </div>

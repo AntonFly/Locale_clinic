@@ -1,9 +1,14 @@
 export interface Client {
-    Id: number,
-    FIO: string;
-    Email: string;
-    Note: string;
-    Password: string;
-    Date: string
-  }
+  person: Person,  
+  email: string;
+  comment: string;  
+}
+
+export interface Person {
+  id: number,
+  name: string,
+  surname: string,
+  patronymic: string,
+  dateOfBirth: string
+}
   

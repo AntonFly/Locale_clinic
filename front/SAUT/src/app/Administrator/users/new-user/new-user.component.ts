@@ -61,7 +61,7 @@ export class NewUserComponent implements OnInit {
     ]    
   };
 
-  myDatepipe: any;
+  myDatepipe: DatePipe;
 
   constructor(private fb: FormBuilder, private adminService:AdminService, datepipe: DatePipe) { 
     this.myDatepipe = datepipe;
@@ -153,9 +153,7 @@ export class NewUserComponent implements OnInit {
           setTimeout(() => {
             this.formMsg = "";
             this.formError = false;
-          }, 5000);
-
-            
+          }, 5000);            
         }
 
       );

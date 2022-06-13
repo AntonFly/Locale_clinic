@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {RequestService } from '../../_services/request.service'
+import {OrderService } from '../../_services/orders.service'
 import {map, startWith} from 'rxjs/operators';
 
 @Component({
@@ -16,7 +16,7 @@ export class NewRequestComponent implements OnInit {
   optionsSpec: string[];
   filteredOptionsSpec: Observable<string[]>;
 
-  constructor( private requestService: RequestService,  private fb: FormBuilder) { }
+  constructor( private requestService: OrderService,  private fb: FormBuilder) { }
 
   ngOnInit() {
     this.biuldForm();

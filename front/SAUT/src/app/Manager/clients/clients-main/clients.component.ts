@@ -15,18 +15,12 @@ export class ClientsComponent implements OnInit {
   ClientsDialogRef: MatDialogRef<ClientsDialogComponent>;
   AdvancedDialogRef: MatDialogRef<AdvancedSearchDialogComponent>;
   clientItems: Client[];
+  clientError: boolean;
 
-  // constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private dialog: MatDialog) {
-  //   http.get<QueueItem[]>(baseUrl + 'download').subscribe(result => {
-  //     this.queueItems = result;
-  //     console.log(this.queueItems);      
-  //   }, error => console.error(error));
-  // }
+  constructor(private dialog: MatDialog, private clientService: ClientsService) {this.updateUsers() }
 
-  constructor(private dialog: MatDialog, private clientService: ClientsService) { }
-
-  ngOnInit() {
-    this.clientItems = this.clientService.getAll();
+  ngOnInit() {  
+    this.clientError = false;  
   }
   
   openClientDialog(){
@@ -37,7 +31,7 @@ export class ClientsComponent implements OnInit {
     this.ClientsDialogRef
       .afterClosed()
       .pipe()
-      .subscribe(closed => {this.clientItems = this.clientService.getAll();})
+      .subscribe(closed => {this.updateUsers()})
 
   }
 
@@ -45,6 +39,22 @@ export class ClientsComponent implements OnInit {
     this.AdvancedDialogRef = this.dialog.open(AdvancedSearchDialogComponent,{
       hasBackdrop:true
     });
+  }
+
+  updateUsers(){
+    this.clientService.getAll().subscribe(
+      result =>{
+        this.clientItems = result;
+        this.clientError = false;
+        console.log(result);
+      },
+      error =>{
+        this.clientError = true;
+      });
+  }
+
+  getFIO(client:any){    
+    return client.surname+' '+client.name.substring(0,1)+'. '+client.patronymic.substring(0,1)+'.'
   }
 
 }

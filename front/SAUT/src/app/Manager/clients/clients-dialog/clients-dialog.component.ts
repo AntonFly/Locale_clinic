@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import {ClientsService} from '../../_services/clients.service'
+import { DatePipe } from '@angular/common';
 import {Client} from '../../../_models/Client'
 
 @Component({
@@ -12,82 +13,120 @@ import {Client} from '../../../_models/Client'
 export class ClientsDialogComponent implements OnInit {
 
   ClientForm: FormGroup;
+  formMsg: string;
+  formError: boolean;
 
   validation_messages = {
-    'FIO': [
-      { type: 'required', message: 'Требуется Ф.И.О.' }
+    'name': [
+      { type: 'required', message: 'Требуется имя' }
     ],
-
-    'Email': [
+    'surname': [
+      { type: 'required', message: 'Требуется фамилия' }
+    ],
+    'patronymic': [
+      { type: 'required', message: 'Требуется отчество' }
+    ],
+    'email': [
       { type: 'required', message: 'Требуется Email' },
       { type: 'pattern', message: 'Формат: __@__.__' }
     ],
 
-    'Passport': [
+    'passport': [
       { type: 'required', message: 'Требуются данные паспорта' }
     ],
-    
-    'eventType': [
-      { type: 'required', message: 'Пожалуйста, кажите тип события' },
-    ],
-    'Date': [
+        
+    'dateOfBirth': [
       { type: 'required', message: 'Пожалуйста, укажите дату рождения' },
     ]    
   };
 
-  constructor( private dialogRef: MatDialogRef<ClientsDialogComponent>,  private fb: FormBuilder, private clientService: ClientsService) { }
+  myDatepipe: DatePipe;
+
+  constructor( private dialogRef: MatDialogRef<ClientsDialogComponent>,  
+    private fb: FormBuilder, 
+    private clientService: ClientsService,
+    datepipe: DatePipe) { 
+      this.myDatepipe = datepipe;
+    }
 
   ngOnInit() {
     this.createForms();    
+    this.formMsg = "";
+    this.formError = false;
   }
 
   
-  get formControlFIO() {
-    return this.ClientForm.get('FIO');
+  get formControlName() {
+    return this.ClientForm.get('name');
   }
 
+  get formControlSurname() {
+    return this.ClientForm.get('surname');
+  }
+
+  get formControlPatronymic() {
+    return this.ClientForm.get('patronymic');
+  }
   get formControlEmail() {
-    return this.ClientForm.get('Email');
+    return this.ClientForm.get('email');
   }
 
   get formControlPassport() {
-    return this.ClientForm.get('Passport');
-  }
-
-  get formControlEvent() {
-    return this.ClientForm.get('eventType');
-  }
+    return this.ClientForm.get('passport');
+  }  
 
   get formControlDate() {
-    return this.ClientForm.get('date');
+    return this.ClientForm.get('dateOfBirth');
   }
 
   createForms() {
     this.ClientForm = this.fb.group({
-      FIO: ['', Validators.required],
-      Email : new FormControl('', Validators.compose([
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      patronymic: ['', Validators.required],
+      email : new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      Passport: ['', Validators.required],
-      Date: ['', Validators.required],
-      Note:['', Validators.maxLength]
-      // eventType: new FormControl('', Validators.required)
+      passport: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      comment:['', Validators.maxLength]      
     })
   }
 
   onSubmitClient(event: any) {
+    event.dateOfBirth = this.myDatepipe.transform(this.ClientForm.value.dateOfBirth, 'yyyy-MM-dd');
     console.log(event);
-    this.clientService.createClient(event);
-    
-    // this.uploadCorpService.postData(event)
-    //   .subscribe(
-    //     (data: any) => {
-    //       console.log(JSON.stringify(data));
-    //       this.delete.emit(this.fileObj);
-    //     },
-    //     error => console.log(error)
-    //   );
+    this.clientService.createClient(event).subscribe(
+      (data: any) => {        
+        console.log(data);
+        this.formMsg = "Пользователь успешно добавлен";
+        this.formError = false;
+
+        setTimeout( () => {
+            this.formMsg = "";
+            this.dialogRef.close();
+          }
+          , 2000
+        );
+                                        
+      },
+      
+      error => {                            
+        console.log(error);
+        this.formError = true;
+          if(error.error.status === "CONFLICT")
+            this.formMsg = error.error.message;
+          else
+          this.formMsg = "Не удалось добавить пользователя";
+
+          setTimeout(() => {
+            this.formMsg = "";
+            this.formError = false;
+          }, 5000);            
+      }
+    );
+              
   }
 
 }

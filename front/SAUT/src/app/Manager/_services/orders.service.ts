@@ -1,23 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import { Client } from '../../_models/Client';
-import { Request } from '../../_models/Request';
-import {map} from 'rxjs/operators';
-import {FnParam} from '@angular/compiler/src/output/output_ast';
+import { Order, Mod, Spec } from '../../_models/Order';
+
 
 @Injectable()
-export class RequestService {
-    zatychka: Client[];
-    curId = 0;
-    constructor(private http: HttpClient) {
-        this.zatychka = [{Id:this.curId++,FIO:"Вася петькин",Date:"12.12.1999",Email:"me@nowhere.wow", Note:"Crazy dude", Password:"PSWD313"},
-        {Id:this.curId++,FIO:"Петя Васькин",Date:"12.10.1990",Email:"хм@yandex.lmao", Note:"Even crazierCrazy dude", Password:"PSWD313"}]
+export class OrderService {
+    baseUrl: string;
+
+    constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { 
+        this.baseUrl = baseUrl;                 
      }
 
-    getAllRequests() {
-        //return this.http.get<Client[]>(`/users`);
-        return this.zatychka
+    getAllOrders() {
+        return this.http.get<Order[]>(this.baseUrl+"manager/get_orders");        
     }
 
     getSpecializations(){

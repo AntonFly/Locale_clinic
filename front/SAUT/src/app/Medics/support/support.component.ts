@@ -23,7 +23,7 @@ export class SupportComponent implements OnInit {
   constructor(private supportService:SupportService) { }
 
   ngOnInit() {
-    this.Id.valueChanges.subscribe(value=>{ this.orders = this.supportService.getClientById(value)});
+    //this.Id.valueChanges.subscribe(value=>{ this.orders = this.supportService.getClientById(value)});
   }
 
   get formControlId() {
