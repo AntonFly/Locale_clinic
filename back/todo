@@ -1,0 +1,18 @@
+/administrator
++Adduser( user ) - done
+
+/manager
++getAllClients() - done
++AddClient(client) - done
+
++getAllSpecializations() - done
++getModificationsBySpec() - done
++addOrder(clientId, Speza, modification (хз есть ли там обьект который все это содержит))
++getAllOrdersMb() - done
+
+++++
+clientExists(passportID)
+
+/medic
++GetSpezsByClientId(int/str whatever clientId)
++BySpezIdGenerateScenario(int/str spezId)

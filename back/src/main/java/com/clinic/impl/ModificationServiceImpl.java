@@ -1,7 +1,10 @@
 package com.clinic.impl;
 
+import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Modification;
 import com.clinic.entities.Specialization;
+import com.clinic.exceptions.ModificationMissingException;
+import com.clinic.exceptions.SpecializationMissingException;
 import com.clinic.repositories.ModificationRepository;
 import com.clinic.repositories.SpecializationRepository;
 import com.clinic.services.ModificationService;
@@ -16,10 +19,16 @@ public class ModificationServiceImpl implements ModificationService {
 
     private ModificationRepository modificationRepository;
 
+    private SpecializationService specializationService;
+
 
     @Autowired
-    public ModificationServiceImpl(ModificationRepository mr){
+    public ModificationServiceImpl(
+            ModificationRepository mr,
+            SpecializationService sr
+    ){
         this.modificationRepository = mr;
+        this.specializationService = sr;
     }
 
     @Override
@@ -40,8 +49,10 @@ public class ModificationServiceImpl implements ModificationService {
     }
 
     @Override
-    public List<Modification> getAllModificationsBySpec(Specialization specialization)
+    public List<Modification> getAllModificationsBySpec(SimpleSpecializationRegistration specializationData)
+            throws SpecializationMissingException
     {
-        return null;//modificationRepository.getAllModificationsBySpecialization(specialization);
+        Specialization specialization = specializationService.getSpecByName(specializationData.getName());
+        return modificationRepository.findBySpecializations(specialization);
     }
 }

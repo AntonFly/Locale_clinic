@@ -1,6 +1,5 @@
 package com.clinic.services;
 
-import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.entities.User;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +16,7 @@ public interface UserService {
     @Transactional
     User setRole(User user, String roleName);
 
+    List<User> getUsersByPersonId(Long personId);
     List<User> getAllUsers();
 
 }

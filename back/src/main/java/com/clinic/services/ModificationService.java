@@ -1,7 +1,10 @@
 package com.clinic.services;
 
+import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Modification;
 import com.clinic.entities.Specialization;
+import com.clinic.exceptions.ModificationMissingException;
+import com.clinic.exceptions.SpecializationMissingException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,7 +19,8 @@ public interface ModificationService {
 
     List<Modification> getAllModifications();
 
-    List<Modification> getAllModificationsBySpec(Specialization specialization);
+    List<Modification> getAllModificationsBySpec(SimpleSpecializationRegistration specializationData)
+            throws SpecializationMissingException;
 
 
 }

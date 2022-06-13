@@ -2,6 +2,7 @@ package com.clinic.services;
 
 import com.clinic.entities.Person;
 import com.clinic.entities.Specialization;
+import com.clinic.exceptions.SpecializationMissingException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface SpecializationService {
 
     @Transactional
     void delete(Specialization specialization);
+
+    Specialization getSpecByName(String name) throws SpecializationMissingException;
 
     List<Specialization> getAllSpecializations();
 

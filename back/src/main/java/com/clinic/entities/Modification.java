@@ -1,7 +1,9 @@
 package com.clinic.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -11,8 +13,13 @@ import java.util.Set;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "specializations", "orders"})
 @Table(name = "modifications")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Modification {
 
     @Id
@@ -31,44 +38,7 @@ public class Modification {
             inverseJoinColumns = @JoinColumn(name = "id_spec"))
     Set<Specialization> specializations;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public Set<Specialization> getSpecializations() {
-        return specializations;
-    }
-
-    public void setSpecializations(Set<Specialization> specializations) {
-        this.specializations = specializations;
-    }
+    @JsonIgnore
+    @ManyToMany(mappedBy = "modifications")
+    Set<Order> orders;
 }

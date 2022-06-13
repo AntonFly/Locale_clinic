@@ -1,7 +1,9 @@
 package com.clinic.impl;
 
+import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.entities.Person;
 import com.clinic.entities.User;
+import com.clinic.exceptions.PersonConflictException;
 import com.clinic.repositories.PersonRepository;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.repositories.UserRepository;
@@ -27,9 +29,25 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person save(Person person) {
-        //kostil'
-        person.setDateOfBirth(new Date(3, 3, 13));
+    public Person save(SimplePersonRegistration personData)
+            throws PersonConflictException {
+        Person person = new Person();
+        person.setId(personData.getPassport());
+        person.setName(personData.getName());
+        person.setSurname(personData.getSurname());
+        person.setPatronymic(personData.getPatronymic());
+        person.setDateOfBirth(personData.getDateOfBirth());
+
+        Optional<Person> optionalPerson = personRepository.getPersonById(person.getId());
+        if (optionalPerson.isPresent())
+            if (optionalPerson.get().equals(person))
+                throw new PersonConflictException(
+                        "There is already a person with this passport: " +
+                                person.getId() +
+                                ", but different parameters");
+            else
+                return optionalPerson.get();
+
         person = personRepository.save(person);
         personRepository.flush();
         return person;

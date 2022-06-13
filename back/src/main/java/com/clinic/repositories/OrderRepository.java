@@ -1,13 +1,13 @@
 package com.clinic.repositories;
 
 import com.clinic.entities.Client;
-import com.clinic.entities.Person;
+import com.clinic.entities.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ClientRepository extends JpaRepository<Client, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Optional<Client> findByPersonId(Long personId);
+
 
 }

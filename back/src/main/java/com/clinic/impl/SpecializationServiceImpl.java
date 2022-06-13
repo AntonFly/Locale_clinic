@@ -3,6 +3,7 @@ package com.clinic.impl;
 import com.clinic.entities.Person;
 import com.clinic.entities.Specialization;
 import com.clinic.entities.User;
+import com.clinic.exceptions.SpecializationMissingException;
 import com.clinic.repositories.PersonRepository;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.repositories.SpecializationRepository;
@@ -41,6 +42,18 @@ public class SpecializationServiceImpl implements SpecializationService {
         specializationRepository.delete(specialization);
     }
 
+    @Override
+    public Specialization getSpecByName(String name) throws SpecializationMissingException
+    {
+        Optional<Specialization> specialization = specializationRepository.findByName(name);
+        if (specialization.isPresent())
+            return specialization.get();
+
+        throw new SpecializationMissingException(
+                "No specialization with the name " +
+                name +
+                " was found");
+    }
     @Override
     public List<Specialization> getAllSpecializations() {
         return specializationRepository.findAll();

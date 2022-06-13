@@ -1,6 +1,8 @@
 package com.clinic.services;
 
+import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.entities.Person;
+import com.clinic.exceptions.PersonConflictException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.Set;
 public interface PersonService {
 
     @Transactional
-    Person save(Person person);
+    Person save(SimplePersonRegistration person) throws PersonConflictException;
 
     @Transactional
     void delete(Person person);
