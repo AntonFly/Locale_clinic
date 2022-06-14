@@ -24,4 +24,6 @@ public class SimpleOrderRegistration {
     @NotEmpty
     @NotNull
     private List<String> modNames;
+
+    private String comment;
 }

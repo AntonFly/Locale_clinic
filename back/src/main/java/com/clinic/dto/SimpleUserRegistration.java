@@ -7,7 +7,7 @@ public class SimpleUserRegistration {
 
     @NotNull
     @NotEmpty
-    private SimplePersonRegistration personData;
+    private SimplePersonRegistration person;
 
     @NotNull
     @NotEmpty
@@ -20,12 +20,12 @@ public class SimpleUserRegistration {
     @NotEmpty
     private String password;
 
-    public SimplePersonRegistration getPersonData() {
-        return personData;
+    public SimplePersonRegistration getPerson() {
+        return person;
     }
 
-    public void setPersonData(SimplePersonRegistration personData) {
-        this.personData = personData;
+    public void setPerson(SimplePersonRegistration person) {
+        this.person = person;
     }
 
     public String getRole() {

@@ -98,6 +98,8 @@ public class ManagerController {
         Specialization specialization = specializationService.getSpecByName(orderData.getSpecName());
         order.setSpecialization(specialization);
 
+        order.setComment(orderData.getComment());
+
         Set<Modification> modifications = new HashSet<>();
         for (String modName : orderData.getModNames())
             modifications.add(modificationService.getModificationByName(modName));
