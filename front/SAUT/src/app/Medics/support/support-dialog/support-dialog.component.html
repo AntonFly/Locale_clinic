@@ -1,0 +1,32 @@
+<div mat-dialog-title class="dialog-header">
+    <div><h3>Сценарий для специализации {{data.order.specialization.name}}</h3></div>
+    <div mat-dialog-close style="float: right;"><mat-icon style="font-size: 30px;" >close</mat-icon></div>
+    <!-- <mat-divider></mat-divider> -->
+</div>
+
+<div mat-dialog-content *ngIf="!isError">
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="orderedSteps">
+    <thead>
+      <tr>
+        <th>№ Шага</th>
+        <th>Действие</th>        
+        <th *ngIf="modsNum>1">Из-за</th>        
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="tableRow" *ngFor="let step of orderedSteps; let i = index" [attr.data-index]="i">
+        <td> {{i}} </td>
+        <td>{{step.name}}</td>                              
+        <td *ngIf="modsNum>1">{{step.mod.name}}</td>                      
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div mat-dialog-content class="errorBox" *ngIf="isError"> 
+    <div class="errorItem"  style="text-align: center;">
+      <mat-icon style="font-size: 40px;">warning</mat-icon>
+    </div>
+    <div class="errorItem" style="text-align: center; font-size: 20px;">{{errorMsg}}</div>
+  </div>

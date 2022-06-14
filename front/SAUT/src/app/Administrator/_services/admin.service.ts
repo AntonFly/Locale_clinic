@@ -18,8 +18,8 @@ export class AdminService {
         'Content-Type': 'application/json'});
     let options = { headers: headers };
     
-  
-      return this.http.post<any>(this.baseUrl + `admin/create_user`,  JSON.stringify(body), options);    
+      console.log("user:"+JSON.stringify(body));
+    return this.http.post<any>(this.baseUrl + `admin/create_user`,  JSON.stringify(body), options);    
   }
   
 }

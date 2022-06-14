@@ -12,9 +12,10 @@ export class RequestListComponent implements OnInit {
   orders: Order[];
   clientError: boolean;
 
-  constructor(private orderService:OrderService) { this.updateOrders() }
+  constructor(private orderService:OrderService) { }
 
   ngOnInit() {
+    this.updateOrders()
   }
 
   updateOrders(){

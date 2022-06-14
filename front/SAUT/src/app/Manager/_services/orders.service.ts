@@ -18,22 +18,26 @@ export class OrderService {
     }
 
     getSpecializations(){
-        return ["Пилот","Мастер-Пилот", "Навигатор", "Боец", "Повариха"];
+        return this.http.get<Spec[]>(this.baseUrl+"manager/get_specs");
     }
 
     getModifications(){
-
+        return this.http.get<Mod[]>(this.baseUrl+"manager/get_mods");
     }
 
-    createRequest(request: Request) {
-        // let headers = new HttpHeaders({
-        //   'Content-Type': 'application/x-www-form-urlencoded'});
-        // let options = { headers: headers };
-        // var body = "name=" + user.name + "&surname=" + user.surName + "&login=" + user.login + "&password=" + user.password;
-        console.log('request.service.ts\createRequest')
-        // var tmp = client;
-        // tmp.Id = this.curId++;
-        // return this.http.post(`http://localhost:8080/MultHubnew_war_exploded/resources/user/signUp`,  body, options);
-        // this.zatychka.push(client);
-      }
+    getModsBySpec(spec:string){
+        let body = "?name=" + spec;
+        return this.http.get<Mod[]>(this.baseUrl+"manager/get_mods_by_spec/"+body);
+    }
+
+    createOrder(request: any, mods: string[]) {        
+        let body = {"passport":request.passport, "specName":request.Specialization, "comment":request.comment, "modNames":mods};
+    
+        let headers = new HttpHeaders({
+        'Content-Type': 'application/json'});
+        let options = { headers: headers };
+        
+        console.log(JSON.stringify(body));
+        return this.http.post<any>(this.baseUrl + `manager/create_order`,  JSON.stringify(body), options);            
+    }
 }

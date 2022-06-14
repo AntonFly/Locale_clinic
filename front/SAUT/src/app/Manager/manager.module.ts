@@ -15,6 +15,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {DragDropModule} from '@angular/cdk/drag-drop'
+import { MatExpansionModule } from '@angular/material/expansion';
 import { DatePipe } from '@angular/common';
 
 
@@ -66,7 +68,9 @@ const routes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatTabsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    DragDropModule,
+    MatExpansionModule
   ],
   providers: [
     DatePipe,

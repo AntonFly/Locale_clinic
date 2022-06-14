@@ -1,57 +1,115 @@
 <div class="formContainer">
-<form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">
-  <h3>Введите идентификатор клиента</h3>
-  <mat-form-field class="full-width">
-    <input matInput placeholder="Идентификатор клиента" formControlName="Id" required>
-    <mat-error *ngFor="let validation of validation_messages.Id">
-      <mat-error class="error-message" *ngIf="formControlId.hasError(validation.type) && (formControlId.dirty || formControlId.touched)">{{validation.message}}</mat-error>
-    </mat-error>
-  </mat-form-field>
+  <form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">
+    <h3>Введите идентификатор клиента</h3>
+    <mat-form-field class="full-width">
+      <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" formControlName="passport" required>
+      <mat-error *ngFor="let validation of validation_messages.passport">
+        <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
+      </mat-error>
+      <!-- <mat-hint *ngIf="currentClient!==undefined&&!isClientError">
+        {{"Клиент: "+getFIO(currentClient.person)}}
+      </mat-hint> -->
+      <mat-hint style="color: red;" *ngIf="isClientError">
+        {{clientErrorMsg}}
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-accordion *ngIf="currentClient!==undefined" class="headers-align">          
+      <mat-expansion-panel (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Данные клиента
+          </mat-panel-title>              
+          <mat-panel-description>
+            {{panelOpenState ? "" : "Ф.И.О.: "+getFIO(currentClient.person)}}
+            <mat-icon *ngIf="!panelOpenState">account_circle</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>            
+        <mat-divider style="margin-top: -13px;"></mat-divider>
+        <div style="padding-top:6px">
+          <p>Ф.И.О: {{currentClient.person.name+" "+currentClient.person.surname+" "+ currentClient.person.patronymic}}</p>
+          <p>Примечания: {{currentClient.comment}}</p>
+          <p>Дата рождения: {{currentClient.person.dateOfBirth}}</p>
+          <p>Email: {{currentClient.email}}</p>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
   
-  <h3>Выберете специализацию</h3>
-  <mat-form-field class="full-width" appearance="fill">
-    <mat-label>Специализация...</mat-label>
-      <input type="text"
+  
+    <h3 style="padding-top: 10px;">Выберете специализацию</h3>
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Специализация...</mat-label>
+        <input 
+          (focusout)="getModsBySpec()"
+          type="text"
           placeholder="Выберете одну"
           aria-label="Специализация"
           matInput
           formControlName="Specialization"
           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptionsSpec | async" [value]="option">
-          {{option}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-error *ngFor="let validation of validation_messages.Specialization">
-      <mat-error class="error-message" *ngIf="formControlSpec.hasError(validation.type) && (formControlSpec.dirty || formControlSpec.touched)">{{validation.message}}</mat-error>
-    </mat-error>
-  </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete" >
+        <mat-option *ngFor="let option of filteredOptionsSpec | async" [value]="option">
+            {{option}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngFor="let validation of validation_messages.Specialization">
+        <mat-error class="error-message" *ngIf="formControlSpec.hasError(validation.type) && (formControlSpec.dirty || formControlSpec.touched)">{{validation.message}}</mat-error>
+      </mat-error>
+      <mat-hint style="color: red;" *ngIf="isSpecError">
+        {{specErrorMsg}}
+      </mat-hint>
+    </mat-form-field>
 
-  <h3>Выберете модификацию</h3>
-  <mat-form-field class="full-width" appearance="fill">
-    <mat-label>Модификацию...</mat-label>
-      <input type="text"
-          placeholder="Выберете одну"
-          aria-label="Модификация"
-          matInput
-          formControlName="Modification">
-          <!-- [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptionsSpec | async" [value]="option">
-          {{option}}
-      </mat-option>
-    </mat-autocomplete> -->
-    <mat-error *ngFor="let validation of validation_messages.Modification">
-      <mat-error class="error-message" *ngIf="formControlMod.hasError(validation.type) && (formControlMod.dirty || formControlMod.touched)">{{validation.message}}</mat-error>
-    </mat-error>
-  </mat-form-field>
-
+    <mat-form-field class="full-width">
+      <input matInput formControlName="comment" #note maxlength="256" placeholder="Примечания">
+      <mat-hint align="start"><strong>Поле для дополнительной информации</strong> </mat-hint>
+      <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
+    </mat-form-field>
+    
+    <h3 style="padding-top: 20px;" *ngIf="!isModsError&&(selected.length>0 || toSelect.length > 0)">Выберете модификации</h3>  
+    <div style="width: 130%;margin-left: -10%;" *ngIf="!isModsError&&(selected.length>0 || toSelect.length > 0)"> 
+        
+      <div class="example-container">
+        <h5 style="margin-left: 30%;">Доступно</h5>
+  
+        <div
+          cdkDropList
+          #todoList="cdkDropList"
+          [cdkDropListData]="toSelect"
+          [cdkDropListConnectedTo]="[doneList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of toSelect" cdkDrag>
+            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              {{item}}            
+          </div>
+        </div>
+      </div>
+  
+      <div class="example-container">
+        <h5 style="margin-left: 30%;">Выбрано</h5>
+  
+        <div
+          cdkDropList
+          #doneList="cdkDropList"
+          [cdkDropListData]="selected"
+          [cdkDropListConnectedTo]="[todoList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of selected" cdkDrag>{{item}}</div>
+        </div>
+      </div>
+    </div>
+    
     <div>
-      <button class="RequestButtons" mat-raised-button color="primary" type="submit" [disabled]="!RequestForm.valid">Создать заявку</button>      
+      <button class="RequestButtons" mat-raised-button color="primary" type="submit" [disabled]="!RequestForm.valid||checkErrors()">Создать заявку</button>      
       <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить стоимость</button>
       <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить риски</button>
-    <!-- <button mat-button >Отмена</button> -->
+    <!-- !RequestForm.valid&&selected.length===0 <button mat-button >Отмена</button> -->
     </div>
-  </form>
+    <span *ngIf="isFormError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+    <span *ngIf="isFormError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
+  </form>  
   
 </div>

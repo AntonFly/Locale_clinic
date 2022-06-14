@@ -144,6 +144,7 @@ export class NewUserComponent implements OnInit {
         },
         
         error => {                    
+          console.log(error);
           this.formError = true;
           if(error.error.status === "CONFLICT")
             this.formMsg = error.error.message;

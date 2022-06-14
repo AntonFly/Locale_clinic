@@ -30,9 +30,7 @@ export class ClientsService {
     }
 
     getClient(pass: number) {
-        // let params = new HttpParams();
-        // params.append("",pass.toString());
-        // return this.http.get<Client>(this.baseUrl+"manager/get_client_by_passport" + pass);        
-        return {"id":2,"email":"TEST@TEST.com","comment":"comment","person":{"id":123,"name":"divan","surname":"sur","patronymic":"patr","dateOfBirth":"1903-04-13"}};
+        let body = "?passport=" + pass;
+        return this.http.get<Client>(this.baseUrl+"manager/get_client_by_passport/" + body);                
     }
 }

@@ -15,12 +15,14 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import {SupportService} from './_services/index'
 
 import { ManagerGuard } from '../_guards/manager.guard';
-import { SupportComponent } from './support/support.component';
-import { ReportingComponent } from './reporting/reporting.component'
+import { SupportComponent } from './support/support/support.component';
+import { ReportingComponent } from './reporting/reporting.component';
+import { SupportDialogComponent } from './support/support-dialog/support-dialog.component'
 
  
 const routes: Routes = [
@@ -35,7 +37,9 @@ const routes: Routes = [
     
   SupportComponent,
     
-  ReportingComponent],
+  ReportingComponent,
+    
+  SupportDialogComponent],
   imports: [
     MatButtonModule,
     CommonModule,
@@ -53,12 +57,13 @@ const routes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatTabsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatExpansionModule
   ],
   providers: [
     SupportService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],
-  //entryComponents: [ClientsDialogComponent, AdvancedSearchDialogComponent]
+  entryComponents: [SupportDialogComponent]
 })
 export class MedicsModule { }

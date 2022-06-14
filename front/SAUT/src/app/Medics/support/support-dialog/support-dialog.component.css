@@ -1,0 +1,28 @@
+.dialog-header div{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+.full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+  
+  .double-line-hint {
+    .mat-input-hint-wrapper
+  
+  {
+    flex-wrap: wrap;
+    .hint-line
+  
+  {
+    flex: 0 0 100%;
+  }
+  
+  }
+  }
