@@ -9,22 +9,35 @@ import com.clinic.exceptions.UserConflictException;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AdminServiceImpl implements AdminService{
+
+    private JavaMailSender sender;
+    private final SimpleMailMessage registrationMessage;
     private PersonService personService;
     private UserService userService;
 
     private RoleRepository roleRepository;
 
     @Autowired
-    public AdminServiceImpl(PersonService ps, UserService us, RoleRepository rp) {
+    public AdminServiceImpl(
+            JavaMailSender jms,
+            @Qualifier("registrationMessage") SimpleMailMessage rm,
+            PersonService ps,
+            UserService us,
+            RoleRepository rp) {
         this.personService = ps;
         this.roleRepository = rp;
         this.userService = us;
+        this.sender = jms;
+        this.registrationMessage = rm;
     }
 
 
@@ -44,8 +57,22 @@ public class AdminServiceImpl implements AdminService{
         user.setEmail(userData.getEmail());
         user.setPassword(userData.getPassword());
 
-        return userService.save(user);
-        //emailService.sendRegistrationMessageToOfficer(officer.getId(), userData);
+        user = userService.save(user);
+
+        String text = String.format(registrationMessage.getText(),
+                person.getName(),
+                person.getSurname(),
+                user.getEmail(),
+                user.getPassword()
+                );
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        registrationMessage.copyTo(message);
+        message.setTo(user.getEmail());
+        message.setText(text);
+        sender.send(message);
+
+        return user;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.clinic.controllers;
 
+import com.clinic.configs.email.MessageConfig;
 import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.dto.TestClass;
 import com.clinic.entities.Client;
@@ -14,6 +15,9 @@ import com.clinic.repositories.SpecializationRepository;
 import com.clinic.services.UserService;
 import com.clinic.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -24,28 +28,13 @@ import java.util.Set;
 @RestController()
 @RequestMapping("/admin")
 public class AdminController {
-
-    private AdminService adminService;
-
-    private UserService userService;
-
-    private ClientRepository clientRepository;
-    private ModificationRepository modificationRepository;
-    private SpecializationRepository specializationRepository;
+    private final AdminService adminService;
 
     @Autowired
     public AdminController(
-            AdminService as,
-            UserService us,
-            ClientRepository cr,
-            ModificationRepository mr,
-            SpecializationRepository sr
+            AdminService as
     ){
         this.adminService = as;
-        this.userService = us;
-        this.clientRepository = cr;
-        this.modificationRepository = mr;
-        this.specializationRepository = sr;
     }
 
     @GetMapping("/hm")
@@ -61,10 +50,8 @@ public class AdminController {
     }
 
     @GetMapping("/test")
-    public List<Modification> findUsers(@RequestBody TestClass personId) {
-        System.out.println("id: " + personId.getId());
-        Specialization specialization = specializationRepository.findByName(personId.getId()).get();
-        return modificationRepository.findBySpecializations(specialization);
+    public void findUsers() {
+
     }
 
 }

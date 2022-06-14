@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        System.out.println("HERE");
-        System.out.println(user.getPerson().getName());
         user = userRepository.save(user);
         userRepository.flush();
         return user;
