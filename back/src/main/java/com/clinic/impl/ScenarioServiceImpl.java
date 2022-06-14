@@ -20,9 +20,9 @@ import java.util.Optional;
 @Service
 public class ScenarioServiceImpl implements ScenarioService {
 
-    private ScenarioRepository scenarioRepository;
+    private final ScenarioRepository scenarioRepository;
 
-    private SpecializationService specializationService;
+    private final SpecializationService specializationService;
 
 
     @Autowired
@@ -52,10 +52,10 @@ public class ScenarioServiceImpl implements ScenarioService {
     }
 
     @Override
-    public List<Scenario> getAllScenariosBySpec(SimpleSpecializationRegistration specializationData)
+    public List<Scenario> getAllScenariosBySpec(String specName)
             throws SpecializationMissingException
     {
-        Specialization specialization = specializationService.getSpecByName(specializationData.getName());
+        Specialization specialization = specializationService.getSpecByName(specName);
         return scenarioRepository.findBySpecialization(specialization);
     }
 }

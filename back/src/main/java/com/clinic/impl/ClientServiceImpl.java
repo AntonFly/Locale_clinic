@@ -66,7 +66,7 @@ public class ClientServiceImpl implements ClientService {
 
         throw new ClientNotFoundException(
                 "There is no client associated with " +
-                passport +
+                        (passport == null ? "empty" : passport.toString()) +
                 " passport number");
     }
     @Override

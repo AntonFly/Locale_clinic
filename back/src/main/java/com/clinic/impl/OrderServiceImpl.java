@@ -1,10 +1,13 @@
 package com.clinic.impl;
 
+import com.clinic.entities.Client;
 import com.clinic.entities.Order;
 import com.clinic.entities.User;
+import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.repositories.OrderRepository;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.repositories.UserRepository;
+import com.clinic.services.ClientService;
 import com.clinic.services.OrderService;
 import com.clinic.services.PersonService;
 import com.clinic.services.UserService;
@@ -16,13 +19,16 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private ClientService clientService;
     private OrderRepository orderRepository;
 
 
     @Autowired
     public OrderServiceImpl(
+            ClientService cs,
             OrderRepository or
     ){
+        this.clientService = cs;
         this.orderRepository = or;
     }
 
@@ -44,7 +50,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrdersByClientId(Long id) {
-        return orderRepository.findAllByClient_Person_Id(id);
+    public List<Order> getAllOrdersByClientId(Long id)
+            throws ClientNotFoundException
+    {
+        Client client = clientService.getClientByPassport(id);
+        return orderRepository.findAllByClient(client);
     }
 }

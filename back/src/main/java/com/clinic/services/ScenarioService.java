@@ -20,7 +20,7 @@ public interface ScenarioService {
 
     List<Scenario> getAllScenarios();
 
-    List<Scenario> getAllScenariosBySpec(SimpleSpecializationRegistration specializatioData)
+    List<Scenario> getAllScenariosBySpec(String specName)
             throws SpecializationMissingException;
 
 

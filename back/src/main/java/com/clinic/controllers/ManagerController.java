@@ -58,7 +58,7 @@ public class ManagerController {
     }
 
     @GetMapping("/get_client_by_passport")
-    public Client clientExists(@RequestBody Long passport)
+    public Client clientExists(@RequestParam Long passport)
             throws ClientNotFoundException
     {
        return clientService.getClientByPassport(passport);
@@ -72,10 +72,10 @@ public class ManagerController {
     }
 
     @GetMapping("/get_mods_by_spec")
-    public List<Modification> getModsBySpec(@RequestBody SimpleSpecializationRegistration specializationData)
+    public List<Modification> getModsBySpec(@RequestParam String name)
             throws SpecializationMissingException
     {
-        return modificationService.getAllModificationsBySpec(specializationData);
+        return modificationService.getAllModificationsBySpec(name);
     }
 
     @GetMapping("/get_orders")
@@ -102,7 +102,7 @@ public class ManagerController {
         for (String modName : orderData.getModNames())
             modifications.add(modificationService.getModificationByName(modName));
 
-        List<Modification> allowedModifications = modificationService.getAllModificationsBySpec(new SimpleSpecializationRegistration(specialization.getName()));
+        List<Modification> allowedModifications = modificationService.getAllModificationsBySpec(specialization.getName());
         if (!new HashSet<>(allowedModifications).containsAll(modifications))
             throw new ModSpecConflictException(
                     "Some modifications are not allowed for given specialization: " +

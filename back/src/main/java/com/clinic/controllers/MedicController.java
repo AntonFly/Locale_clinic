@@ -39,17 +39,18 @@ public class MedicController {
         this.scenarioService = scs;
     }
 
-    @GetMapping("/get_orders_by_client_id")
-    public List<Order> getOrdersByClientId(@RequestBody Long passport)
+    @GetMapping("/get_orders_by_client_passport")
+    public List<Order> getOrdersByClientId(@RequestParam Long passport)
+            throws ClientNotFoundException
     {
         return orderService.getAllOrdersByClientId(passport);
     }
 
     @GetMapping("/get_scenarios_by_spec")
-    public List<Scenario> getScenariosBySpec(@RequestBody SimpleSpecializationRegistration specData)
+    public List<Scenario> getScenariosBySpec(@RequestParam String name)
         throws SpecializationMissingException
     {
-        return scenarioService.getAllScenariosBySpec(specData);
+        return scenarioService.getAllScenariosBySpec(name);
     }
 
 

@@ -52,8 +52,8 @@ public class ModificationServiceImpl implements ModificationService {
             return modification.get();
 
         throw new ModificationMissingException(
-                "There is no modification associated with name: " +
-                name);
+                "There is no modification associated with " +
+                (name.isEmpty() ? "empty name" : ("name: " + name)));
     }
 
     @Override
@@ -62,10 +62,10 @@ public class ModificationServiceImpl implements ModificationService {
     }
 
     @Override
-    public List<Modification> getAllModificationsBySpec(SimpleSpecializationRegistration specializationData)
+    public List<Modification> getAllModificationsBySpec(String specName)
             throws SpecializationMissingException
     {
-        Specialization specialization = specializationService.getSpecByName(specializationData.getName());
+        Specialization specialization = specializationService.getSpecByName(specName);
         return modificationRepository.findBySpecializations(specialization);
     }
 }

@@ -42,4 +42,18 @@ public class RestControllerAdvicor {
                 .timestamp(now())
                 .build();
     }
+
+    @ExceptionHandler(
+            {
+                    Exception.class
+            })
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorResponse handleOtherException(Exception exception) {
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(BAD_REQUEST)
+                .timestamp(now())
+                .build();
+    }
+
 }

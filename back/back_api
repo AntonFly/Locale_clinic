@@ -25,7 +25,7 @@
 
 /get_client_by_passport GET
 
-123
+?passport=123
 
 /create_client POST
 
@@ -44,9 +44,7 @@
 
 /get_mods_by_spec GET
 
-{
-    "name": "Мастер-пилот"
-}
+?name=Мастер-пилот
 
 /get_orders GET
 
@@ -58,16 +56,12 @@
     "modName": "Дальномер в глазах"
 }
 
-
-
 /medic
 
-/get_orders_by_client_id GET
+/get_orders_by_client_passport GET
 
-123
+?passport=123
 
 /get_scenarios_by_spec
 
-{
-    "name": "Мастер-пилот"
-}
+?name="Мастер-пилот"

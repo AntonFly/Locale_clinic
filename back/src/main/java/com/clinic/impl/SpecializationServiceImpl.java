@@ -50,9 +50,11 @@ public class SpecializationServiceImpl implements SpecializationService {
             return specialization.get();
 
         throw new SpecializationMissingException(
-                "No specialization with the name " +
-                name +
-                " was found");
+                "No specialization with " +
+                        (name.isEmpty() ?
+                                "empty name" :
+                                ("the name " + name))
+                        + " was found");
     }
     @Override
     public List<Specialization> getAllSpecializations() {

@@ -42,7 +42,7 @@ public class PersonServiceImpl implements PersonService {
         if (optionalPerson.isPresent())
             if (!optionalPerson.get().equals(person))
                 throw new PersonConflictException(
-                        "There is already a person with this passport: " +
+                        "There is already a person with " +
                                 person.getId() +
                                 ", but different parameters");
             else
