@@ -26,11 +26,13 @@
 }
 
 
-.div-search-icon .search-icon{  
+.search-icon {  
+  vertical-align: middle;
   font-size: 30px;
   cursor: pointer;  
-  /* padding-top: 10px; */
 }
+
+
 
 
 /* TEST */

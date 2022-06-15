@@ -67,7 +67,7 @@ export class SupportDialogComponent implements OnInit {
 
         if(tmp == 0)
           tmp = mods[i].price * (j + this.modsNum  ) / stepsPerMod + 1;          
-          let index = ( tmp * mods[i].price - tmp ) % stepsNum;
+          let index = ( this.data.order.id * tmp * mods[i].price - tmp ) % stepsNum;
           index = Math.round(index);          
           unorderedSteps.push({mod: mods[i], name: this.steps[ index ]})      
       }      
@@ -76,8 +76,7 @@ export class SupportDialogComponent implements OnInit {
     let num = unorderedSteps.length
     for (var i = 0; i < num; i++) { 
       var price = String(mods[ i % this.modsNum  ].price);
-      var tmp = (parseInt(price.charAt(i % price.length))+i)*i;
-      console.log(tmp+" "+unorderedSteps.length)
+      var tmp = (parseInt(price.charAt(i % price.length))+i)*i;      
       this.orderedSteps.push( unorderedSteps.splice(tmp%unorderedSteps.length,1)[0]);
     }
     

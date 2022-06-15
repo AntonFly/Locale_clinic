@@ -9,11 +9,15 @@
   <div class="right-hand">
     <div class="search">
       <mat-form-field class="no-wrapper" >
-        <input matInput placeholder="Поиск...">      
+        <input matInput placeholder="Поиск..." [formControl]="searchField">
+        <!-- <input matInput placeholder="Поиск...">       -->
+        <button mat-button *ngIf="searchField.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchReset()">
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field> 
-      <div class="div-search-icon">
-        <mat-icon class="search-icon" [inline]="true">search</mat-icon>        
-      </div>
+      <!-- <div > -->
+        <mat-icon class="search-icon" (click)="clientSearch()" >search</mat-icon>        
+      <!-- </div> -->
     </div>
 
     <div>

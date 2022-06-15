@@ -19,6 +19,8 @@ export class NewRequestComponent implements OnInit {
   
   RequestForm: FormGroup;   
 
+  panelOpenState = false;
+
   toSelect: string[] = [];
   selected: string[] = [];
   

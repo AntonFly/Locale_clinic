@@ -29,10 +29,26 @@
             </mat-expansion-panel-header>            
             <mat-divider style="margin-top: -13px;"></mat-divider>
             <div style="padding-top:6px">
-              <p>Ф.И.О: {{currentClient.person.name+" "+currentClient.person.surname+" "+ currentClient.person.patronymic}}</p>
-              <p>Примечания: {{currentClient.comment}}</p>
-              <p>Дата рождения: {{currentClient.person.dateOfBirth}}</p>
-              <p>Email: {{currentClient.email}}</p>
+              <table class='table table-striped' aria-labelledby="tableLabel">                        
+                <tbody>
+                  <tr>
+                    <td> Ф.И.О </td>
+                    <td>{{currentClient.person.name+" "+currentClient.person.surname+" "+ currentClient.person.patronymic}} </td>                      
+                  </tr>
+                  <tr>
+                    <td> Примечания </td>
+                    <td>{{currentClient.comment}} </td>                      
+                  </tr>
+                  <tr>
+                    <td> Дата рождения </td>
+                    <td>{{currentClient.person.dateOfBirth | date:'shortDate'}} </td>                      
+                  </tr>
+                  <tr>
+                    <td> Email </td>
+                    <td>{{currentClient.email}} </td>                      
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
