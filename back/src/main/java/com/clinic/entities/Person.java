@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Table(name = "person")
 @Entity
@@ -27,6 +29,10 @@ public class Person {
 
     @Temporal(TemporalType.DATE)
     Date dateOfBirth;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders;
 
     @Override
     public boolean equals(Object o) {
