@@ -66,6 +66,6 @@ public class ModificationServiceImpl implements ModificationService {
             throws SpecializationMissingException
     {
         Specialization specialization = specializationService.getSpecByName(specName);
-        return modificationRepository.findBySpecializations(specialization);
+        return null;//modificationRepository.findBySpecializations(specialization);
     }
 }

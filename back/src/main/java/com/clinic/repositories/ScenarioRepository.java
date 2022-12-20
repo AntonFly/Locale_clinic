@@ -10,6 +10,4 @@ import java.util.Optional;
 
 public interface ScenarioRepository extends JpaRepository<Scenario, Long> {
 
-    List<Scenario> findBySpecialization(Specialization specialization);
-
 }

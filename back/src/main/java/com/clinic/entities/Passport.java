@@ -1,6 +1,7 @@
 package com.clinic.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +18,7 @@ import javax.persistence.*;
 @Getter
 public class Passport {
 
-    @Id
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_person")
     private Person person;

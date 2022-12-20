@@ -1,19 +1,28 @@
 package com.clinic.entities;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
 @Table(name = "users")
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class)
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "role")
     private Role role;
@@ -27,46 +36,11 @@ public class User {
     @JoinColumn(name = "id_person", referencedColumnName = "id")
     private Person person;
 
-    public User() {
-    }
+    @JsonBackReference
+    @OneToMany(mappedBy = "user")
+    private Set<PwdDropRequest> pwdDropRequests;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
+    @JsonBackReference
+    @OneToMany(mappedBy = "user")
+    private Set<Stock> stock;
 }

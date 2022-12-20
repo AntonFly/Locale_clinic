@@ -17,18 +17,9 @@ import java.util.Set;
 public class Specialization {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String name;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "specializations")
-    Set<Modification> modifications;
-
-    @JsonBackReference
-    @OneToMany(mappedBy = "specialization")
-    private Set<Order> orders;
-
-    @JsonBackReference
-    @OneToMany(mappedBy = "specialization")
-    private Set<Scenario> scenarios;
 
 }

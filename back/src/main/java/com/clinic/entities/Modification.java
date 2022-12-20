@@ -1,15 +1,12 @@
 package com.clinic.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "specializations", "orders"})
 @Table(name = "modifications")
 @Entity
 @AllArgsConstructor
@@ -19,26 +16,22 @@ import java.util.Set;
 public class Modification {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name;
 
     private int price;
 
     private String currency;
 
+    private String risk;
+
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
-            name = "modification_specialization",
-            joinColumns = @JoinColumn(name = "mod"),
-            inverseJoinColumns = @JoinColumn(name = "spec"))
-    Set<Specialization> specializations;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "modifications")
-    Set<Order> orders;
-
-    @Override
-    public int hashCode() {
-        int prime = 31;
-        return prime + (name == null ? 0 : name.hashCode());
-    }
+            name = "modification_scenario",
+            joinColumns = @JoinColumn(name = "mod_id"),
+            inverseJoinColumns = @JoinColumn(name = "scanario_id")) //Anton moment gif
+    Set<Scenario> scenarios;
 }

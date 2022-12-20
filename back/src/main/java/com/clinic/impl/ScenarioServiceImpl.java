@@ -56,6 +56,6 @@ public class ScenarioServiceImpl implements ScenarioService {
             throws SpecializationMissingException
     {
         Specialization specialization = specializationService.getSpecByName(specName);
-        return scenarioRepository.findBySpecialization(specialization);
+        return null;
     }
 }

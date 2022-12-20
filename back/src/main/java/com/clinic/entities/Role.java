@@ -17,8 +17,9 @@ public class Role implements GrantedAuthority {
     protected Long id;
     private String role;
 
-    @Transient
-    @ManyToMany
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "role")
     private Set<User> users;
 
     public Role() {

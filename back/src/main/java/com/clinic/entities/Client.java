@@ -40,5 +40,13 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private Set<Order> orders;
 
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(
+            name = "client_implant",
+            joinColumns = @JoinColumn(name = "id_client"),
+            inverseJoinColumns = @JoinColumn(name = "id_implant"))
+    Set<Implant> implants;
+
 
 }

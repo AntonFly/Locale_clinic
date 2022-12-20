@@ -13,7 +13,4 @@ public interface ModificationRepository extends JpaRepository<Modification, Long
 
     Optional<Modification> findByName(String name);
 
-    List<Modification> findBySpecializations_Name(String name);
-    List<Modification> findBySpecializations(Specialization specialization);
-
 }

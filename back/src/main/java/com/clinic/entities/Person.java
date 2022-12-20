@@ -34,6 +34,10 @@ public class Person {
     @OneToMany(mappedBy = "client")
     private List<Order> orders;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "person")
+    private List<Passport> passports;
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
