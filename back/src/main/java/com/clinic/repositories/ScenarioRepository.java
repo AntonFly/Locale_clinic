@@ -10,4 +10,6 @@ import java.util.Optional;
 
 public interface ScenarioRepository extends JpaRepository<Scenario, Long> {
 
+    Optional<List<Scenario>> findAllBySpecialization_Id(long specialization_id);
+
 }

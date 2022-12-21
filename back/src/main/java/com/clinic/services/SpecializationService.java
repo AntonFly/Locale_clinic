@@ -1,5 +1,6 @@
 package com.clinic.services;
 
+import com.clinic.entities.Modification;
 import com.clinic.entities.Person;
 import com.clinic.entities.Specialization;
 import com.clinic.exceptions.SpecializationMissingException;
@@ -19,5 +20,8 @@ public interface SpecializationService {
     Specialization getSpecByName(String name) throws SpecializationMissingException;
 
     List<Specialization> getAllSpecializations();
+
+    List<Modification> getAllModificationsBySpec(int specId)
+            throws SpecializationMissingException;
 
 }

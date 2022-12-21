@@ -3,12 +3,14 @@ package com.clinic.impl;
 import com.clinic.dto.ExistingPersonClientRegistration;
 import com.clinic.dto.SimpleClientRegistration;
 import com.clinic.entities.Client;
+import com.clinic.entities.Passport;
 import com.clinic.entities.Person;
 import com.clinic.exceptions.ClientConflictException;
 import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.exceptions.PassportConflictException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.repositories.ClientRepository;
+import com.clinic.repositories.PassportRepository;
 import com.clinic.services.ClientService;
 import com.clinic.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,14 @@ public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
 
+    private PassportRepository passportRepository;
+
 
     @Autowired
-    public ClientServiceImpl(PersonService ps, ClientRepository cr){
+    public ClientServiceImpl(PersonService ps, ClientRepository cr, PassportRepository pr){
         this.personService = ps;
         this.clientRepository = cr;
+        this.passportRepository = pr;
     }
 
     @Override
@@ -78,17 +83,20 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClientByPassport(Long passport)
+    public Client getClientByPassport(Long passportNum)
             throws ClientNotFoundException
     {
-        Optional<Client> client = clientRepository.findByPerson_Id(passport);
-        if (client.isPresent())
-            return client.get();
+        Passport passport = passportRepository.getPassportByPassport(passportNum).orElseThrow(()->
+                new ClientNotFoundException(
+                        "There is no client associated with " +
+                                (passportNum == null ? "empty" : passportNum.toString()) +
+                                " passport number"));
 
-        throw new ClientNotFoundException(
-                "There is no client associated with " +
-                        (passport == null ? "empty" : passport.toString()) +
-                " passport number");
+        Optional<Client> client = clientRepository.findByPersonId(passport.getPerson().getId());
+
+        return client.orElseThrow(()-> new ClientNotFoundException(
+                "An error occured while getting client by passort"));
+
     }
     @Override
     public List<Client> getAllClients() {

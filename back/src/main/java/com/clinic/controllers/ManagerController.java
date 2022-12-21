@@ -76,10 +76,11 @@ public class ManagerController {
 
 
     @GetMapping("/get_mods_by_spec")
-    public List<Modification> getModsBySpec(@RequestParam String name)
+    public List<Modification> getModsBySpec(@RequestParam int id)
             throws SpecializationMissingException
     {
-        return modificationService.getAllModificationsBySpec(name);
+        return null;
+        //return modificationService.getAllModificationsBySpec(id);
     }
 
     @GetMapping("/get_orders")
@@ -108,15 +109,15 @@ public class ManagerController {
         for (String modName : orderData.getModNames())
             modifications.add(modificationService.getModificationByName(modName));
 
-        List<Modification> allowedModifications = modificationService.getAllModificationsBySpec(specialization.getName());
-        if (!new HashSet<>(allowedModifications).containsAll(modifications))
-            throw new ModSpecConflictException(
-                    "Some modifications are not allowed for given specialization: " +
-                    modifications.stream()
-                            .filter(modification -> !allowedModifications.contains(modification))
-                            .map(Modification::getName)
-                            .collect(Collectors.joining(","))
-            );
+//        List<Modification> allowedModifications = modificationService.getAllModificationsBySpec(specialization.getName());
+//        if (!new HashSet<>(allowedModifications).containsAll(modifications))
+//            throw new ModSpecConflictException(
+//                    "Some modifications are not allowed for given specialization: " +
+//                    modifications.stream()
+//                            .filter(modification -> !allowedModifications.contains(modification))
+//                            .map(Modification::getName)
+//                            .collect(Collectors.joining(","))
+//            );
 
         order.setModifications(modifications);
 

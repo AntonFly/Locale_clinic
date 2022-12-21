@@ -23,5 +23,7 @@ public interface ScenarioService {
     List<Scenario> getAllScenariosBySpec(String specName)
             throws SpecializationMissingException;
 
+    public List<Modification> getAllModificationsBySpec(int specId)
+            throws SpecializationMissingException;
 
 }

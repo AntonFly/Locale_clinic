@@ -61,11 +61,5 @@ public class ModificationServiceImpl implements ModificationService {
         return modificationRepository.findAll();
     }
 
-    @Override
-    public List<Modification> getAllModificationsBySpec(String specName)
-            throws SpecializationMissingException
-    {
-        Specialization specialization = specializationService.getSpecByName(specName);
-        return null;//modificationRepository.findBySpecializations(specialization);
-    }
+
 }

@@ -22,8 +22,7 @@ public interface ModificationService {
 
     List<Modification> getAllModifications();
 
-    List<Modification> getAllModificationsBySpec(String specName)
-            throws SpecializationMissingException;
+
 
 
 }

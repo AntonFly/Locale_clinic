@@ -77,8 +77,8 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public List<Stock> test() {
-        return stockRepository.findAll();
+    public List<Specialization> test() {
+        return specializationRepository.findAll();
     }
 
 }

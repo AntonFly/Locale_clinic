@@ -1,5 +1,6 @@
 package com.clinic.impl;
 
+import com.clinic.entities.Modification;
 import com.clinic.entities.Person;
 import com.clinic.entities.Specialization;
 import com.clinic.entities.User;
@@ -60,5 +61,13 @@ public class SpecializationServiceImpl implements SpecializationService {
     public List<Specialization> getAllSpecializations() {
         return specializationRepository.findAll();
     }
+
+    @Override
+    public List<Modification> getAllModificationsBySpec(int specId) throws SpecializationMissingException {
+        return null;
+    }
+
+
+
 
 }

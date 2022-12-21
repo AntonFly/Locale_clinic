@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ScenarioServiceImpl implements ScenarioService {
@@ -57,5 +58,18 @@ public class ScenarioServiceImpl implements ScenarioService {
     {
         Specialization specialization = specializationService.getSpecByName(specName);
         return null;
+    }
+    @Override
+    public List<Modification> getAllModificationsBySpec(int specId)
+            throws SpecializationMissingException
+    {
+        Set<Modification> modifications;
+        List<Scenario> scenarios = scenarioRepository.findAllBySpecialization_Id(specId)
+                .orElseThrow(()-> new SpecializationMissingException("There is no specialization with id: "+specId));
+
+        //TODO scenarios.forEach((item) -> modifications. );
+
+
+        return null;//modificationRepository.findBySpecializations(specialization);
     }
 }
