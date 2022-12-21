@@ -1,19 +1,12 @@
 package com.clinic.controllers;
 
-import com.clinic.dto.SimpleClientRegistration;
-import com.clinic.dto.SimpleOrderRegistration;
-import com.clinic.dto.SimplePersonRegistration;
-import com.clinic.dto.SimpleSpecializationRegistration;
-import com.clinic.entities.Client;
-import com.clinic.entities.Modification;
-import com.clinic.entities.Order;
-import com.clinic.entities.Specialization;
+import com.clinic.dto.*;
+import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.ClientService;
 import com.clinic.services.ModificationService;
 import com.clinic.services.OrderService;
 import com.clinic.services.SpecializationService;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,10 +59,21 @@ public class ManagerController {
 
     @PostMapping("/create_client")
     public Client createClient(@RequestBody SimpleClientRegistration clientData)
-            throws PersonConflictException, ClientConflictException
-    {
+            throws PersonConflictException, ClientConflictException, PassportConflictException {
+
         return clientService.save(clientData);
     }
+
+    @PostMapping("/create_client_existing_person")
+    public Client createClientWithExistingPerson(@RequestBody ExistingPersonClientRegistration clientData)
+            throws PersonConflictException, ClientConflictException, PassportConflictException {
+
+        return clientService.save(clientData);
+    }
+
+
+
+
 
     @GetMapping("/get_mods_by_spec")
     public List<Modification> getModsBySpec(@RequestParam String name)

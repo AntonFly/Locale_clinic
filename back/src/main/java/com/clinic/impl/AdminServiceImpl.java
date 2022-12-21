@@ -4,6 +4,7 @@ import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.entities.Person;
 import com.clinic.entities.Role;
 import com.clinic.entities.User;
+import com.clinic.exceptions.PassportConflictException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.exceptions.UserConflictException;
 import com.clinic.repositories.RoleRepository;
@@ -43,7 +44,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public User createUser(SimpleUserRegistration userData)
-            throws UserConflictException, PersonConflictException {
+            throws UserConflictException, PersonConflictException, PassportConflictException {
         Person person = personService.save(userData.getPerson());
 
         User user = new User();

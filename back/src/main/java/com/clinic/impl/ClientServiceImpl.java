@@ -1,10 +1,12 @@
 package com.clinic.impl;
 
+import com.clinic.dto.ExistingPersonClientRegistration;
 import com.clinic.dto.SimpleClientRegistration;
 import com.clinic.entities.Client;
 import com.clinic.entities.Person;
 import com.clinic.exceptions.ClientConflictException;
 import com.clinic.exceptions.ClientNotFoundException;
+import com.clinic.exceptions.PassportConflictException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.repositories.ClientRepository;
 import com.clinic.services.ClientService;
@@ -31,7 +33,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client save(SimpleClientRegistration clientData)
-            throws PersonConflictException, ClientConflictException {
+            throws PersonConflictException, ClientConflictException, PassportConflictException {
         Person person = personService.save(clientData.getPerson());
 
         Client client = new Client();
@@ -40,6 +42,25 @@ public class ClientServiceImpl implements ClientService {
         client.setComment(clientData.getComment());
 
         Optional<Client> optionalClient = clientRepository.findByPersonId(person.getId());
+
+        if (optionalClient.isPresent())
+            if (optionalClient.get() != client)
+                throw new ClientConflictException(
+                        "There is already client associated with a given person");
+
+        client = clientRepository.save(client);
+        clientRepository.flush();
+        return client;
+    }
+
+    @Override
+    public Client save(ExistingPersonClientRegistration clientData) throws PersonConflictException, ClientConflictException, PassportConflictException {
+        Client client = new Client();
+        client.setPerson(clientData.getPerson());
+        client.setEmail(clientData.getEmail());
+        client.setComment(clientData.getComment());
+
+        Optional<Client> optionalClient = clientRepository.findByPersonId(clientData.getPerson().getId());
 
         if (optionalClient.isPresent())
             if (optionalClient.get() != client)

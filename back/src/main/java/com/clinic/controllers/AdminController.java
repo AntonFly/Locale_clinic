@@ -2,6 +2,7 @@ package com.clinic.controllers;
 
 import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.entities.User;
+import com.clinic.exceptions.PassportConflictException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.exceptions.UserConflictException;
 import com.clinic.repositories.ScenarioRepository;
@@ -28,8 +29,7 @@ public class AdminController {
 
     @PostMapping("/create_user")
     public User createUser(@RequestBody SimpleUserRegistration clinicStaffData)
-    throws PersonConflictException, UserConflictException
-    {
+            throws PersonConflictException, UserConflictException, PassportConflictException {
         return adminService.createUser(clinicStaffData);
     }
 
