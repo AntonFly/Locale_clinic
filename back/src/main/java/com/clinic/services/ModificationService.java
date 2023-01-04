@@ -20,6 +20,9 @@ public interface ModificationService {
     Modification getModificationByName(String name)
         throws ModificationMissingException;
 
+    Modification getModificationById(Long modId)
+            throws ModificationMissingException;
+
     List<Modification> getAllModifications();
 
 

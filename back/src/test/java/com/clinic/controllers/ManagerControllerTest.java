@@ -1,20 +1,18 @@
 package com.clinic.controllers;
 
 import com.clinic.dto.SimpleClientRegistration;
+import com.clinic.dto.SimpleOrderRegistration;
 import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.entities.Client;
+import com.clinic.entities.Order;
 import com.clinic.entities.Person;
-import com.clinic.exceptions.ClientConflictException;
-import com.clinic.exceptions.ClientNotFoundException;
-import com.clinic.exceptions.PassportConflictException;
-import com.clinic.exceptions.PersonConflictException;
+import com.clinic.exceptions.*;
 import com.clinic.repositories.ClientRepository;
+import com.clinic.repositories.OrderRepository;
 import com.clinic.repositories.PassportRepository;
 import com.clinic.repositories.PersonRepository;
-import com.clinic.services.ClientService;
-import com.clinic.services.ModificationService;
-import com.clinic.services.OrderService;
-import com.clinic.services.SpecializationService;
+import com.clinic.services.*;
+import org.hibernate.tool.schema.internal.exec.AbstractScriptSourceInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,9 +38,13 @@ class ManagerControllerTest {
     @Autowired
     private ModificationService ms;
     @Autowired
-    ClientService cs;
+    private ClientService cs;
     @Autowired
-    OrderService os;
+    private OrderService os;
+    @Autowired
+    private ScenarioService scenarioService;
+
+
 
     @Autowired
     ClientRepository clientRepository;
@@ -50,20 +54,21 @@ class ManagerControllerTest {
 
     @Autowired
     PassportRepository passportRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     Client createdClient;
     SimpleClientRegistration simpleClientRegistration;
 
     @BeforeEach
     void setUp() throws PersonConflictException, ClientConflictException, PassportConflictException {
-        mc = new ManagerController(ss,ms,cs,os);
+        mc = new ManagerController(ss,ms,cs,os,scenarioService);
         simpleClientRegistration = generateTestPerson();
         createdClient = mc.createClient(simpleClientRegistration);
     }
 
     @AfterEach
-    void afterAll(){
-        clientRepository.delete(createdClient);
+    void afterEach(){
         personRepository.delete(createdClient.getPerson());
         createdClient = null;
     }
@@ -82,7 +87,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Get all existing clients")
-    void getClients() { assertTrue(mc.getClients().size() > 0 );
+    void getClients() { assertTrue(mc.getClients().size() >= 1 );
 
     }
 
@@ -123,9 +128,9 @@ class ManagerControllerTest {
     }
 
     @Test
-    void getModsBySpec() {
-
-        //assertEquals(1,mc.getModsBySpec());
+    @DisplayName("Get all modifications for specialization")
+    void getModsBySpec() throws SpecializationMissingException {
+        assertEquals(7,mc.getModsBySpec(5).size());
     }
 
     @Test
@@ -133,7 +138,36 @@ class ManagerControllerTest {
     }
 
     @Test
-    void createOrder() {
+    @DisplayName("Create order")
+    void createOrder() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException {
+        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
+                createdClient.getId(),
+                1L,
+                Arrays.asList(2L, 5L),
+                "Test Order"
+                );
+        Order createdOrder = mc.createOrder(simpleOrderRegistration);
+        assertEquals("Test Order",createdOrder.getComment());
+    }
+
+
+    @Test
+    @DisplayName("Change client")
+    void changeClient(){
+        SimpleClientRegistration temp = simpleClientRegistration;
+        SimplePersonRegistration tempPerson = temp.getPerson();
+        tempPerson.setPassport(1000000000L);
+        tempPerson.setName("TestName1");
+        temp.setPerson(tempPerson);
+        temp.setEmail("testemail1@email.com");
+
+        Client changedClient = mc.changeClient(temp, createdClient.getId());
+
+        assertAll(
+                ()-> assertEquals("testemail1@email.com",changedClient.getEmail()),
+                ()-> assertTrue(changedClient.getPerson().getPassports().stream().anyMatch(item-> item.getPassport() == 1000000000L)),
+                ()-> assertEquals("TestName1", changedClient.getPerson().getName())
+        );
     }
 
 

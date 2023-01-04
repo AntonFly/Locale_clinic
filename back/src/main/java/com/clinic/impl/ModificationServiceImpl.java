@@ -57,6 +57,12 @@ public class ModificationServiceImpl implements ModificationService {
     }
 
     @Override
+    public Modification getModificationById(Long modId) throws ModificationMissingException {
+        return modificationRepository.findById(modId)
+                .orElseThrow(()-> new ModificationMissingException("Не было найдено модификаций с id: "+ modId));
+    }
+
+    @Override
     public List<Modification> getAllModifications() {
         return modificationRepository.findAll();
     }

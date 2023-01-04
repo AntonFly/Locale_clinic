@@ -3,6 +3,7 @@ package com.clinic.controllers;
 import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.entities.*;
 import com.clinic.exceptions.PersonConflictException;
+import com.clinic.exceptions.SpecializationMissingException;
 import com.clinic.exceptions.UserConflictException;
 import com.clinic.repositories.*;
 import com.clinic.services.*;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController()
 @RequestMapping("/test")
@@ -77,8 +79,8 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public List<Specialization> test() {
-        return specializationRepository.findAll();
+    public Set<Modification> test(@RequestParam int specId) throws SpecializationMissingException {
+        return scenarioService.getAllModificationsBySpec(specId);
     }
 
 }

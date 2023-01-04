@@ -57,6 +57,13 @@ public class SpecializationServiceImpl implements SpecializationService {
                                 ("the name " + name))
                         + " was found");
     }
+
+    @Override
+    public Specialization getSpecById(Long specId) throws SpecializationMissingException {
+        return specializationRepository.findById(specId)
+                .orElseThrow(()->new SpecializationMissingException("Не было найдено специализации с id: "+ specId));
+    }
+
     @Override
     public List<Specialization> getAllSpecializations() {
         return specializationRepository.findAll();

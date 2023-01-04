@@ -3,10 +3,7 @@ package com.clinic.controllers;
 import com.clinic.dto.*;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
-import com.clinic.services.ClientService;
-import com.clinic.services.ModificationService;
-import com.clinic.services.OrderService;
-import com.clinic.services.SpecializationService;
+import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,17 +19,21 @@ public class ManagerController {
     private ClientService clientService;
     private OrderService orderService;
 
+    private  ScenarioService scenarioService;
+
     @Autowired
     public ManagerController(
             SpecializationService ss,
             ModificationService ms,
             ClientService cs,
-            OrderService os
+            OrderService os,
+            ScenarioService scenarioService
     ){
         this.specializationService = ss;
         this.modificationService = ms;
         this.clientService = cs;
         this.orderService = os;
+        this.scenarioService = scenarioService;
     }
 
     @GetMapping("/get_specs")
@@ -76,11 +77,10 @@ public class ManagerController {
 
 
     @GetMapping("/get_mods_by_spec")
-    public List<Modification> getModsBySpec(@RequestParam int id)
+    public Set<Modification> getModsBySpec(@RequestParam int specId)
             throws SpecializationMissingException
     {
-        return null;
-        //return modificationService.getAllModificationsBySpec(id);
+        return scenarioService.getAllModificationsBySpec(specId);
     }
 
     @GetMapping("/get_orders")
@@ -98,30 +98,25 @@ public class ManagerController {
             ModSpecConflictException
     {
         Order order = new Order();
-        order.setClient(clientService.getClientByPassport(orderData.getPassport()));
+        order.setClient(clientService.getClient(orderData.getClientId()));
 
-        Specialization specialization = specializationService.getSpecByName(orderData.getSpecName());
-        order.setSpecialization(specialization);
+        order.setSpecialization(specializationService.getSpecById(orderData.getSpecId()));
 
         order.setComment(orderData.getComment());
 
         Set<Modification> modifications = new HashSet<>();
-        for (String modName : orderData.getModNames())
-            modifications.add(modificationService.getModificationByName(modName));
-
-//        List<Modification> allowedModifications = modificationService.getAllModificationsBySpec(specialization.getName());
-//        if (!new HashSet<>(allowedModifications).containsAll(modifications))
-//            throw new ModSpecConflictException(
-//                    "Some modifications are not allowed for given specialization: " +
-//                    modifications.stream()
-//                            .filter(modification -> !allowedModifications.contains(modification))
-//                            .map(Modification::getName)
-//                            .collect(Collectors.joining(","))
-//            );
+        for (Long modId : orderData.getModIds())
+            modifications.add(modificationService.getModificationById(modId));
 
         order.setModifications(modifications);
 
         return orderService.save(order);
+    }
+
+    @PostMapping
+    public Client changeClient(@RequestBody SimpleClientRegistration clientInfo, @RequestParam Long clientId){
+        return clientService.updateClient(clientInfo, clientId);
+
     }
 
 }

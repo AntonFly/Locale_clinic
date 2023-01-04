@@ -9,6 +9,7 @@ import com.clinic.exceptions.SpecializationMissingException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ScenarioService {
 
@@ -23,7 +24,7 @@ public interface ScenarioService {
     List<Scenario> getAllScenariosBySpec(String specName)
             throws SpecializationMissingException;
 
-    public List<Modification> getAllModificationsBySpec(int specId)
+    public Set<Modification> getAllModificationsBySpec(int specId)
             throws SpecializationMissingException;
 
 }

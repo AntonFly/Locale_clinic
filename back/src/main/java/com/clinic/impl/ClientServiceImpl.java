@@ -11,6 +11,7 @@ import com.clinic.exceptions.PassportConflictException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.repositories.ClientRepository;
 import com.clinic.repositories.PassportRepository;
+import com.clinic.repositories.PersonRepository;
 import com.clinic.services.ClientService;
 import com.clinic.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class ClientServiceImpl implements ClientService {
 
     private PassportRepository passportRepository;
 
+    private PersonRepository personRepository;
+
 
     @Autowired
-    public ClientServiceImpl(PersonService ps, ClientRepository cr, PassportRepository pr){
+    public ClientServiceImpl(PersonService ps, ClientRepository cr, PassportRepository pr,PersonRepository personRepository){
         this.personService = ps;
         this.clientRepository = cr;
         this.passportRepository = pr;
+        this.personRepository = personRepository;
     }
 
     @Override
@@ -98,9 +102,38 @@ public class ClientServiceImpl implements ClientService {
                 "An error occured while getting client by passort"));
 
     }
+
+    @Override
+    public Client getClient(Long clientId) throws ClientNotFoundException { return  clientRepository.findById(clientId)
+            .orElseThrow(()->new ClientNotFoundException("Не было найдено клиента с Id: "+ clientId)); }
+
     @Override
     public List<Client> getAllClients() {
         return clientRepository.findAll();
+    }
+
+    @Override
+    public Client updateClient(SimpleClientRegistration clientInfo, Long clientId) {
+        Client currentClient = clientRepository.getOne(clientId);
+
+        currentClient.setEmail(clientInfo.getEmail());
+        currentClient.setComment(clientInfo.getComment());
+
+        Person currentPerson = personRepository.getOne(currentClient.getPerson().getId());
+
+        if(currentPerson.getPassports().stream().noneMatch(item -> item.getPassport() == clientInfo.getPerson().getPassport()))
+            passportRepository.save(new Passport(currentPerson,clientInfo.getPerson().getPassport()));
+
+        currentPerson.setName(clientInfo.getPerson().getName());
+        currentPerson.setSurname(clientInfo.getPerson().getSurname());
+        currentPerson.setPatronymic(clientInfo.getPerson().getPatronymic());
+        currentPerson.setDateOfBirth(clientInfo.getPerson().getDateOfBirth());
+
+        personRepository.save(currentPerson);
+
+
+        return clientRepository.save(currentClient);
+
     }
 
 }

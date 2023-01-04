@@ -7,7 +7,7 @@ create table user_role
 );
 
 alter table user_role
-    owner to remoteuser;
+    owner to "remoteUser";
 
 create unique index user_role_role_uindex
     on user_role (role);

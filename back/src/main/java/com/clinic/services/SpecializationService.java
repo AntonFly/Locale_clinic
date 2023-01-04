@@ -19,6 +19,8 @@ public interface SpecializationService {
 
     Specialization getSpecByName(String name) throws SpecializationMissingException;
 
+    Specialization getSpecById (Long specId) throws  SpecializationMissingException;
+
     List<Specialization> getAllSpecializations();
 
     List<Modification> getAllModificationsBySpec(int specId)

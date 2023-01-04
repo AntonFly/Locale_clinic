@@ -15,15 +15,15 @@ public class SimpleOrderRegistration {
 
     @NotEmpty
     @NotNull
-    private Long passport;
+    private Long clientId;
 
     @NotEmpty
     @NotNull
-    private String specName;
+    private Long specId;
 
     @NotEmpty
     @NotNull
-    private List<String> modNames;
+    private List<Long> modIds;
 
     private String comment;
 }

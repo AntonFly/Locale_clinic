@@ -15,7 +15,5 @@ create table users
 );
 
 alter table users
-    owner to remoteuser;
+    owner to "remoteUser";
 
-INSERT INTO public.users (id, role, password, email, id_person) VALUES (35, 1, 'TEST_PSWD', 'fsdodsz@shitmail.me', 313);
-INSERT INTO public.users (id, role, password, email, id_person) VALUES (36, 4, 'PSWD', 'anton99910@outlook.com', 9999);

@@ -26,6 +26,12 @@ public interface ClientService {
 
     Client getClientByPassport(Long passport) throws ClientNotFoundException;
 
+    Client getClient(Long clientId) throws ClientNotFoundException;
+
     List<Client> getAllClients();
+
+    Client updateClient(SimpleClientRegistration clientInfo, Long clientId);
+
+
 
 }
