@@ -1,9 +1,10 @@
-package com.clinic.impl;
+package com.clinic.configs.impl;
 
 import com.clinic.entities.Client;
 import com.clinic.entities.Order;
 import com.clinic.entities.User;
 import com.clinic.exceptions.ClientNotFoundException;
+import com.clinic.exceptions.OrderNotFoundExceprion;
 import com.clinic.repositories.OrderRepository;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.repositories.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -56,4 +58,13 @@ public class OrderServiceImpl implements OrderService {
         Client client = clientService.getClientByPassport(id);
         return orderRepository.findAllByClient(client);
     }
+
+    @Override
+    public Order getOrderById(Long id) throws OrderNotFoundExceprion {
+        Optional<Order> order = orderRepository.findById(id);
+
+        return order.orElseThrow(()->new OrderNotFoundExceprion("No order found with id: "+id));
+    }
+
+
 }

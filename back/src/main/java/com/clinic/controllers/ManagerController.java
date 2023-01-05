@@ -4,11 +4,20 @@ import com.clinic.dto.*;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/manager")
@@ -21,19 +30,23 @@ public class ManagerController {
 
     private  ScenarioService scenarioService;
 
+    private  PDFService pdfService;
+
     @Autowired
     public ManagerController(
             SpecializationService ss,
             ModificationService ms,
             ClientService cs,
             OrderService os,
-            ScenarioService scenarioService
+            ScenarioService scenarioService,
+            PDFService pdfService
     ){
         this.specializationService = ss;
         this.modificationService = ms;
         this.clientService = cs;
         this.orderService = os;
         this.scenarioService = scenarioService;
+        this.pdfService = pdfService;
     }
 
     @GetMapping("/get_specs")
@@ -113,9 +126,39 @@ public class ManagerController {
         return orderService.save(order);
     }
 
-    @PostMapping
+    @PostMapping("/update_client")
     public Client changeClient(@RequestBody SimpleClientRegistration clientInfo, @RequestParam Long clientId){
         return clientService.updateClient(clientInfo, clientId);
+    }
+
+    @GetMapping("/get_commercial/{order}")
+    public ResponseEntity<InputStreamResource> get_commercial(
+            @PathVariable("order") Long orderId
+    ) throws OrderNotFoundExceprion, IOException, DocumentException {
+        Order currentOrder = orderService.getOrderById(orderId);
+        String filePath = pdfService.generateCommercial(currentOrder);
+
+        try
+        {
+            File file = new File(filePath);
+            HttpHeaders respHeaders = new HttpHeaders();
+            MediaType mediaType = MediaType.parseMediaType("application/pdf");
+            respHeaders.setContentType(mediaType);
+            respHeaders.setContentLength(file.length());
+            respHeaders.setContentDispositionFormData("attachment", file.getName());
+            InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
+            return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+
+
+
+
 
     }
 

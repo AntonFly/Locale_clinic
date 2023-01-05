@@ -1,4 +1,4 @@
-package com.clinic.impl;
+package com.clinic.configs.impl;
 
 import com.clinic.dto.ExistingPersonClientRegistration;
 import com.clinic.dto.SimpleClientRegistration;

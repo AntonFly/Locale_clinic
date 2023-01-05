@@ -1,4 +1,4 @@
-package com.clinic.impl;
+package com.clinic.configs.impl;
 
 import com.clinic.entities.User;
 import com.clinic.repositories.RoleRepository;

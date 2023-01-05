@@ -32,7 +32,8 @@ public class RestControllerAdvicor {
             {
                     SpecializationMissingException.class,
                     ModificationMissingException.class,
-                    ClientNotFoundException.class
+                    ClientNotFoundException.class,
+                    OrderNotFoundExceprion.class
             })
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleMissingException(Exception exception) {

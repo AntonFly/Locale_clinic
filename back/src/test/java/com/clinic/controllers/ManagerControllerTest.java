@@ -43,6 +43,8 @@ class ManagerControllerTest {
     private OrderService os;
     @Autowired
     private ScenarioService scenarioService;
+    @Autowired
+    PDFService pdfService;
 
 
 
@@ -62,7 +64,7 @@ class ManagerControllerTest {
 
     @BeforeEach
     void setUp() throws PersonConflictException, ClientConflictException, PassportConflictException {
-        mc = new ManagerController(ss,ms,cs,os,scenarioService);
+        mc = new ManagerController(ss,ms,cs,os,scenarioService,pdfService);
         simpleClientRegistration = generateTestPerson();
         createdClient = mc.createClient(simpleClientRegistration);
     }
@@ -133,9 +135,6 @@ class ManagerControllerTest {
         assertEquals(7,mc.getModsBySpec(5).size());
     }
 
-    @Test
-    void getOrders() {
-    }
 
     @Test
     @DisplayName("Create order")

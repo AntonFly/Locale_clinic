@@ -79,8 +79,8 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public Set<Modification> test(@RequestParam int specId) throws SpecializationMissingException {
-        return scenarioService.getAllModificationsBySpec(specId);
+    public List<Scenario> test() throws SpecializationMissingException {
+        return scenarioService.getAllScenarios();
     }
 
 }

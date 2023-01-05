@@ -3,6 +3,7 @@ package com.clinic.services;
 import com.clinic.entities.Order;
 import com.clinic.entities.User;
 import com.clinic.exceptions.ClientNotFoundException;
+import com.clinic.exceptions.OrderNotFoundExceprion;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface OrderService {
     List<Order> getAllOrdersByClientId(Long id)
             throws ClientNotFoundException;
 
+    Order getOrderById(Long id)
+            throws OrderNotFoundExceprion;
 }

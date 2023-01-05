@@ -1,11 +1,8 @@
 package com.clinic.services;
 
-import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.entities.Passport;
 import com.clinic.entities.Person;
 import com.clinic.exceptions.PassportConflictException;
-import com.clinic.exceptions.PersonConflictException;
-import com.clinic.impl.PersonServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
