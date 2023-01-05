@@ -5,6 +5,7 @@ import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Table(name = "modifications")
@@ -27,7 +28,9 @@ public class Modification {
 
     private String risk;
 
-    @JsonManagedReference
+    private BigDecimal chance;
+
+    @JsonBackReference
     @ManyToMany
     @JoinTable(
             name = "modification_scenario",
