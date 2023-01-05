@@ -1,5 +1,6 @@
 package com.clinic.services;
 
+import com.clinic.dto.SimpleScenarioRegistration;
 import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Modification;
 import com.clinic.entities.Scenario;
@@ -21,10 +22,19 @@ public interface ScenarioService {
 
     List<Scenario> getAllScenarios();
 
-    List<Scenario> getAllScenariosBySpec(String specName)
+//    Set<Scenario> getAllScenariosBySpec(String specName)
+//            throws SpecializationMissingException;
+
+    List<Scenario> getAllScenariosBySpecId(long specId)
             throws SpecializationMissingException;
 
     public Set<Modification> getAllModificationsBySpec(int specId)
             throws SpecializationMissingException;
+
+    public List<Modification> getAllModificationsBySpecOrderedByRisk(int specId)
+            throws SpecializationMissingException;
+
+    public Scenario createScenario(SimpleScenarioRegistration scenarioData)
+            throws SpecializationMissingException, ModificationMissingException;
 
 }

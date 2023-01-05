@@ -1,35 +1,54 @@
 package com.clinic.impl;
 
+import com.clinic.dto.SimpleScenarioRegistration;
 import com.clinic.entities.Modification;
 import com.clinic.entities.Scenario;
 import com.clinic.entities.Specialization;
+import com.clinic.exceptions.ModificationMissingException;
 import com.clinic.exceptions.SpecializationMissingException;
+import com.clinic.repositories.ModificationRepository;
 import com.clinic.repositories.ScenarioRepository;
+import com.clinic.repositories.SpecializationRepository;
 import com.clinic.services.ScenarioService;
 import com.clinic.services.SpecializationService;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ScenarioServiceImpl implements ScenarioService {
 
+    private final ModificationRepository modificationRepository;
+
     private final ScenarioRepository scenarioRepository;
+
+    private final SpecializationRepository specializationRepository;
 
     private final SpecializationService specializationService;
 
 
     @Autowired
     public ScenarioServiceImpl(
+            ModificationRepository mr,
             ScenarioRepository sr,
-            SpecializationService ss
-    ){
+            SpecializationService ss,
+            SpecializationRepository slr
+    )
+    {
+        this.modificationRepository = mr;
         this.scenarioRepository = sr;
         this.specializationService = ss;
+        this.specializationRepository = slr;
     }
+
+    private SpecializationMissingException GenerateException(long specId)
+    { return new SpecializationMissingException("There is no scenario for specialization with id: " + specId); }
+
+    private ModificationMissingException GenerateModException(long modId)
+    { return  new ModificationMissingException("There is no scenario for modification with id: " + modId); }
 
     @Override
     public Scenario save(Scenario scenario) {
@@ -49,11 +68,43 @@ public class ScenarioServiceImpl implements ScenarioService {
     }
 
     @Override
-    public List<Scenario> getAllScenariosBySpec(String specName)
+    public List<Scenario> getAllScenariosBySpecId(long specId)
             throws SpecializationMissingException
     {
-        Specialization specialization = specializationService.getSpecByName(specName);
-        return null;
+        return scenarioRepository.findAllBySpecializationId(specId)
+                .orElseThrow(() -> GenerateException(specId));
+    }
+
+    @Override
+    public List<Modification> getAllModificationsBySpecOrderedByRisk(int specId)
+            throws SpecializationMissingException
+    {
+        List<Scenario> scenarios = scenarioRepository.findAllBySpecializationId(specId)
+                .orElseThrow(() -> GenerateException(specId));
+
+       return scenarios.stream()
+                .map(Scenario::getModifications)
+                .flatMap(Set::stream)
+               .sorted(Comparator.comparing(Modification::getChance))
+               .collect(Collectors.toList());
+    }
+
+    @Override
+    public Scenario createScenario(SimpleScenarioRegistration scenarioData)
+            throws SpecializationMissingException, ModificationMissingException
+    {
+        Specialization specialization = specializationRepository.findById(scenarioData.getSpecId())
+                .orElseThrow(() -> GenerateException(scenarioData.getSpecId()));
+
+        Set<Modification> modifications = new TreeSet<>();
+        for (Integer modId : scenarioData.getModIds())
+            modifications.add(modificationRepository.findById(modId.longValue()).orElseThrow(() -> GenerateModException(modId)));
+
+        Scenario scenario = new Scenario();
+        scenario.setSpecialization(specialization);
+        scenario.setModifications(modifications);
+
+        return scenarioRepository.save(scenario);
     }
     @Override
     public Set<Modification> getAllModificationsBySpec(int specId)
@@ -61,7 +112,7 @@ public class ScenarioServiceImpl implements ScenarioService {
     {
         Set<Modification> modifications = new HashSet<>() ;
         List<Scenario> scenarios = scenarioRepository.findAllBySpecialization_Id(specId)
-                .orElseThrow(()-> new SpecializationMissingException("There is no scenario for specialization with id: "+specId));
+                .orElseThrow(() -> GenerateException(specId));
 
 
         scenarios.forEach((item) -> modifications.addAll(item.getModifications()));

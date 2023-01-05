@@ -47,10 +47,10 @@ public class MedicController {
     }
 
     @GetMapping("/get_scenarios_by_spec")
-    public List<Scenario> getScenariosBySpec(@RequestParam String name)
+    public List<Scenario> getScenariosBySpec(@RequestParam long specId)
         throws SpecializationMissingException
     {
-        return scenarioService.getAllScenariosBySpec(name);
+        return scenarioService.getAllScenariosBySpecId(specId);
     }
 
 

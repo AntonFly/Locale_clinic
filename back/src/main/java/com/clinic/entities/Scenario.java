@@ -28,7 +28,7 @@ public class Scenario {
     @JoinColumn(name = "spec_id", nullable = false)
     private Specialization specialization;
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
             name = "modification_scenario",
