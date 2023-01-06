@@ -79,8 +79,8 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public List<Scenario> test() throws SpecializationMissingException {
-        return scenarioService.getAllScenarios();
+    public List<Stock> test() throws SpecializationMissingException {
+        return stockRepository.findAll();
     }
 
 }
