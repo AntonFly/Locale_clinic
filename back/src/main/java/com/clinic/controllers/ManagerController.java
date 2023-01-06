@@ -4,6 +4,8 @@ import com.clinic.dto.*;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
+import com.clinic.utilities.FileUploadResponse;
+import com.clinic.utilities.FileUploadUtil;
 import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -11,7 +13,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.ResponseEntity;
+
 
 
 import java.io.File;
@@ -179,5 +185,29 @@ public class ManagerController {
             e.printStackTrace();
             return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/uploadConfirmation/{order}")
+    public ResponseEntity<FileUploadResponse> uploadConfirmation(
+            @RequestParam("file") MultipartFile multipartFile,
+            @PathVariable("order") Long orderId)
+            throws IOException, OrderNotFoundExceprion {
+
+        String[] fileParts = StringUtils.cleanPath(multipartFile.getOriginalFilename()).split("\\.");
+
+        String fileName = "confirmationOrder_"+orderId+"."+fileParts[fileParts.length-1];
+        long size = multipartFile.getSize();
+
+        fileName = FileUploadUtil.saveFile(fileName,"confirmation", multipartFile);
+
+        FileUploadResponse response = new FileUploadResponse();
+        response.setFileName(fileName);
+        response.setSize(size);
+
+        Order currentOrder =  orderService.getOrderById(orderId);
+        currentOrder.setConfirmation(fileName);
+        orderService.save(currentOrder);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

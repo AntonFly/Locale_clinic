@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,8 +24,11 @@ import java.util.stream.Stream;
 @Service
 public class PDFServiceImpl implements PDFService {
 
-    String generalCommercialPath = "./commercial/commercialForOrder_<order>.pdf";
-    String generalRisksPath = "./risks/risksForOrder_<order>.pdf";
+    String generalCommercialPath = "commercialForOrder_<order>.pdf";
+    String generalCommercialFolder = "./commercial";
+    String generalRisksPath = "risksForOrder_<order>.pdf";
+
+    String generalRisksFolder = "./risk";
     String pathToFont = "/fonts/TimesNewRoman.ttf";
     String fontname;
     BaseFont baseFont;
@@ -41,9 +45,15 @@ public class PDFServiceImpl implements PDFService {
 
         Document document = new Document();
 
-        String filePath = this.generalCommercialPath.replace("<order>",String.valueOf(order.getId()));
+        Path uploadPath = Paths.get(generalCommercialFolder);
 
-        PdfWriter writer =PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(filePath)));
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        Path  filePath = uploadPath.resolve(this.generalCommercialPath.replace("<order>",String.valueOf(order.getId())));
+
+        PdfWriter writer =PdfWriter.getInstance(document, Files.newOutputStream(filePath));
 
         document.open();
         document.newPage();
@@ -92,9 +102,15 @@ public class PDFServiceImpl implements PDFService {
 
         Document document = new Document();
 
-        String filePath = this.generalRisksPath.replace("<order>",String.valueOf(order.getId()));
+        Path uploadPath = Paths.get(generalRisksFolder);
 
-        PdfWriter writer =PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(filePath)));
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        Path filePath = uploadPath.resolve(this.generalRisksPath.replace("<order>",String.valueOf(order.getId())));
+
+        PdfWriter writer =PdfWriter.getInstance(document, Files.newOutputStream(filePath));
 
         document.open();
         document.newPage();

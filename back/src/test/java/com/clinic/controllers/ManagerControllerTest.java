@@ -12,6 +12,7 @@ import com.clinic.repositories.OrderRepository;
 import com.clinic.repositories.PassportRepository;
 import com.clinic.repositories.PersonRepository;
 import com.clinic.services.*;
+import com.clinic.utilities.FileUploadResponse;
 import com.itextpdf.text.DocumentException;
 import org.hibernate.tool.schema.internal.exec.AbstractScriptSourceInput;
 import org.junit.jupiter.api.AfterEach;
@@ -22,10 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -213,6 +218,41 @@ class ManagerControllerTest {
         assert(Files.exists(Path.of(filePath)));
 
         Files.delete(Path.of(filePath));
+    }
+
+    @Test
+    @DisplayName("Upload confirmation")
+    void uploadConfirmation() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException, OrderNotFoundExceprion, IOException {
+        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
+                createdClient.getId(),
+                1L,
+                Arrays.asList(2L, 5L),
+                "Test Order"
+        );
+        Order createdOrder = mc.createOrder(simpleOrderRegistration);
+
+        Path path = Paths.get("/src/test/data/test_confirmation.docx");
+        String name = "test_confirmation.docx";
+        String originalFileName = "test_confirmation.docx";
+        String contentType = "text/plain";
+        byte[] content = null;
+        try {
+            content = Files.readAllBytes(path);
+        } catch (final IOException e) {
+        }
+
+        MultipartFile file = new MockMultipartFile(name,originalFileName,contentType,content);
+        ResponseEntity<FileUploadResponse> response = mc.uploadConfirmation(file,createdOrder.getId());
+
+        createdOrder = orderRepository.getOne(createdOrder.getId());
+        Order finalCreatedOrder = createdOrder;
+        assertAll(
+                ()->assertTrue(Files.exists(Path.of(Objects.requireNonNull(response.getBody()).getFileName()))),
+                ()-> assertEquals(finalCreatedOrder.getConfirmation(), Objects.requireNonNull(response.getBody()).getFileName())
+
+        );
+
+        Files.delete(Path.of(Objects.requireNonNull(response.getBody()).getFileName()));
     }
 
 
