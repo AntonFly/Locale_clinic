@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 public class PDFServiceImpl implements PDFService {
 
     String generalCommercialPath = "./commercial/commercialForOrder_<order>.pdf";
+    String generalRisksPath = "./risks/risksForOrder_<order>.pdf";
     String pathToFont = "/fonts/TimesNewRoman.ttf";
     String fontname;
     BaseFont baseFont;
@@ -83,7 +84,53 @@ public class PDFServiceImpl implements PDFService {
 
         writer.close();
         return filePath.toString();
-    };
+    }
+
+    @Override
+    public String generateRiskList(Order order) throws IOException, DocumentException {
+        Person currentPerson = order.getClient().getPerson();
+
+        Document document = new Document();
+
+        String filePath = this.generalRisksPath.replace("<order>",String.valueOf(order.getId()));
+
+        PdfWriter writer =PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(filePath)));
+
+        document.open();
+        document.newPage();
+
+
+        Paragraph header = new Paragraph(
+                "Перечень рисков к заказу №"+order.getId()+"\r\n для "+currentPerson.getSurname()+" "+currentPerson.getName()+" "+ currentPerson.getPatronymic(),
+                new Font(baseFont,18)
+        );
+        header.setAlignment(Element.ALIGN_CENTER);
+        document.add(header);
+
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("\n"));
+
+        document.add(generateRiskTable(order.getModifications()));
+
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("\n"));
+
+        header = new Paragraph(
+                "С возможными осложнениями ознакомился: ___________/"+currentPerson.getSurname()+" "+currentPerson.getName().charAt(0)+". "+currentPerson.getPatronymic().charAt(0)+".",
+                new Font(baseFont,12)
+        );
+
+        header.setAlignment(Element.ALIGN_RIGHT);
+
+        document.add(header);
+
+        document.close();
+
+        writer.close();
+        return filePath.toString();
+    }
+
+    ;
 
     public PdfPTable generatePriceTable(Set<Modification> modificationSet){
         PdfPTable table = new PdfPTable(2);
@@ -113,6 +160,32 @@ public class PDFServiceImpl implements PDFService {
             cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
             //cell.setBorderWidth(2);
             table.addCell(cell);
+        });
+
+        return  table;
+
+    }
+
+    public PdfPTable generateRiskTable(Set<Modification> modificationSet){
+        PdfPTable table = new PdfPTable(3);
+
+        AtomicReference<Float> sum = new AtomicReference<>((float) 0);
+
+        Stream.of("Модификация","Риск", "Вероятность появления")
+                .forEach(columnTitle -> {
+                    PdfPCell header = new PdfPCell();
+                    header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    //header.setBorderWidth(2);
+                    header.setPhrase(new Phrase(columnTitle,new Font(baseFont,12)));
+                    table.addCell(header);
+                });
+
+        modificationSet.forEach(modification -> {
+            if(modification.getRisk() != null){
+                table.addCell(new Phrase(modification.getName(),new Font(baseFont,12)));
+                table.addCell(new Phrase(modification.getRisk(),new Font(baseFont,12)));
+                table.addCell(new Phrase(modification.getChance()+" %"));
+            }
         });
 
         return  table;

@@ -154,13 +154,30 @@ public class ManagerController {
         {
             return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
-
-
-
-
-
     }
 
+    @GetMapping("/get_risks/{order}")
+    public ResponseEntity<InputStreamResource> get_risks(
+            @PathVariable("order") Long orderId
+    ) throws OrderNotFoundExceprion, IOException, DocumentException {
+        try
+        {
+            Order currentOrder = orderService.getOrderById(orderId);
+            String filePath = pdfService.generateRiskList(currentOrder);
+
+            File file = new File(filePath);
+            HttpHeaders respHeaders = new HttpHeaders();
+            MediaType mediaType = MediaType.parseMediaType("application/pdf");
+            respHeaders.setContentType(mediaType);
+            respHeaders.setContentLength(file.length());
+            respHeaders.setContentDispositionFormData("attachment", file.getName());
+            InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
+            return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

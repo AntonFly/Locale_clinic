@@ -189,13 +189,30 @@ class ManagerControllerTest {
 
         assert(Files.exists(Path.of(filePath)));
 
-        //Files.delete(Path.of(filePath));
+        Files.delete(Path.of(filePath));
 //        ResponseEntity<InputStreamResource> result  = mc.get_commercial(createdOrder.getId());
 //        byte[] content = result.getBody().getInputStream().readAllBytes();
 //        for (byte i: content
 //             ) {
 //            System.out.print((char) i);
 //        }
+    }
+
+    @Test
+    @DisplayName("Generating risks")
+    void generatingRisks() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException, OrderNotFoundExceprion, DocumentException, IOException {
+        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
+                createdClient.getId(),
+                1L,
+                Arrays.asList(2L, 5L),
+                "Test Order"
+        );
+        Order createdOrder = mc.createOrder(simpleOrderRegistration);
+        String filePath = pdfService.generateRiskList(createdOrder);
+
+        assert(Files.exists(Path.of(filePath)));
+
+        Files.delete(Path.of(filePath));
     }
 
 
