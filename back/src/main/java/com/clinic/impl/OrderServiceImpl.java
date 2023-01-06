@@ -1,4 +1,4 @@
-package com.clinic.configs.impl;
+package com.clinic.impl;
 
 import com.clinic.entities.Client;
 import com.clinic.entities.Order;

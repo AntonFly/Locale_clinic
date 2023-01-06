@@ -1,4 +1,4 @@
-package com.clinic.configs.impl;
+package com.clinic.impl;
 
 import com.clinic.entities.Modification;
 import com.clinic.entities.Order;
@@ -15,10 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
@@ -84,7 +82,7 @@ public class PDFServiceImpl implements PDFService {
         document.close();
 
         writer.close();
-        return filePath;
+        return filePath.toString();
     };
 
     public PdfPTable generatePriceTable(Set<Modification> modificationSet){

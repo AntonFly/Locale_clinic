@@ -1,4 +1,4 @@
-package com.clinic.configs.impl;
+package com.clinic.impl;
 
 import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Modification;

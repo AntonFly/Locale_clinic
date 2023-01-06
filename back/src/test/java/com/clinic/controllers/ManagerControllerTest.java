@@ -12,6 +12,7 @@ import com.clinic.repositories.OrderRepository;
 import com.clinic.repositories.PassportRepository;
 import com.clinic.repositories.PersonRepository;
 import com.clinic.services.*;
+import com.itextpdf.text.DocumentException;
 import org.hibernate.tool.schema.internal.exec.AbstractScriptSourceInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,6 +173,29 @@ class ManagerControllerTest {
                 ()-> assertTrue(changedClient.getPerson().getPassports().stream().anyMatch(item-> item.getPassport() == 1000000000L)),
                 ()-> assertEquals("TestName1", changedClient.getPerson().getName())
         );
+    }
+
+    @Test
+    @DisplayName("Generating commercial")
+    void generatingCommercial() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException, OrderNotFoundExceprion, DocumentException, IOException {
+        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
+                createdClient.getId(),
+                1L,
+                Arrays.asList(2L, 5L),
+                "Test Order"
+        );
+        Order createdOrder = mc.createOrder(simpleOrderRegistration);
+        String filePath = pdfService.generateCommercial(createdOrder);
+
+        assert(Files.exists(Path.of(filePath)));
+
+        //Files.delete(Path.of(filePath));
+//        ResponseEntity<InputStreamResource> result  = mc.get_commercial(createdOrder.getId());
+//        byte[] content = result.getBody().getInputStream().readAllBytes();
+//        for (byte i: content
+//             ) {
+//            System.out.print((char) i);
+//        }
     }
 
 
