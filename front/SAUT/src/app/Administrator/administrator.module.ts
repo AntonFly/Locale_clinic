@@ -16,6 +16,10 @@ import {NewUserComponent} from './users/new-user/new-user.component';
 import { PassRecoveryComponent } from './users/pass-recovery/pass-recovery.component'
 import { AdminService } from './_services/admin.service'
 import { DatePipe } from '@angular/common';
+import {SharedModule} from '../common/shared.module';
+import { RecoverDialogComponent } from './users/recover-dialog/recover-dialog.component'
+
+import { AnimationDirective } from './_directives/animation.directive'
 
   
 const routes: Routes = [
@@ -24,10 +28,11 @@ const routes: Routes = [
 ];
  
 @NgModule({
-  declarations: [NewUserComponent, PassRecoveryComponent],
+  declarations: [NewUserComponent, PassRecoveryComponent, RecoverDialogComponent, AnimationDirective],
   imports: [
     MatButtonModule,
     CommonModule,
+    SharedModule,
     RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,        
@@ -45,7 +50,7 @@ const routes: Routes = [
     AdminService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
     DatePipe    
-  ]
-//   entryComponents: [ClientsDialogComponent]
+  ],
+  entryComponents: [RecoverDialogComponent]
 })
 export class AdministratorModule { }

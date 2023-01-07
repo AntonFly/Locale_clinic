@@ -10,7 +10,12 @@ import { User } from '../../_models/User'
 })
 export class LoginComponent implements OnInit {
   
-  fileDetailsForm: FormGroup;   
+  fileDetailsForm: FormGroup;
+  hide: boolean = true;
+  UserForm: FormGroup;
+
+  formError: boolean = true;
+  formMsg: string = 'JIASAS';
 
     eventTypes = [
     "Администратор",
@@ -22,13 +27,25 @@ export class LoginComponent implements OnInit {
     'eventType': [
       { type: 'required', message: 'Выберете роль' },
     ],
-    
+    'Email':[
+      {type: 'required', message:''}
+    ],
+    'Pass':[
+      {type: 'required', message:''}
+    ]    
   };
 
   constructor(private authenticationService: AuthenticationService, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.createForms();
+  }
+
+  get formControlEmail() {
+    return this.UserForm.get('Email');
+  }
+  get formControlPass() {
+    return this.UserForm.get('Pass');
   }
 
   get formControlEvent() {
@@ -39,6 +56,11 @@ export class LoginComponent implements OnInit {
     this.fileDetailsForm = this.fb.group({      
       eventType: new FormControl(this.eventTypes[this.eventTypes[0]], Validators.required)
     })
+
+    this.UserForm = this.fb.group({
+      Email: new FormControl('', Validators.required),
+      Pass: new FormControl('', Validators.required),
+    });
   }
   
   onSubmitFileDetails(event: any) {
@@ -58,6 +80,10 @@ export class LoginComponent implements OnInit {
 
   logout($event){
     this.authenticationService.logout();
+  }
+
+  onSubmitClient(data){
+    console.log(data);
   }
 
 }

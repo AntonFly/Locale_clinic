@@ -1,0 +1,29 @@
+.action-button button {
+    border-radius: 5px;
+    order: 999;
+    /* margin-left: auto;     */    
+    margin:5px, ;
+    background-color: #3f51b5;
+    color: white;
+  }
+  
+  .action-button {        
+    /* display: flex; */    
+    /* margin: 12px 0 0 12px;     */
+    /* margin: auto, auto, 5px,5px; */
+    /* margin-top: auto; */
+    /* align-self: flex-end; */
+    /* float: botom; */
+    align-self: end;    
+  }
+
+  .mat-cancel{
+    background-color: lightgray;
+    color: black;
+  }
+
+  .dialog-parent{
+    width: 100%;
+    height: 100%;
+    display: grid;
+  }

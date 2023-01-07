@@ -1,1 +1,16 @@
-<p>pass-recovery works!</p>
+<div class="pass-container">
+    <app-loader *ngIf="loading"></app-loader>
+    <div class="tooltip1">
+        <mat-icon class="refresh-list-button"  appAnimation (click)="refreshList()">refresh</mat-icon>
+        <span class="tooltiptext-short">Обновить список</span>
+    </div>
+    <div (click)="openDialog(event)" class="bublik" *ngFor="let event of events">
+        <span class="bublik-email">{{event.email}}</span>
+        <div class="bublik-event">
+            <span class="bublik-event-body">{{event.request_date}}</span>
+            <span class="bublik-event-body">Запрос на сброс пароля</span>            
+            <mat-icon class="bublik-icon">arrow_right_alt</mat-icon>
+        </div>
+    </div>
+</div>
+

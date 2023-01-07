@@ -129,7 +129,7 @@ export class NewUserComponent implements OnInit {
       event.dateOfBirth = this.myDatepipe.transform(this.UserForm.value.dateOfBirth, 'yyyy-MM-dd');
       console.log(event);
 
-      this.adminService.AddUser(event).subscribe(
+      this.adminService.addUser(event).subscribe(
         (data: any) => {
           console.log(JSON.stringify(data));
           

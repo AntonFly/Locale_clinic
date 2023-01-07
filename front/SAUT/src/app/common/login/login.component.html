@@ -1,5 +1,33 @@
 <h1 id="tableLabel">Вход</h1>
+
 <mat-divider></mat-divider>
+<form class="client-form" [formGroup]="UserForm" (ngSubmit)="onSubmitClient(UserForm.value)">
+  <div class="form-div">
+    <mat-form-field class="full-width">
+        <input matInput placeholder="Email" formControlName="Email" required>
+        <mat-error *ngFor="let validation of validation_messages.Email">
+          <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+        <input matInput placeholder="Пароль" formControlName="Pass" required [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngFor="let validation of validation_messages.Pass">
+          <mat-error class="error-message" *ngIf="formControlPass.hasError(validation.type) && (formControlPass.dirty || formControlPass.touched)">{{validation.message}}</mat-error>
+        </mat-error>
+    </mat-form-field>              
+
+    <div class="form-btn">      
+      <span *ngIf="formError===false" style="color: green;padding-right: 10px;">{{formMsg}}</span>
+      <span *ngIf="formError===true" style="color: red;padding-right: 10px;">{{formMsg}}</span>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" >Войти</button>      
+    </div>
+  </div>
+  </form>
+
+
+
 <form [formGroup]="fileDetailsForm" (ngSubmit)="onSubmitFileDetails(fileDetailsForm.value)">
 
 <mat-form-field class="full-width">
@@ -20,4 +48,4 @@
 </form>
 <button class="submit-btn" color="red" mat-raised-button (click)="logout($event)">
     Разлогиниться 
-  </button>
+</button>

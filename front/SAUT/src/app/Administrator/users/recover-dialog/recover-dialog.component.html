@@ -1,0 +1,61 @@
+<div class="dialog-parent">
+<h5 mat-dialog-title>
+    Смена пароля
+</h5>
+<!-- <mat-divider style="margin-top:-20px"></mat-divider> -->
+<mat-dialog-content class="mat-typography">
+<!-- {{data.surname +" "+data.name+" "+data.patronymic}}<br>
+{{data.dateOfBirth}}<br>
+{{data.email}}<br>
+{{data.request_date}}<br>
+</mat-dialog-content> -->
+
+<table  *ngIf="!loading&&!loadingComplete" class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th class="text-center" scope="col" colspan="2">Данные заявки</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="label-cell">Фамилия</td>
+      <td>{{data.surname}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Имя</td>
+      <td>{{data.name}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Отчество</td>
+      <td>{{data.patronymic}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Дата рождения</td>
+      <td>{{data.dateOfBirth}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Дата запроса</td>
+      <td>{{data.request_date}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Email</td>
+      <td>{{data.email}} <a href={{link}}>Связаться</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+  {{resultMsg}}
+</div>
+</mat-dialog-content>
+<div *ngIf="!loading&&!loadingComplete" class="action-button">    
+    <button color="primary" mat-raised-button (click)="generate()">
+        Сгенерировать
+      </button>
+    <button style="background-color: lightgray; color: black; margin-left: 10px;" color="basic" mat-raised-button (click)="closeDialog()">
+      Отмена
+    </button>
+</div>
+
+<app-loader *ngIf="loading"></app-loader>
+</div>

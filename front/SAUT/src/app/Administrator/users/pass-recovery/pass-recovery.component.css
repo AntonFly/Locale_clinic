@@ -1,0 +1,68 @@
+.pass-container{
+    margin-top: 35px;
+    min-height: 300px;
+    height: auto;
+}
+
+.bublik
+{
+    margin: 15px;
+    padding: 30px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+}
+.bublik-event{    
+    float: right;    
+}
+
+.bublik-event-body{
+    margin: 5px;
+    /* padding: 30px;  */
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.bublik-email{
+    font: 20px bold;
+
+    /* float: left; */
+}
+
+.bublik-icon{
+    float: right;
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+}
+
+.refresh-list-button {
+    cursor: pointer;
+  
+  }
+  
+.refresh-list-button-animation {
+      animation: rotate 1s ease-in-out 0s;
+  }
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+}
+  
+.tooltiptext-short{
+      font-size: 14px;
+}
+
+.tooltiptext-short {
+    bottom: 115%;
+    left: 50%;
+}
+
+.tooltip1{
+      height: 30px
+}
+  
