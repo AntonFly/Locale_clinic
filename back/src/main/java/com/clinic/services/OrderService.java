@@ -1,5 +1,7 @@
 package com.clinic.services;
 
+import com.clinic.dto.SimpleBodyChangesUpdate;
+import com.clinic.entities.AccompanimentScript;
 import com.clinic.entities.Order;
 import com.clinic.entities.User;
 import com.clinic.exceptions.ClientNotFoundException;
@@ -22,5 +24,12 @@ public interface OrderService {
             throws ClientNotFoundException;
 
     Order getOrderById(Long id)
+            throws OrderNotFoundExceprion;
+
+    AccompanimentScript getScriptByOrderId(long id)
+            throws OrderNotFoundExceprion;
+
+    @Transactional
+    Order createBodyChanges(SimpleBodyChangesUpdate changesData)
             throws OrderNotFoundExceprion;
 }

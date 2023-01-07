@@ -26,6 +26,6 @@ public class BodyChange {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "order")
+    @JoinColumn(name = "order_id")
     private Order order;
 }

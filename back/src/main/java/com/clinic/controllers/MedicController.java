@@ -1,5 +1,6 @@
 package com.clinic.controllers;
 
+import com.clinic.dto.SimpleBodyChangesUpdate;
 import com.clinic.dto.SimpleClientRegistration;
 import com.clinic.dto.SimpleOrderRegistration;
 import com.clinic.dto.SimpleSpecializationRegistration;
@@ -51,6 +52,20 @@ public class MedicController {
         throws SpecializationMissingException
     {
         return scenarioService.getAllScenariosBySpecId(specId);
+    }
+
+    @GetMapping("/get_script_by_order")
+    public AccompanimentScript getScriptByOrder(@RequestParam long orderId)
+        throws OrderNotFoundExceprion
+    {
+        return orderService.getScriptByOrderId(orderId);
+    }
+
+    @PutMapping("/update_changes")
+    public Order updateBodyChangesForOrder(@RequestBody SimpleBodyChangesUpdate changesData)
+        throws OrderNotFoundExceprion
+    {
+        return orderService.createBodyChanges(changesData);
     }
 
 
