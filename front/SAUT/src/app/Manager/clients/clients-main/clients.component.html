@@ -50,7 +50,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let queueItem of clientItems">
-      <td>{{ queueItem.person.id }}</td>
+      <td>{{ queueItem.person.passports[0].passport }}</td>
       <td>{{ getFIO(queueItem.person) }}</td>      
       <td>{{ queueItem.person.dateOfBirth | date:'shortDate'}}</td>
       <td>{{ queueItem.email }}</td>

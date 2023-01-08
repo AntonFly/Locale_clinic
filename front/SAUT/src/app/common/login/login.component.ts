@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import {AuthenticationService} from '../../_services'
+import { Router } from '@angular/router';
 import { User } from '../../_models/User'
 
 @Component({
@@ -14,28 +15,43 @@ export class LoginComponent implements OnInit {
   hide: boolean = true;
   UserForm: FormGroup;
 
-  formError: boolean = true;
-  formMsg: string = 'JIASAS';
+  formError: boolean = false;
+  formMsg: string = '';
 
     eventTypes = [
     "Администратор",
     "Менеджер",
-    "Медик"
-  ]
+    "Медик",
+    "Инженер",
+    "Ученый"
+  ];
+  
+  defaultRoutes = {
+    "ROLE_ADMIN": "admin/addUser",
+    "ROLE_MANAGER": "manager/clients",
+    "ROLE_MEDIC": "medic/support",
+    "ROLE_ENGINEER": "engineer/",
+    "ROLE_SCIENTIST": "scientist/"
+    };
 
   validation_messages = {    
     'eventType': [
       { type: 'required', message: 'Выберете роль' },
     ],
-    'Email':[
+    'username':[
       {type: 'required', message:''}
     ],
-    'Pass':[
+    'password':[
       {type: 'required', message:''}
     ]    
   };
 
-  constructor(private authenticationService: AuthenticationService, private fb: FormBuilder) {}
+  retried: number = 0;
+
+  constructor(
+    private authenticationService: AuthenticationService, 
+    private fb: FormBuilder,
+    public router: Router) {}
 
   ngOnInit() {
     this.createForms();
@@ -58,8 +74,8 @@ export class LoginComponent implements OnInit {
     })
 
     this.UserForm = this.fb.group({
-      Email: new FormControl('', Validators.required),
-      Pass: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
     });
   }
   
@@ -75,7 +91,8 @@ export class LoginComponent implements OnInit {
         patronymic: "Denisovich",
         role: event.eventType,
         password: "xd313"
-      });      
+      });
+    this.router.navigateByUrl(this.defaultRoutes[event.eventType]);
   }
 
   logout($event){
@@ -84,6 +101,25 @@ export class LoginComponent implements OnInit {
 
   onSubmitClient(data){
     console.log(data);
+    this.authenticationService.login(data).subscribe(
+      res => {
+        console.log(res);
+        this.router.navigateByUrl(this.defaultRoutes[res]);
+      },
+      error => {
+        console.log(error)
+        this.retried++;
+        this.formMsg = "Неверные данные";
+        this.formError = true;                
+
+        setTimeout
+        (
+            () => this.formMsg = "",
+            5000
+        );
+      }
+      
+    );
   }
 
 }

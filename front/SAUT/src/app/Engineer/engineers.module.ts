@@ -16,31 +16,17 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
-
-import {SupportService} from './_services/index'
-
-import { ManagerGuard } from '../_guards/manager.guard';
-import { SupportComponent } from './support/support/support.component';
-import { ReportingComponent } from './reporting/reporting.component';
-import { SupportDialogComponent } from './support/support-dialog/support-dialog.component'
-
  
 const routes: Routes = [
-    {   path: 'medic', redirectTo: '/medic/support', pathMatch: 'full'},
-    {   path: 'support',   component: SupportComponent},
-    {   path: 'reporting',   component: ReportingComponent   },
+    // {   path: 'support',   component: SupportComponent},
+    // {   path: 'reporting',   component: ReportingComponent   },
     // {   path: 'requests',   component: RequestContainerComponent   },
     // {   path: 'services',   component: ServicesComponent   },
 ];
  
 @NgModule({
   declarations: [
-    
-  SupportComponent,
-    
-  ReportingComponent,
-    
-  SupportDialogComponent],
+      ],
   imports: [
     MatButtonModule,
     CommonModule,
@@ -61,10 +47,9 @@ const routes: Routes = [
     MatAutocompleteModule,
     MatExpansionModule
   ],
-  providers: [
-    SupportService,
+  providers: [  
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],
-  entryComponents: [SupportDialogComponent]
+  entryComponents: []
 })
-export class MedicsModule { }
+export class EngineersModule { }

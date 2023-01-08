@@ -41,6 +41,7 @@ export class NewRequestComponent implements OnInit {
 
   optionsSpec: String[] = [];
   filteredOptionsSpec: Observable<String[]>;
+  nameToId= {};
 
   constructor(  private orderService: OrderService, 
                 private clientService: ClientsService,
@@ -48,7 +49,8 @@ export class NewRequestComponent implements OnInit {
 
   ngOnInit() {
     this.selected = [];
-    this.optionsSpec = [];        
+    this.optionsSpec = [];
+    this.nameToId= {};      
 
     this.biuldForm();
     this.updateSpecs();
@@ -173,8 +175,10 @@ export class NewRequestComponent implements OnInit {
   updateSpecs(){
     this.orderService.getSpecializations().subscribe(
       result => {
+        console.log(result);
         result.forEach(item => {
           this.optionsSpec.push(item.name);
+          this.nameToId[item.name] = item.id;
         });
         this.specList = result;
         this.isSpecError = false;        
@@ -215,12 +219,13 @@ export class NewRequestComponent implements OnInit {
 
   getModsBySpec(){
     let spec = this.formControlSpec.value;
+    console.log(this.optionsSpec);
     if( this.optionsSpec.indexOf(spec) > -1)
     {    
       this.isSpecError = false;
       this.specErrorMsg = "";
 
-      this.orderService.getModsBySpec(spec).subscribe(
+      this.orderService.getModsBySpec(this.nameToId[spec]).subscribe(
         result => {                                
           console.log("get mods by spec() succ");
           console.log(result);          

@@ -15,42 +15,20 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {DragDropModule} from '@angular/cdk/drag-drop'
 import { MatExpansionModule } from '@angular/material/expansion';
-import { DatePipe } from '@angular/common';
 
 
-import { ClientsComponent } from './clients/clients-main/clients.component';
-import { ClientsDialogComponent } from './clients/clients-dialog/clients-dialog.component';
-
-import { ContractsComponent } from './contracts/contracts.component';
-import { ServicesComponent } from './services/services.component';
-
-import { ClientsService, OrderService } from './_services/index';
-import { AdvancedSearchDialogComponent } from './clients/advanced-search-dialog/advanced-search-dialog.component';
-import { NewRequestComponent } from './request/new-request/new-request.component';
-import { RequestListComponent } from './request/request-list/request-list.component';
-import { RequestContainerComponent } from './request/request-container/request-container.component'
  
 const routes: Routes = [
-    {   path: 'manager', redirectTo: '/manager/clients', pathMatch: 'full'},
-    {   path: 'clients',   component: ClientsComponent  },
-    {   path: 'contracts',   component: ContractsComponent   },
-    {   path: 'requests',   component: RequestContainerComponent   },
-    {   path: 'services',   component: ServicesComponent   },
+    // {   path: 'support',   component: SupportComponent},
+    // {   path: 'reporting',   component: ReportingComponent   },
+    // {   path: 'requests',   component: RequestContainerComponent   },
+    // {   path: 'services',   component: ServicesComponent   },
 ];
  
 @NgModule({
   declarations: [
-    ClientsComponent, 
-    ClientsDialogComponent,
-    ContractsComponent,
-    ServicesComponent,
-    AdvancedSearchDialogComponent,
-    NewRequestComponent,
-    RequestListComponent,
-    RequestContainerComponent
-  ],
+   ],
   imports: [
     MatButtonModule,
     CommonModule,
@@ -69,15 +47,11 @@ const routes: Routes = [
     MatMenuModule,
     MatTabsModule,
     MatAutocompleteModule,
-    DragDropModule,
     MatExpansionModule
   ],
-  providers: [
-    DatePipe,
-    ClientsService,
-    OrderService,    
+  providers: [    
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],
-  entryComponents: [ClientsDialogComponent, AdvancedSearchDialogComponent]
+  entryComponents: []
 })
-export class ManagerModule { }
+export class ScientistsModule { }

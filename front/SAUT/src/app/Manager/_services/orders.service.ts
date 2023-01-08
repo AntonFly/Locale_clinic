@@ -26,7 +26,7 @@ export class OrderService {
     }
 
     getModsBySpec(spec:string){
-        let body = "?name=" + spec;
+        let body = "?specId=" + spec;
         return this.http.get<Mod[]>(this.baseUrl+"manager/get_mods_by_spec/"+body);
     }
 

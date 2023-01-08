@@ -1,3 +1,4 @@
+import * as internal from 'assert'
 import {Client} from './Client'
 
 export interface Order {
@@ -9,7 +10,8 @@ export interface Order {
 }
 
 export interface Spec {
-name: string, 
+  id: number, 
+  name: string
 }
 
 export interface Mod {

@@ -23,16 +23,26 @@ import {MatMenuModule} from '@angular/material/menu';
 /*SERVICES*/
 import {AuthenticationService} from './_services'
 
-import { AppRoutingModule } from './app-routing.module';
+/* COMPONENTS */
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './common/not-found/not-found.component';
 import { HeaderComponent } from './common/header/header.component';
 import { HomeComponent } from './common/home/home.component';
 import { LoginComponent } from './common/login/login.component'
 
+/* MODULES */
+import { AppRoutingModule } from './app-routing.module';
 import {ManagerModule} from './Manager/manager.module';
 import {AdministratorModule} from './Administrator/administrator.module';
 import {MedicsModule} from './Medics/medics.module';
+import { ScientistsModule } from './Scientist/scientists.module';
+import { EngineersModule } from './Engineer/engineers.module';
+
+/* GUARDS */
+import {RoleGuard} from './_guards/role.guard'
+
+/* INTERCEPTORS */
+import { AuthInterceptor } from './_interceptors/authInterceptor';
 
 @NgModule({
   declarations: [
@@ -46,6 +56,8 @@ import {MedicsModule} from './Medics/medics.module';
     ManagerModule,
     AdministratorModule,
     MedicsModule,
+    ScientistsModule,
+    EngineersModule,
     BrowserModule,
     AppRoutingModule,
     // BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -66,9 +78,15 @@ import {MedicsModule} from './Medics/medics.module';
     MatMenuModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     AuthenticationService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
-    { provide: 'BASE_URL', useValue: environment.apiRoot }
+    { provide: 'BASE_URL', useValue: environment.apiRoot },
+    RoleGuard
   ],
   bootstrap: [AppComponent]
 })

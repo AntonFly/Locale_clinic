@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Token } from 'src/app/_models/User';
 import {AuthenticationService} from '../../_services';
 
 @Component({
@@ -9,8 +10,16 @@ import {AuthenticationService} from '../../_services';
 export class HeaderComponent implements OnInit {
 
   isExpanded = false;
-  
-  constructor(private authenticationService: AuthenticationService) { }
+  token : Token = undefined;
+
+  constructor(private authenticationService: AuthenticationService) { 
+    authenticationService.token$.subscribe(
+      token =>
+      {
+        this.token = token;
+      }
+    )
+  }
 
   ngOnInit() {
   }  

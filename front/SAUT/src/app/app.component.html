@@ -1,7 +1,7 @@
 <app-header></app-header>
 <mat-drawer-container class="drawer-container" autosize>  
   <mat-drawer #drawer class="drawer-side side-shadow" mode="over" role="navigation">
-    <div [ngSwitch]='getUserRole()' class="side-contents">
+    <div [ngSwitch]='role' class="side-contents">
       <ng-template ngSwitchCase="Менеджер">
         <div class="side-header">
           <div><h2> Разделы </h2></div>
@@ -9,51 +9,72 @@
         </div>
         <mat-divider></mat-divider>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/clients']">Клиенты</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/clients']">Клиенты</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/requests']">Заявки</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/requests']">Заявки</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/contracts']">Договора</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/contracts']">Договора</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/services']">Услуги</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/services']">Услуги</a>
         </div>      
       </ng-template>
-      <ng-template ngSwitchCase="Администратор">
+      <ng-template ngSwitchCase="ROLE_ADMIN">
         <div class="side-header">
           <div><h2> Разделы </h2></div>
           <div style="float:right;"><mat-icon style="font-size: 30px; cursor: pointer;" (click)="drawer.toggle()" [inline]="true">arrow_back_ios</mat-icon></div>
         </div>
         <mat-divider></mat-divider>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/addUser']">Клиенты</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['admin/addUser']">Клиенты</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/recoverPass']">События</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['admin/recoverPass']">События</a>
         </div>
         
       </ng-template>
 
-      <ng-template ngSwitchCase="Медик">
+      <ng-template ngSwitchCase="ROLE_MEDIC">
         <div class="side-header">
           <div><h2> Разделы </h2></div>
           <div style="float:right;"><mat-icon style="font-size: 30px; cursor: pointer;" (click)="drawer.toggle()" [inline]="true">arrow_back_ios</mat-icon></div>
         </div>
         <mat-divider></mat-divider>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/support']">Сопровождение</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['medic/support']">Сопровождение</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['/reporting']">Отчетность</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['medic/reporting']">Отчетность</a>
         </div>
-        
+      </ng-template>
+
+      <ng-template ngSwitchCase="ROLE_ENGINEER">
+          <div class="side-header">
+            <div><h2> Разделы </h2></div>
+            <div style="float:right;"><mat-icon style="font-size: 30px; cursor: pointer;" (click)="drawer.toggle()" [inline]="true">arrow_back_ios</mat-icon></div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="side-link">
+            <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['Engineer/test']">TEST</a>
+          </div>
+        </ng-template>
+
+      <ng-template ngSwitchCase="ROLE_SCIENTISTS">
+            <div class="side-header">
+              <div><h2> Разделы </h2></div>
+              <div style="float:right;"><mat-icon style="font-size: 30px; cursor: pointer;" (click)="drawer.toggle()" [inline]="true">arrow_back_ios</mat-icon></div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="side-link">
+              <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['scientists/test']">TEST</a>
+            </div>            
       </ng-template>
     </div>
   </mat-drawer>
 
-  <div class="side-icon-div" (click)="drawer.toggle()">
+  <div *ngIf="router.url !== '/login'" class="side-icon-div" (click)="drawer.toggle()">
     <mat-icon class="side-icon" [inline]="true">arrow_forward_ios</mat-icon>
   </div>
   

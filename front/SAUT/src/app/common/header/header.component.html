@@ -20,8 +20,8 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <div *ngIf="getUser();else toLogin">
-            {{getUser()}}
+          <div *ngIf="token;else toLogin">
+            {{token.email}}
             <button mat-button [matMenuTriggerFor]="menu"><mat-icon style="font-size: 30px;margin-bottom: 8px;">list</mat-icon></button>
 
             <mat-menu #menu="matMenu">
