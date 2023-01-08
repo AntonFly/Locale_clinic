@@ -1,12 +1,12 @@
 package com.clinic.services;
 
 import com.clinic.dto.SimpleScenarioRegistration;
-import com.clinic.dto.SimpleSpecializationRegistration;
+import com.clinic.dto.SimpleScenarioUpdate;
 import com.clinic.entities.Modification;
 import com.clinic.entities.Scenario;
-import com.clinic.entities.Specialization;
-import com.clinic.exceptions.ModificationMissingException;
-import com.clinic.exceptions.SpecializationMissingException;
+import com.clinic.exceptions.ModificationNotFoundException;
+import com.clinic.exceptions.ScenarioNotFoundException;
+import com.clinic.exceptions.SpecializationNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,15 +26,18 @@ public interface ScenarioService {
 //            throws SpecializationMissingException;
 
     List<Scenario> getAllScenariosBySpecId(long specId)
-            throws SpecializationMissingException;
+            throws SpecializationNotFoundException;
 
     public Set<Modification> getAllModificationsBySpec(int specId)
-            throws SpecializationMissingException;
+            throws SpecializationNotFoundException;
 
     public List<Modification> getAllModificationsBySpecOrderedByRisk(int specId)
-            throws SpecializationMissingException;
+            throws SpecializationNotFoundException;
 
     public Scenario createScenario(SimpleScenarioRegistration scenarioData)
-            throws SpecializationMissingException, ModificationMissingException;
+            throws SpecializationNotFoundException, ModificationNotFoundException;
+
+    public Scenario updateScenario(SimpleScenarioUpdate updateData)
+            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException;
 
 }

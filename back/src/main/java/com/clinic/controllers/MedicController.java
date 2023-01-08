@@ -1,19 +1,13 @@
 package com.clinic.controllers;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
-import com.clinic.dto.SimpleClientRegistration;
-import com.clinic.dto.SimpleOrderRegistration;
-import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/medic")
@@ -49,7 +43,7 @@ public class MedicController {
 
     @GetMapping("/get_scenarios_by_spec")
     public List<Scenario> getScenariosBySpec(@RequestParam long specId)
-        throws SpecializationMissingException
+        throws SpecializationNotFoundException
     {
         return scenarioService.getAllScenariosBySpecId(specId);
     }

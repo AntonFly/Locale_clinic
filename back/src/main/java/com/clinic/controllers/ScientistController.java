@@ -1,20 +1,15 @@
 package com.clinic.controllers;
 
 import com.clinic.dto.SimpleScenarioRegistration;
-import com.clinic.dto.SimpleUserRegistration;
+import com.clinic.dto.SimpleScenarioUpdate;
 import com.clinic.entities.*;
-import com.clinic.exceptions.ModificationMissingException;
-import com.clinic.exceptions.PersonConflictException;
-import com.clinic.exceptions.SpecializationMissingException;
-import com.clinic.exceptions.UserConflictException;
+import com.clinic.exceptions.*;
 import com.clinic.repositories.*;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/scientist")
@@ -83,17 +78,22 @@ public class ScientistController {
 
     @GetMapping("/get_scenarios_by_spec")
     public List<Scenario> getScenariosBySpec(@RequestParam int specId)
-            throws SpecializationMissingException
+            throws SpecializationNotFoundException
     { return scenarioService.getAllScenariosBySpecId(specId); }
 
     @GetMapping("/get_ordered_mods_by_spec")
     public List<Modification> getOrderedModsBySpec(@RequestParam int specId)
-            throws SpecializationMissingException
+            throws SpecializationNotFoundException
     { return scenarioService.getAllModificationsBySpecOrderedByRisk(specId); }
 
     @PostMapping("/create_scenario")
-    public Scenario createScenario(@RequestBody SimpleScenarioRegistration scenarioData)
-            throws SpecializationMissingException, ModificationMissingException
-    { return scenarioService.createScenario(scenarioData); }
+    public Scenario createScenario(@RequestBody SimpleScenarioRegistration createData)
+            throws SpecializationNotFoundException, ModificationNotFoundException
+    { return scenarioService.createScenario(createData); }
+
+    @PutMapping("/update_scenario")
+    public Scenario updateScenario(@RequestBody SimpleScenarioUpdate updateData)
+            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException
+    { return scenarioService.updateScenario(updateData); }
 
 }

@@ -30,8 +30,8 @@ public class RestControllerAdvisor {
 
     @ExceptionHandler(
             {
-                    SpecializationMissingException.class,
-                    ModificationMissingException.class,
+                    SpecializationNotFoundException.class,
+                    ModificationNotFoundException.class,
                     ClientNotFoundException.class,
                     OrderNotFoundExceprion.class,
                     StockNotFoundException.class,

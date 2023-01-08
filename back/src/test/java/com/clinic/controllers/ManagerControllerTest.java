@@ -5,7 +5,6 @@ import com.clinic.dto.SimpleOrderRegistration;
 import com.clinic.dto.SimplePersonRegistration;
 import com.clinic.entities.Client;
 import com.clinic.entities.Order;
-import com.clinic.entities.Person;
 import com.clinic.exceptions.*;
 import com.clinic.repositories.ClientRepository;
 import com.clinic.repositories.OrderRepository;
@@ -14,27 +13,22 @@ import com.clinic.repositories.PersonRepository;
 import com.clinic.services.*;
 import com.clinic.utilities.FileUploadResponse;
 import com.itextpdf.text.DocumentException;
-import org.hibernate.tool.schema.internal.exec.AbstractScriptSourceInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -142,14 +136,14 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Get all modifications for specialization")
-    void getModsBySpec() throws SpecializationMissingException {
+    void getModsBySpec() throws SpecializationNotFoundException {
         assertEquals(7,mc.getModsBySpec(5).size());
     }
 
 
     @Test
     @DisplayName("Create order")
-    void createOrder() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException {
+    void createOrder() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,
@@ -182,7 +176,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Generating commercial")
-    void generatingCommercial() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException, OrderNotFoundExceprion, DocumentException, IOException {
+    void generatingCommercial() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException, OrderNotFoundExceprion, DocumentException, IOException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,
@@ -205,7 +199,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Generating risks")
-    void generatingRisks() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException, OrderNotFoundExceprion, DocumentException, IOException {
+    void generatingRisks() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException, OrderNotFoundExceprion, DocumentException, IOException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,
@@ -222,7 +216,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Upload confirmation")
-    void uploadConfirmation() throws ClientNotFoundException, SpecializationMissingException, ModSpecConflictException, ModificationMissingException, OrderNotFoundExceprion, IOException {
+    void uploadConfirmation() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException, OrderNotFoundExceprion, IOException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,

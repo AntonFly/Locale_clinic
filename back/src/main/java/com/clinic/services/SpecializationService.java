@@ -1,13 +1,11 @@
 package com.clinic.services;
 
 import com.clinic.entities.Modification;
-import com.clinic.entities.Person;
 import com.clinic.entities.Specialization;
-import com.clinic.exceptions.SpecializationMissingException;
+import com.clinic.exceptions.SpecializationNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SpecializationService {
 
@@ -17,13 +15,13 @@ public interface SpecializationService {
     @Transactional
     void delete(Specialization specialization);
 
-    Specialization getSpecByName(String name) throws SpecializationMissingException;
+    Specialization getSpecByName(String name) throws SpecializationNotFoundException;
 
-    Specialization getSpecById (Long specId) throws  SpecializationMissingException;
+    Specialization getSpecById (Long specId) throws SpecializationNotFoundException;
 
     List<Specialization> getAllSpecializations();
 
     List<Modification> getAllModificationsBySpec(int specId)
-            throws SpecializationMissingException;
+            throws SpecializationNotFoundException;
 
 }

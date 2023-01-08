@@ -16,14 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.ResponseEntity;
-
 
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 @RestController()
@@ -98,7 +95,7 @@ public class ManagerController {
 
     @GetMapping("/get_mods_by_spec")
     public Set<Modification> getModsBySpec(@RequestParam int specId)
-            throws SpecializationMissingException
+            throws SpecializationNotFoundException
     {
         return scenarioService.getAllModificationsBySpec(specId);
     }
@@ -113,8 +110,8 @@ public class ManagerController {
     public Order createOrder(@RequestBody SimpleOrderRegistration orderData)
             throws
             ClientNotFoundException,
-            SpecializationMissingException,
-            ModificationMissingException,
+            SpecializationNotFoundException,
+            ModificationNotFoundException,
             ModSpecConflictException
     {
         Order order = new Order();

@@ -1,10 +1,7 @@
 package com.clinic.services;
 
-import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Modification;
-import com.clinic.entities.Specialization;
-import com.clinic.exceptions.ModificationMissingException;
-import com.clinic.exceptions.SpecializationMissingException;
+import com.clinic.exceptions.ModificationNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,10 +15,10 @@ public interface ModificationService {
     void delete(Modification specialization);
 
     Modification getModificationByName(String name)
-        throws ModificationMissingException;
+        throws ModificationNotFoundException;
 
     Modification getModificationById(Long modId)
-            throws ModificationMissingException;
+            throws ModificationNotFoundException;
 
     List<Modification> getAllModifications();
 

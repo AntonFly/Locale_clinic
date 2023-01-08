@@ -1,12 +1,8 @@
 package com.clinic.impl;
 
-import com.clinic.dto.SimpleSpecializationRegistration;
 import com.clinic.entities.Modification;
-import com.clinic.entities.Specialization;
-import com.clinic.exceptions.ModificationMissingException;
-import com.clinic.exceptions.SpecializationMissingException;
+import com.clinic.exceptions.ModificationNotFoundException;
 import com.clinic.repositories.ModificationRepository;
-import com.clinic.repositories.SpecializationRepository;
 import com.clinic.services.ModificationService;
 import com.clinic.services.SpecializationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,20 +42,20 @@ public class ModificationServiceImpl implements ModificationService {
 
     @Override
     public Modification getModificationByName(String name)
-            throws ModificationMissingException {
+            throws ModificationNotFoundException {
         Optional<Modification> modification = modificationRepository.findByName(name);
         if (modification.isPresent())
             return modification.get();
 
-        throw new ModificationMissingException(
+        throw new ModificationNotFoundException(
                 "There is no modification associated with " +
                 (name.isEmpty() ? "empty name" : ("name: " + name)));
     }
 
     @Override
-    public Modification getModificationById(Long modId) throws ModificationMissingException {
+    public Modification getModificationById(Long modId) throws ModificationNotFoundException {
         return modificationRepository.findById(modId)
-                .orElseThrow(()-> new ModificationMissingException("Не было найдено модификаций с id: "+ modId));
+                .orElseThrow(()-> new ModificationNotFoundException("Не было найдено модификаций с id: "+ modId));
     }
 
     @Override

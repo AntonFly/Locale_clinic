@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ModificationMissingException extends Exception {
+public class ScenarioNotFoundException extends Exception {
 
     private final String message;
 

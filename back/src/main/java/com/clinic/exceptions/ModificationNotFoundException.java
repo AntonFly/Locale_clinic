@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SpecializationMissingException extends Exception {
+public class ModificationNotFoundException extends Exception {
 
     private final String message;
 
