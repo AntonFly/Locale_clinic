@@ -4,6 +4,7 @@ import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.entities.Person;
 import com.clinic.entities.Role;
 import com.clinic.entities.User;
+import com.clinic.entities.enums.ERole;
 import com.clinic.exceptions.PassportConflictException;
 import com.clinic.exceptions.PersonConflictException;
 import com.clinic.exceptions.UserConflictException;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,36 +29,44 @@ public class AdminServiceImpl implements AdminService{
 
     private RoleRepository roleRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
     public AdminServiceImpl(
             JavaMailSender jms,
             @Qualifier("registrationMessage") SimpleMailMessage rm,
             PersonService ps,
             UserService us,
-            RoleRepository rp) {
+            RoleRepository rp,
+            PasswordEncoder pe) {
         this.personService = ps;
         this.roleRepository = rp;
         this.userService = us;
         this.sender = jms;
         this.registrationMessage = rm;
+        this.passwordEncoder = pe;
     }
 
 
     @Override
     public User createUser(SimpleUserRegistration userData)
-            throws UserConflictException, PersonConflictException, PassportConflictException {
+            throws UserConflictException, PersonConflictException, PassportConflictException
+    {
         Person person = personService.save(userData.getPerson());
 
         User user = new User();
-        Role role = roleRepository.findByRole(userData.getRole());
+        Role role = roleRepository.findByName(ERole.valueOf(userData.getRole()));
 
         if (userService.getUsersByPersonId(person.getId()).stream().anyMatch(tmpUser -> tmpUser.getRole() == role))
             throw new UserConflictException("There is already a user with given privileges");
 
+        if (userService.existsByEmail(userData.getEmail()))
+            throw new UserConflictException("Ther is already a user with email: " + userData.getEmail());
+
         user.setPerson(person);
         user.setRole(role);
         user.setEmail(userData.getEmail());
-        user.setPassword(userData.getPassword());
+        user.setPassword(passwordEncoder.encode(userData.getPassword()));
 
         user = userService.save(user);
 
@@ -67,11 +77,11 @@ public class AdminServiceImpl implements AdminService{
                 user.getPassword()
                 );
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        registrationMessage.copyTo(message);
-        message.setTo(user.getEmail());
-        message.setText(text);
-        sender.send(message);
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        registrationMessage.copyTo(message);
+//        message.setTo(user.getEmail());
+//        message.setText(text);
+//        sender.send(message);
 
         return user;
     }

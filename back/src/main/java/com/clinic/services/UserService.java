@@ -16,6 +16,8 @@ public interface UserService {
     @Transactional
     User setRole(User user, String roleName);
 
+    boolean existsByEmail(String email);
+
     List<User> getUsersByPersonId(Long personId);
     List<User> getAllUsers();
 

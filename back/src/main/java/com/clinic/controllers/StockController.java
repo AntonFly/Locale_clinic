@@ -5,9 +5,11 @@ import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/stock")
 public class StockController {
 

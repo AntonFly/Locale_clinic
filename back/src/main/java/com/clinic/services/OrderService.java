@@ -3,9 +3,8 @@ package com.clinic.services;
 import com.clinic.dto.SimpleBodyChangesUpdate;
 import com.clinic.entities.AccompanimentScript;
 import com.clinic.entities.Order;
-import com.clinic.entities.User;
 import com.clinic.exceptions.ClientNotFoundException;
-import com.clinic.exceptions.OrderNotFoundExceprion;
+import com.clinic.exceptions.OrderNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -24,12 +23,12 @@ public interface OrderService {
             throws ClientNotFoundException;
 
     Order getOrderById(Long id)
-            throws OrderNotFoundExceprion;
+            throws OrderNotFoundException;
 
     AccompanimentScript getScriptByOrderId(long id)
-            throws OrderNotFoundExceprion;
+            throws OrderNotFoundException;
 
     @Transactional
     Order createBodyChanges(SimpleBodyChangesUpdate changesData)
-            throws OrderNotFoundExceprion;
+            throws OrderNotFoundException;
 }

@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 @RestController()
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/manager")
 public class ManagerController {
 
@@ -138,7 +140,7 @@ public class ManagerController {
     @GetMapping("/get_commercial/{order}")
     public ResponseEntity<InputStreamResource> get_commercial(
             @PathVariable("order") Long orderId
-    ) throws OrderNotFoundExceprion, IOException, DocumentException {
+    ) throws OrderNotFoundException, IOException, DocumentException {
         Order currentOrder = orderService.getOrderById(orderId);
         String filePath = pdfService.generateCommercial(currentOrder);
 
@@ -162,7 +164,7 @@ public class ManagerController {
     @GetMapping("/get_risks/{order}")
     public ResponseEntity<InputStreamResource> get_risks(
             @PathVariable("order") Long orderId
-    ) throws OrderNotFoundExceprion, IOException, DocumentException {
+    ) throws OrderNotFoundException, IOException, DocumentException {
         try
         {
             Order currentOrder = orderService.getOrderById(orderId);
@@ -188,7 +190,7 @@ public class ManagerController {
     public ResponseEntity<FileUploadResponse> uploadConfirmation(
             @RequestParam("file") MultipartFile multipartFile,
             @PathVariable("order") Long orderId)
-            throws IOException, OrderNotFoundExceprion {
+            throws IOException, OrderNotFoundException {
 
         String[] fileParts = StringUtils.cleanPath(multipartFile.getOriginalFilename()).split("\\.");
 

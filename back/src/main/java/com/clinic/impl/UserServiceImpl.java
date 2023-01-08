@@ -1,6 +1,7 @@
 package com.clinic.impl;
 
 import com.clinic.entities.User;
+import com.clinic.entities.enums.ERole;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.repositories.UserRepository;
 import com.clinic.services.PersonService;
@@ -40,10 +41,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User setRole(User user, String roleName) {
-        user.setRole(roleRepository.findByRole(roleName));
+        user.setRole(roleRepository.findByName(ERole.valueOf(roleName)));
         return user;
     }
 
+    @Override
+    public boolean existsByEmail(String email)
+    { return userRepository.existsByEmail(email); }
     @Override
     public List<User> getUsersByPersonId(Long id) {
         return userRepository.findAllByPersonId(id);

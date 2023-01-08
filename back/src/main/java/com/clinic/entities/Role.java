@@ -1,6 +1,11 @@
 package com.clinic.entities;
 
+import com.clinic.entities.enums.ERole;
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -10,54 +15,21 @@ import java.util.Set;
 
 @Table(name = "user_role")
 @Entity
-public class Role implements GrantedAuthority {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class Role {
 
     @Id
     @GeneratedValue
     protected Long id;
-    private String role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ERole name;
 
     @JsonBackReference
     @OneToMany(mappedBy = "role")
     private Set<User> users;
-
-    public Role() {
-    }
-    public Role(long id) {
-        this.id = id;
-    }
-    public Role(long id, String role) {
-        this.id = id;
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String name) {
-        this.role = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String getAuthority() {
-        return getRole();
-    }
 }

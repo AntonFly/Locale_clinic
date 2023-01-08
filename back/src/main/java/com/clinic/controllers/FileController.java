@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 @RestController()
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/file")
 public class FileController {
 

@@ -33,7 +33,7 @@ public class RestControllerAdvisor {
                     SpecializationNotFoundException.class,
                     ModificationNotFoundException.class,
                     ClientNotFoundException.class,
-                    OrderNotFoundExceprion.class,
+                    OrderNotFoundException.class,
                     StockNotFoundException.class,
                     UserNotFoundException.class
             })

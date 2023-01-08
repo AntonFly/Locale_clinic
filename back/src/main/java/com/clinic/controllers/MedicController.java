@@ -5,11 +5,13 @@ import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController()
+@PreAuthorize("hasRole('ROLE_MEDIC')")
 @RequestMapping("/medic")
 public class MedicController {
 
@@ -50,14 +52,14 @@ public class MedicController {
 
     @GetMapping("/get_script_by_order")
     public AccompanimentScript getScriptByOrder(@RequestParam long orderId)
-        throws OrderNotFoundExceprion
+        throws OrderNotFoundException
     {
         return orderService.getScriptByOrderId(orderId);
     }
 
     @PutMapping("/update_changes")
     public Order updateBodyChangesForOrder(@RequestBody SimpleBodyChangesUpdate changesData)
-        throws OrderNotFoundExceprion
+        throws OrderNotFoundException
     {
         return orderService.createBodyChanges(changesData);
     }

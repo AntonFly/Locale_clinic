@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class OrderNotFoundExceprion extends Exception {
+public class OrderNotFoundException extends Exception {
 
     private final String message;
 }
