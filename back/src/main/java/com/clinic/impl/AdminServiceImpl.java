@@ -131,11 +131,11 @@ public class AdminServiceImpl implements AdminService{
                 user.getPassword()
                 );
 
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        registrationMessage.copyTo(message);
-//        message.setTo(user.getEmail());
-//        message.setText(text);
-//        sender.send(message);
+        SimpleMailMessage message = new SimpleMailMessage();
+        registrationMessage.copyTo(message);
+        message.setTo(user.getEmail());
+        message.setText(text);
+        sender.send(message);
 
         return user;
     }
