@@ -53,4 +53,8 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<BodyChange> bodyChanges;
 
+    @JsonManagedReference
+    @OneToOne(mappedBy = "order")
+    private Scenario scenario;
+
 }

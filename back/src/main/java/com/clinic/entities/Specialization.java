@@ -7,7 +7,6 @@ import net.minidev.json.annotate.JsonIgnore;
 import javax.persistence.*;
 import java.util.Set;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "modifications"})
 @Table(name = "specializations")
 @Entity
 @AllArgsConstructor
@@ -21,5 +20,13 @@ public class Specialization {
     private long id;
 
     private String name;
+
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(
+            name = "spec_mod",
+            joinColumns = @JoinColumn(name = "id_spec"),
+            inverseJoinColumns = @JoinColumn(name = "id_mod"))
+    Set<Modification> modifications;
 
 }

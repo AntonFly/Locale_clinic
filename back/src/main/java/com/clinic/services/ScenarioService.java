@@ -25,9 +25,6 @@ public interface ScenarioService {
 //    Set<Scenario> getAllScenariosBySpec(String specName)
 //            throws SpecializationMissingException;
 
-    List<Scenario> getAllScenariosBySpecId(long specId)
-            throws SpecializationNotFoundException;
-
     public Set<Modification> getAllModificationsBySpec(int specId)
             throws SpecializationNotFoundException;
 

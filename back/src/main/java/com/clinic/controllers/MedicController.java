@@ -43,13 +43,6 @@ public class MedicController {
         return orderService.getAllOrdersByClientId(passport);
     }
 
-    @GetMapping("/get_scenarios_by_spec")
-    public List<Scenario> getScenariosBySpec(@RequestParam long specId)
-        throws SpecializationNotFoundException
-    {
-        return scenarioService.getAllScenariosBySpecId(specId);
-    }
-
     @GetMapping("/get_script_by_order")
     public AccompanimentScript getScriptByOrder(@RequestParam long orderId)
         throws OrderNotFoundException

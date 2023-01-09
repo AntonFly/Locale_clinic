@@ -11,8 +11,5 @@ import java.util.Set;
 
 public interface ScenarioRepository extends JpaRepository<Scenario, Long> {
 
-    Optional<List<Scenario>> findAllBySpecialization_Id(long specialization_id);
-
-    Optional<List<Scenario>> findAllBySpecializationId(long specializationId);
 
 }

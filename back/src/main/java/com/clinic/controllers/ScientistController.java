@@ -78,11 +78,6 @@ public class ScientistController {
         this.stockRepository = str;
     }
 
-    @GetMapping("/get_scenarios_by_spec")
-    public List<Scenario> getScenariosBySpec(@RequestParam int specId)
-            throws SpecializationNotFoundException
-    { return scenarioService.getAllScenariosBySpecId(specId); }
-
     @GetMapping("/get_ordered_mods_by_spec")
     public List<Modification> getOrderedModsBySpec(@RequestParam int specId)
             throws SpecializationNotFoundException

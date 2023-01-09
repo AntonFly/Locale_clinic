@@ -6,6 +6,7 @@ import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "modifications")
@@ -33,8 +34,25 @@ public class Modification {
     @JsonBackReference
     @ManyToMany
     @JoinTable(
-            name = "modification_scenario",
-            joinColumns = @JoinColumn(name = "mod_id"),
-            inverseJoinColumns = @JoinColumn(name = "scanario_id")) //Anton moment gif
-    Set<Scenario> scenarios;
+            name = "spec_mod",
+            joinColumns = @JoinColumn(name = "id_mod"),
+            inverseJoinColumns = @JoinColumn(name = "id_spec"))
+    Set<Specialization> specialization;
+
+
+    @JsonBackReference
+    @ManyToMany
+    @JoinTable(
+            name = "client_modification",
+            joinColumns = @JoinColumn(name = "id_mod"),
+            inverseJoinColumns = @JoinColumn(name = "id_client"))
+    Set<Client> clients;
+
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "modification",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ModificationScenario> modificationScenarios;
 }

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
+import org.bouncycastle.math.raw.Mod;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -47,6 +48,14 @@ public class Client {
             joinColumns = @JoinColumn(name = "id_client"),
             inverseJoinColumns = @JoinColumn(name = "id_implant"))
     Set<Implant> implants;
+
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(
+            name = "client_modification",
+            joinColumns = @JoinColumn(name = "id_client"),
+            inverseJoinColumns = @JoinColumn(name = "id_mod"))
+    Set<Modification> modifications;
 
 
 }

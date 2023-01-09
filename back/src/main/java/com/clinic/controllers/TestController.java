@@ -4,6 +4,7 @@ import com.clinic.entities.*;
 import com.clinic.exceptions.SpecializationNotFoundException;
 import com.clinic.repositories.*;
 import com.clinic.services.*;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,8 +76,8 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public List<Stock> test() throws SpecializationNotFoundException {
-        return stockRepository.findAll();
+    public List<Modification> test() throws SpecializationNotFoundException {
+        return modificationRepository.findAll();
     }
 
 }
