@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 @RestController()
-@PreAuthorize("hasRole('ROLE_MANAGER')")
+//@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/manager")
 public class ManagerController {
 
@@ -135,6 +135,19 @@ public class ManagerController {
     @PostMapping("/update_client")
     public Client changeClient(@RequestBody SimpleClientRegistration clientInfo, @RequestParam Long clientId){
         return clientService.updateClient(clientInfo, clientId);
+    }
+
+    @PostMapping("/add_previous_modification")
+    public  Client addPreviousModifications(@RequestBody SimpleModificationAdd modificationAdd) throws ClientNotFoundException {
+
+        try {
+            return  clientService.addPreviousModifications(modificationAdd);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+
+
     }
 
     @GetMapping("/get_commercial/{order}")

@@ -2,11 +2,14 @@ package com.clinic.impl;
 
 import com.clinic.dto.ExistingPersonClientRegistration;
 import com.clinic.dto.SimpleClientRegistration;
+import com.clinic.dto.SimpleModificationAdd;
 import com.clinic.entities.Client;
+import com.clinic.entities.Modification;
 import com.clinic.entities.Passport;
 import com.clinic.entities.Person;
 import com.clinic.exceptions.*;
 import com.clinic.repositories.ClientRepository;
+import com.clinic.repositories.ModificationRepository;
 import com.clinic.repositories.PassportRepository;
 import com.clinic.repositories.PersonRepository;
 import com.clinic.services.ClientService;
@@ -14,8 +17,7 @@ import com.clinic.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -28,13 +30,16 @@ public class ClientServiceImpl implements ClientService {
 
     private PersonRepository personRepository;
 
+    private ModificationRepository modificationRepository;
+
 
     @Autowired
-    public ClientServiceImpl(PersonService ps, ClientRepository cr, PassportRepository pr,PersonRepository personRepository){
+    public ClientServiceImpl(PersonService ps, ClientRepository cr, PassportRepository pr,PersonRepository personRepository, ModificationRepository mr){
         this.personService = ps;
         this.clientRepository = cr;
         this.passportRepository = pr;
         this.personRepository = personRepository;
+        this.modificationRepository =mr;
     }
 
     @Override
@@ -85,22 +90,24 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClientByPassport(Long passportNum)
-            throws PassportNotFoundException, ClientNotFoundException
+            throws ClientNotFoundException
     {
-        Passport passport = passportRepository.getPassportByPassport(passportNum)
-                .orElseThrow(()-> new PassportNotFoundException(passportNum));
+        Passport passport = passportRepository.getPassportByPassport(passportNum).orElseThrow(()->
+                new ClientNotFoundException(
+                        "There is no client associated with " +
+                                (passportNum == null ? "empty" : passportNum.toString()) +
+                                " passport number"));
 
-       return clientRepository.findByPersonId(passport.getPerson().getId())
-               .orElseThrow(()-> new ClientNotFoundException(passport.getPerson().getId()));
+        Optional<Client> client = clientRepository.findByPersonId(passport.getPerson().getId());
+
+        return client.orElseThrow(()-> new ClientNotFoundException(
+                "An error occured while getting client by passort"));
+
     }
 
     @Override
-    public Client getClient(Long clientId)
-            throws ClientNotFoundException
-    {
-        return  clientRepository.findById(clientId)
-            .orElseThrow(()->new ClientNotFoundException(clientId));
-    }
+    public Client getClient(Long clientId) throws ClientNotFoundException { return  clientRepository.findById(clientId)
+            .orElseThrow(()->new ClientNotFoundException("Не было найдено клиента с Id: "+ clientId)); }
 
     @Override
     public List<Client> getAllClients() {
@@ -129,6 +136,23 @@ public class ClientServiceImpl implements ClientService {
 
         return clientRepository.save(currentClient);
 
+    }
+
+    @Override
+    public Client addPreviousModifications(SimpleModificationAdd modificationAdd) throws ClientNotFoundException, ModificationNotFoundException {
+        Client client = clientRepository.findById(modificationAdd.getClientId())
+                .orElseThrow(()->new ClientNotFoundException(modificationAdd.getClientId()));
+        Set<Modification> mods = new HashSet<>();
+
+
+        for (long modId : modificationAdd.getModIds())
+        {
+            mods.add(modificationRepository.findById(modId).orElseThrow(()-> new ModificationNotFoundException("Не было найдено модификации с id: "+ modId)));
+        }
+
+        client.setModifications(mods);
+
+        return clientRepository.save(client);
     }
 
 }
