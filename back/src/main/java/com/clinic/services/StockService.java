@@ -10,8 +10,11 @@ import com.clinic.exceptions.StockNotFoundException;
 import com.clinic.exceptions.UserNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface StockService {
 
+    List<Stock> getAllItems();
     @Transactional
     Stock createStockItem(SimpleStockCreate stockCreateData)
             throws StockConflictException, InvalidStockDataException, UserNotFoundException;

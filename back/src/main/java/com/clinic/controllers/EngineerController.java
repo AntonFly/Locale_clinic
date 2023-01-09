@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@PreAuthorize("hasRole('ROLE_ENGINEER')")
+//@PreAuthorize("hasRole('ROLE_ENGINEER')")
 @RequestMapping("/engineer")
 public class EngineerController {
 

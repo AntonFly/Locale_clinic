@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController()
-@PreAuthorize("hasRole('ROLE_MANAGER')")
+//@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/stock")
 public class StockController {
 
@@ -21,6 +23,10 @@ public class StockController {
     ){
         this.stockService = ss;
     }
+
+    @GetMapping("/get_all_items")
+    public List<Stock> getAllItems()
+    { return stockService.getAllItems(); }
 
     @PostMapping("/create_item")
     public Stock createStockItem(@RequestBody SimpleStockCreate createData)

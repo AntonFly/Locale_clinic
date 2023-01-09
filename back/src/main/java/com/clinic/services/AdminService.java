@@ -1,14 +1,21 @@
 package com.clinic.services;
 
+import com.clinic.dto.SimplePwdDropRequestSatisfaction;
 import com.clinic.dto.SimpleUserRegistration;
+import com.clinic.entities.PwdDropRequest;
 import com.clinic.entities.User;
-import com.clinic.exceptions.PassportConflictException;
-import com.clinic.exceptions.PersonConflictException;
-import com.clinic.exceptions.UserConflictException;
+import com.clinic.exceptions.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface AdminService {
+
+    List<PwdDropRequest> getAllPwdDropRequests();
+
+    @Transactional
+    PwdDropRequest satisfyDropRequest(SimplePwdDropRequestSatisfaction dropRequestData)
+            throws PwdDropRequestNotFoundException, PwdDropRequestAlreadySatisfiedException;
 
     User createUser(SimpleUserRegistration clinicStaffData) throws PersonConflictException, UserConflictException, PassportConflictException;
 

@@ -1,13 +1,14 @@
 package com.clinic.impl;
 
+import com.clinic.dto.SimplePwdDropRequestSatisfaction;
 import com.clinic.dto.SimpleUserRegistration;
 import com.clinic.entities.Person;
+import com.clinic.entities.PwdDropRequest;
 import com.clinic.entities.Role;
 import com.clinic.entities.User;
 import com.clinic.entities.enums.ERole;
-import com.clinic.exceptions.PassportConflictException;
-import com.clinic.exceptions.PersonConflictException;
-import com.clinic.exceptions.UserConflictException;
+import com.clinic.exceptions.*;
+import com.clinic.repositories.PwdDropRequestRepository;
 import com.clinic.repositories.RoleRepository;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,38 +17,91 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class AdminServiceImpl implements AdminService{
 
-    private JavaMailSender sender;
+    private final JavaMailSender sender;
     private final SimpleMailMessage registrationMessage;
-    private PersonService personService;
-    private UserService userService;
-
-    private RoleRepository roleRepository;
+    private final SimpleMailMessage pwdResetMessage;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final PersonService personService;
+    private final UserService userService;
+
+    private final RoleRepository roleRepository;
+    private final PwdDropRequestRepository pwdDropRequestRepository;
 
     @Autowired
     public AdminServiceImpl(
             JavaMailSender jms,
             @Qualifier("registrationMessage") SimpleMailMessage rm,
+            @Qualifier("passwordResetMessage") SimpleMailMessage prm,
+            PasswordEncoder pe,
             PersonService ps,
             UserService us,
             RoleRepository rp,
-            PasswordEncoder pe) {
-        this.personService = ps;
-        this.roleRepository = rp;
-        this.userService = us;
+            PwdDropRequestRepository pwdr)
+    {
         this.sender = jms;
         this.registrationMessage = rm;
+        this.pwdResetMessage = prm;
         this.passwordEncoder = pe;
+        this.personService = ps;
+        this.userService = us;
+        this.roleRepository = rp;
+        this.pwdDropRequestRepository = pwdr;
     }
 
+    @Override
+    public List<PwdDropRequest> getAllPwdDropRequests()
+    { return pwdDropRequestRepository.findAll(); }
 
+    @Override
+    @Transactional
+    public PwdDropRequest satisfyDropRequest(SimplePwdDropRequestSatisfaction dropRequestData)
+            throws PwdDropRequestNotFoundException, PwdDropRequestAlreadySatisfiedException
+    {
+        PwdDropRequest pwdDropRequest = pwdDropRequestRepository.findById(dropRequestData.getId())
+                .orElseThrow(() -> new PwdDropRequestNotFoundException("No drop request is found with id: " + dropRequestData.getId()));
+
+        if (pwdDropRequest.isDropped())
+            throw new PwdDropRequestAlreadySatisfiedException("Drop request with id: " + pwdDropRequest.getId() + " was already satisfied");
+
+        User user = pwdDropRequest.getUser();
+
+        String password = "LAMAOOOO";//alphaNumericString(10);
+        String encodedPassword = passwordEncoder.encode(password);
+
+        user.setPassword(encodedPassword);
+        userService.save(user);
+
+        String text = String.format(pwdResetMessage.getText(),
+                user.getPerson().getName(),
+                user.getPerson().getSurname(),
+                user.getEmail(),
+                password
+        );
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        pwdResetMessage.copyTo(message);
+        message.setTo(user.getEmail());
+        message.setText(text);
+
+        pwdDropRequest.setDropped(true);
+        pwdDropRequest.setDropDate(Calendar.getInstance());
+        pwdDropRequest = pwdDropRequestRepository.save(pwdDropRequest);
+
+        sender.send(message);
+
+        return pwdDropRequest;
+    }
     @Override
     public User createUser(SimpleUserRegistration userData)
             throws UserConflictException, PersonConflictException, PassportConflictException
@@ -95,5 +149,16 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    public static String alphaNumericString(int len) {
+        String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Random rnd = new Random();
+
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        }
+        return sb.toString();
     }
 }

@@ -1,10 +1,10 @@
 package com.clinic.controllers;
 
+import com.clinic.dto.SimplePwdDropRequestSatisfaction;
 import com.clinic.dto.SimpleUserRegistration;
+import com.clinic.entities.PwdDropRequest;
 import com.clinic.entities.User;
-import com.clinic.exceptions.PassportConflictException;
-import com.clinic.exceptions.PersonConflictException;
-import com.clinic.exceptions.UserConflictException;
+import com.clinic.exceptions.*;
 import com.clinic.repositories.ScenarioRepository;
 import com.clinic.services.AdminService;
 import lombok.Getter;
@@ -43,8 +43,17 @@ public class AdminController {
     public void findUsers() {
     }
 
-    @GetMapping("get_all_users")
+    @GetMapping("/get_all_users")
     public List<User> getAllUsers()
     { return adminService.getAllUsers(); }
+
+    @GetMapping("/get_all_drop_requests")
+    public List<PwdDropRequest> getAllDropRequests()
+    { return adminService.getAllPwdDropRequests(); }
+
+    @PutMapping("/satisfy_pwd_drop_request")
+    public PwdDropRequest satisfyPwdDropRequest(@RequestBody SimplePwdDropRequestSatisfaction dropRequestData)
+            throws PwdDropRequestNotFoundException, PwdDropRequestAlreadySatisfiedException
+    { return adminService.satisfyDropRequest(dropRequestData); }
 
 }

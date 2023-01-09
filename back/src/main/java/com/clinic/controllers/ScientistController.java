@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController()
-@PreAuthorize("hasRole('ROLE_SCIENTIST')")
+//@PreAuthorize("hasRole('ROLE_SCIENTIST')")
 @RequestMapping("/scientist")
 public class ScientistController {
     private final AdminService adminService;

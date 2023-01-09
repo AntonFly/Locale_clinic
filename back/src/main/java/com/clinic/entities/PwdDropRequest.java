@@ -13,23 +13,25 @@ import java.util.Calendar;
 
 @Table(name = "pwd_drop_requests")
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class PwdDropRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private boolean dropped;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar request_date;
+    @Column(name = "request_date")
+    private Calendar requestDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar drop_date;
+    @Column(name = "drop_date")
+    private Calendar dropDate;
 
     @JsonManagedReference
     @ManyToOne

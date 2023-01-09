@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -33,10 +35,13 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    public List<Stock> getAllItems()
+    { return stockRepository.findAll(); }
+
+    @Override
     public Stock createStockItem(SimpleStockCreate stockCreateData)
             throws StockConflictException, InvalidStockDataException, UserNotFoundException
     {
-        System.out.println("createStockItem: " + stockCreateData);
         if (stockCreateData.getAmount() < stockCreateData.getMinAmount() || stockCreateData.getAmount() <= 0 || stockCreateData.getMinAmount() <= 0)
             throw new InvalidStockDataException("Amount " + stockCreateData.getAmount() + " is less than minimal allowed amount " + stockCreateData.getMinAmount());
 

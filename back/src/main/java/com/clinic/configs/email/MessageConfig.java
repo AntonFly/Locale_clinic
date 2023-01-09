@@ -24,4 +24,19 @@ public class MessageConfig {
         return mailMessage;
     }
 
+    @Bean(name = "passwordResetMessage")
+    public SimpleMailMessage passwordResetMessageTemplate(){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("inaclinic@outlook.com");
+        mailMessage.setSubject("Password reset for INA Clinic");
+        mailMessage.setSentDate(new Date());
+        mailMessage.setText("%s %s, you request for password reset was satisfied.\n" +
+                "Here is new information required for login: \n" +
+                "Login: %s\n" +
+                "Password: %s\n" +
+                "---------------------\n" +
+                "With gratitude, \n INA Clinic");
+        return mailMessage;
+    }
+
 }

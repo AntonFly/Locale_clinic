@@ -33,7 +33,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try
         {
             String jwt = parseJwt(request);
-            System.out.println("3");
             if (jwt != null && jwtUtils.validateJwtToken(jwt))
             {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
