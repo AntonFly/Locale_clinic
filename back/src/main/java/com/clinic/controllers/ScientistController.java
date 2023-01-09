@@ -6,11 +6,13 @@ import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.repositories.*;
 import com.clinic.services.*;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController()
 //@PreAuthorize("hasRole('ROLE_SCIENTIST')")
@@ -92,5 +94,10 @@ public class ScientistController {
     public Scenario updateScenario(@RequestBody SimpleScenarioUpdate updateData)
             throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException
     { return scenarioService.updateScenario(updateData); }
+
+    @GetMapping("/get_all_orders_by_passport")
+    public Set<Order> getOrdersByPassport(@RequestParam long passport)
+            throws PassportNotFoundException, ClientNotFoundException
+    { return orderService.getAllOrdersByPassport(passport); }
 
 }

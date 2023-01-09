@@ -8,9 +8,11 @@ import com.clinic.exceptions.BodyChangeNotFoundException;
 import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.exceptions.OrderNotFoundException;
 import com.clinic.exceptions.ScenarioNotFoundException;
+import com.clinic.exceptions.PassportNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface OrderService {
 
@@ -22,8 +24,8 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
-    List<Order> getAllOrdersByClientId(Long id)
-            throws ClientNotFoundException;
+    Set<Order> getAllOrdersByPassport(long passport)
+            throws PassportNotFoundException, ClientNotFoundException;
 
     Order getOrderById(Long id)
             throws OrderNotFoundException;

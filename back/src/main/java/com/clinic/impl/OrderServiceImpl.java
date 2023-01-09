@@ -7,8 +7,10 @@ import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.exceptions.OrderNotFoundException;
 import com.clinic.exceptions.ScenarioNotFoundException;
 import com.clinic.repositories.AccompanimentScriptRepository;
+import com.clinic.exceptions.PassportNotFoundException;
 import com.clinic.repositories.BodyChangeRepository;
 import com.clinic.repositories.OrderRepository;
+import com.clinic.repositories.PassportRepository;
 import com.clinic.services.ClientService;
 import com.clinic.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,29 +21,32 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final ClientService clientService;
-    private final OrderRepository orderRepository;
-
-    private final BodyChangeRepository bodyChangeRepository;
 
     private final AccompanimentScriptRepository accompanimentScriptRepository;
-
+    private final BodyChangeRepository bodyChangeRepository;
+    private final OrderRepository orderRepository;
+    private final PassportRepository passportRepository;
 
     @Autowired
     public OrderServiceImpl(
             ClientService cs,
-            OrderRepository or,
+            AccompanimentScriptRepository asr,
             BodyChangeRepository bcr,
-            AccompanimentScriptRepository asr
-    ){
+            OrderRepository or,
+            PassportRepository pr
+    )
+    {
         this.clientService = cs;
-        this.orderRepository = or;
-        this.bodyChangeRepository = bcr;
         this.accompanimentScriptRepository = asr;
+        this.bodyChangeRepository = bcr;
+        this.orderRepository = or;
+        this.passportRepository = pr;
     }
 
     @Override
@@ -62,12 +67,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrdersByClientId(Long id)
-            throws ClientNotFoundException
-    {
-        Client client = clientService.getClientByPassport(id);
-        return orderRepository.findAllByClient(client);
-    }
+    public Set<Order> getAllOrdersByPassport(long id)
+            throws PassportNotFoundException, ClientNotFoundException
+    { return clientService.getClientByPassport(id).getOrders(); }
 
     @Override
     public Order getOrderById(Long id)

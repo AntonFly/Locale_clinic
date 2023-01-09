@@ -72,7 +72,7 @@ public class ManagerController {
 
     @GetMapping("/get_client_by_passport")
     public Client clientExists(@RequestParam Long passport)
-            throws ClientNotFoundException
+            throws PassportNotFoundException, ClientNotFoundException
     {
        return clientService.getClientByPassport(passport);
     }

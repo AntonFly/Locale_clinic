@@ -5,10 +5,7 @@ import com.clinic.dto.SimpleClientRegistration;
 import com.clinic.entities.Client;
 import com.clinic.entities.Passport;
 import com.clinic.entities.Person;
-import com.clinic.exceptions.ClientConflictException;
-import com.clinic.exceptions.ClientNotFoundException;
-import com.clinic.exceptions.PassportConflictException;
-import com.clinic.exceptions.PersonConflictException;
+import com.clinic.exceptions.*;
 import com.clinic.repositories.ClientRepository;
 import com.clinic.repositories.PassportRepository;
 import com.clinic.repositories.PersonRepository;
@@ -88,24 +85,22 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClientByPassport(Long passportNum)
-            throws ClientNotFoundException
+            throws PassportNotFoundException, ClientNotFoundException
     {
-        Passport passport = passportRepository.getPassportByPassport(passportNum).orElseThrow(()->
-                new ClientNotFoundException(
-                        "There is no client associated with " +
-                                (passportNum == null ? "empty" : passportNum.toString()) +
-                                " passport number"));
+        Passport passport = passportRepository.getPassportByPassport(passportNum)
+                .orElseThrow(()-> new PassportNotFoundException(passportNum));
 
-        Optional<Client> client = clientRepository.findByPersonId(passport.getPerson().getId());
-
-        return client.orElseThrow(()-> new ClientNotFoundException(
-                "An error occured while getting client by passort"));
-
+       return clientRepository.findByPersonId(passport.getPerson().getId())
+               .orElseThrow(()-> new ClientNotFoundException(passport.getPerson().getId()));
     }
 
     @Override
-    public Client getClient(Long clientId) throws ClientNotFoundException { return  clientRepository.findById(clientId)
-            .orElseThrow(()->new ClientNotFoundException("Не было найдено клиента с Id: "+ clientId)); }
+    public Client getClient(Long clientId)
+            throws ClientNotFoundException
+    {
+        return  clientRepository.findById(clientId)
+            .orElseThrow(()->new ClientNotFoundException(clientId));
+    }
 
     @Override
     public List<Client> getAllClients() {

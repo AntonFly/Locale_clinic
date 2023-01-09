@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController()
 //@PreAuthorize("hasRole('ROLE_MEDIC')")
@@ -37,11 +38,9 @@ public class MedicController {
     }
 
     @GetMapping("/get_orders_by_client_passport")
-    public List<Order> getOrdersByClientId(@RequestParam Long passport)
-            throws ClientNotFoundException
-    {
-        return orderService.getAllOrdersByClientId(passport);
-    }
+    public Set<Order> getOrdersByClientId(@RequestParam Long passport)
+            throws PassportNotFoundException, ClientNotFoundException
+    { return orderService.getAllOrdersByPassport(passport); }
 
     @GetMapping("/get_script_by_order")
     public AccompanimentScript getScriptByOrder(@RequestParam long orderId)

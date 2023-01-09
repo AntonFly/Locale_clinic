@@ -31,10 +31,6 @@ public class Person {
     @Temporal(TemporalType.DATE)
     Date dateOfBirth;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "client")
-    private List<Order> orders;
-
     @JsonManagedReference
     @OneToMany(mappedBy = "person")
     private List<Passport> passports;
