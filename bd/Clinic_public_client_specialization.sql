@@ -10,6 +10,6 @@ create table client_specialization
         primary key (id_client, id_spec)
 );
 
-alter table client_specialization
+alter table client_modification
     owner to "remoteUser";
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController()
-@PreAuthorize("hasRole('ROLE_MEDIC')")
+//@PreAuthorize("hasRole('ROLE_MEDIC')")
 @RequestMapping("/medic")
 public class MedicController {
 
@@ -45,8 +45,7 @@ public class MedicController {
 
     @GetMapping("/get_script_by_order")
     public AccompanimentScript getScriptByOrder(@RequestParam long orderId)
-        throws OrderNotFoundException
-    {
+            throws OrderNotFoundException, ScenarioNotFoundException {
         return orderService.getScriptByOrderId(orderId);
     }
 
@@ -55,6 +54,19 @@ public class MedicController {
         throws OrderNotFoundException
     {
         return orderService.createBodyChanges(changesData);
+    }
+
+    @GetMapping("/get_body_changes")
+    public List<BodyChange> getBodyChangesForOrder(@RequestParam long orderId)
+            throws OrderNotFoundException
+    {
+        return orderService.getBodyChanges(orderId);
+    }
+
+    @DeleteMapping("/drop_change")
+    public Boolean updateBodyChangesForOrder(@RequestBody long bodyChangeId)
+            throws BodyChangeNotFoundException {
+        return orderService.dropBodyChange(bodyChangeId);
     }
 
 

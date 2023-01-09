@@ -31,6 +31,8 @@ public class Modification {
 
     private BigDecimal chance;
 
+    private String accompaniment;
+
     @JsonBackReference
     @ManyToMany
     @JoinTable(

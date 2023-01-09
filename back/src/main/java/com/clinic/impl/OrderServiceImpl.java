@@ -2,8 +2,11 @@ package com.clinic.impl;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
 import com.clinic.entities.*;
+import com.clinic.exceptions.BodyChangeNotFoundException;
 import com.clinic.exceptions.ClientNotFoundException;
 import com.clinic.exceptions.OrderNotFoundException;
+import com.clinic.exceptions.ScenarioNotFoundException;
+import com.clinic.repositories.AccompanimentScriptRepository;
 import com.clinic.repositories.BodyChangeRepository;
 import com.clinic.repositories.OrderRepository;
 import com.clinic.services.ClientService;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -23,16 +28,20 @@ public class OrderServiceImpl implements OrderService {
 
     private final BodyChangeRepository bodyChangeRepository;
 
+    private final AccompanimentScriptRepository accompanimentScriptRepository;
+
 
     @Autowired
     public OrderServiceImpl(
             ClientService cs,
             OrderRepository or,
-            BodyChangeRepository bcr
+            BodyChangeRepository bcr,
+            AccompanimentScriptRepository asr
     ){
         this.clientService = cs;
         this.orderRepository = or;
         this.bodyChangeRepository = bcr;
+        this.accompanimentScriptRepository = asr;
     }
 
     @Override
@@ -70,12 +79,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public AccompanimentScript getScriptByOrderId(long id)
-            throws OrderNotFoundException
-    {
-        return orderRepository
+            throws OrderNotFoundException, ScenarioNotFoundException {
+        Order currentOrder =  orderRepository
                 .findById(id)
-                .orElseThrow(()->new OrderNotFoundException("No order found with id: "+ id))
-                .getAccompanimentScript();
+                .orElseThrow(()->new OrderNotFoundException("No order found with id: "+ id));
+
+        AccompanimentScript script = currentOrder.getAccompanimentScript();
+
+        return  script != null ? script : generateAccompanimentScript(currentOrder);
     }
 
     @Transactional
@@ -101,5 +112,57 @@ public class OrderServiceImpl implements OrderService {
         bodyChangeRepository.saveAll(bodyChanges);
 
         return order;
+    }
+
+    @Override
+    public List<BodyChange> getBodyChanges(long orderId) throws OrderNotFoundException {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Не было найдено заказа с id: "+orderId));
+        return order.getBodyChanges();
+    }
+
+    @Override
+    public Boolean dropBodyChange(long bodyChangeId) throws BodyChangeNotFoundException {
+           bodyChangeRepository.deleteById(bodyChangeId);
+           return true;
+
+    }
+
+    private AccompanimentScript generateAccompanimentScript(Order order) throws ScenarioNotFoundException {
+
+        Scenario currentScenario = order.getScenario();
+        if (currentScenario == null)
+            throw new ScenarioNotFoundException("Не было найдено сценариев для заказа с id: "+ order.getId());
+
+
+
+        StringBuilder strScript = new StringBuilder();
+        List<ModificationScenario> modificationList = currentScenario.getModificationScenarios().stream().sorted(new Comparator<ModificationScenario>() {
+            @Override
+            public int compare(ModificationScenario o1, ModificationScenario o2) {
+                return Long.compare(o2.getPriority(), o1.getPriority());
+            }
+        }).collect(Collectors.toList());
+
+        for ( ModificationScenario item: modificationList)
+             {
+                 strScript.append(item.getModification().getAccompaniment()).append("\r\n");
+             }
+
+        AccompanimentScript accompanimentScript = new AccompanimentScript();
+        accompanimentScript.setScenarios(strScript.toString());
+
+        accompanimentScript = accompanimentScriptRepository.save(accompanimentScript);
+
+        order.setAccompanimentScript(accompanimentScript);
+
+        order = orderRepository.save(order);
+
+
+
+
+
+
+        return order.getAccompanimentScript();
     }
 }
