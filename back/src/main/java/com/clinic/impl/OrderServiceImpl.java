@@ -1,6 +1,7 @@
 package com.clinic.impl;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
+import com.clinic.dto.SimpleChange;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.repositories.AccompanimentScriptRepository;
@@ -96,11 +97,14 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(changesData.getOrderId()));
 
         List<BodyChange> bodyChanges = new ArrayList<>();
-        for (String change : changesData.getChanges())
+        for (SimpleChange change : changesData.getChanges())
         {
             BodyChange bodyChange = new BodyChange();
             bodyChange.setOrder(order);
-            bodyChange.setChange(change);
+            bodyChange.setChange(change.getChange());
+            bodyChange.setActions(change.getActions());
+            bodyChange.setDescription(change.getDescription());
+            bodyChange.setSymptoms(change.getSymptoms());
             bodyChanges.add(bodyChange);
         }
 

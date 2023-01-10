@@ -24,6 +24,12 @@ public class BodyChange {
 
     private String change;
 
+    private String description;
+
+    private String symptoms;
+
+    private String actions;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")

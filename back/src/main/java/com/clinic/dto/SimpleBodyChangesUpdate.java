@@ -20,8 +20,7 @@ public class SimpleBodyChangesUpdate {
 
     @NotEmpty
     @NotNull
-    @JsonProperty("changes")
-    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-    private List<String> changes;
+
+    private SimpleChange[] changes;
 
 }
