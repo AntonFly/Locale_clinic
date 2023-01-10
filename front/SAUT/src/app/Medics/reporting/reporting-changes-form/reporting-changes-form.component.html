@@ -1,0 +1,41 @@
+<form [formGroup]="UserForm" (ngSubmit)="onSubmitClient(UserForm.value)">
+
+    <div class="first-line">
+      <mat-form-field class="not-full-width">
+          <input matInput placeholder="Краткое название" formControlName="passport" required>
+          <mat-error *ngFor="let validation of validation_messages.Passport">
+            <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
+          </mat-error>
+      </mat-form-field>
+      <div class="right-hand">      
+        <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>      
+        <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+        <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
+      </div>
+    </div>
+  
+      <mat-form-field class="full-width">
+          <textarea matInput formControlName="comment" #note maxlength="256" placeholder="Примечания"></textarea>        
+          <mat-hint align="start"><strong>Описание произошедшего</strong> </mat-hint>
+          <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
+      </mat-form-field>
+  
+      <mat-form-field class="full-width">
+          <textarea matInput formControlName="symptoms" #sym maxlength="256" placeholder="Примечания"></textarea>        
+          <mat-hint align="start"><strong>Симптомы</strong> </mat-hint>
+          <mat-hint align="end">{{sym.value.length}} / 256</mat-hint>
+      </mat-form-field>
+        
+      <mat-form-field class="full-width">
+          <textarea matInput formControlName="actions" #act maxlength="256" placeholder="Примечания"></textarea>        
+          <mat-hint align="start"><strong>Предпринятые действия</strong> </mat-hint>
+          <mat-hint align="end">{{act.value.length}} / 256</mat-hint>
+      </mat-form-field>      
+  
+      <div>      
+        <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>      
+        <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+        <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
+      </div>
+    
+    </form>

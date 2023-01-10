@@ -1,1 +1,9 @@
-<p>reporting-body-changes works!</p>
+<div *ngFor="let change of currentChanges"> 
+  <app-reporting-changes-form [change]="change"> </app-reporting-changes-form>
+</div>
+
+<div class="round-button-div">
+  <button (click)="addChange()" class="round-button" mat-mini-fab color="warn" >
+  <mat-icon>add</mat-icon>
+  </button>
+</div>

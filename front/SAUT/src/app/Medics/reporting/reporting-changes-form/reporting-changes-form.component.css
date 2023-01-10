@@ -1,0 +1,36 @@
+not-full-width
+{
+  width: 50%;
+
+}
+.first-line{
+  display: flex;
+  align-items: baseline;
+}
+
+.right-hand{
+  float: right;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+  
+  .double-line-hint {
+    .mat-input-hint-wrapper
+  
+  {
+    flex-wrap: wrap;
+    .hint-line
+  
+  {
+    flex: 0 0 100%;
+  }
+  
+  }
+  }

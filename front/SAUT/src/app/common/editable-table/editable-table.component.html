@@ -1,6 +1,6 @@
 <article class="table-header">
 
-    <div>
+    <!-- <div> -->
       <!-- <button
         class="button-remove-rows"
         mat-button
@@ -8,10 +8,10 @@
       >
         Remove Rows
       </button> -->
-      <button class="button-add-row" mat-button (click)="addRow()">
+      <!-- <button class="button-add-row" mat-button (click)="addRow()">
         Add Row
       </button>
-    </div>
+    </div> -->
 </article>
   <table mat-table [dataSource]="dataSource">
     <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
@@ -88,3 +88,10 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+
+<div class="round-button-div">
+  <button (click)="addRow()" class="round-button" mat-mini-fab color="warn" >
+  <mat-icon>add</mat-icon>
+  </button>
+</div>

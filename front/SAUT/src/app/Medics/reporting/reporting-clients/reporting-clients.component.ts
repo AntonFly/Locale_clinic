@@ -5,6 +5,8 @@ import { Subject, Subscription } from 'rxjs';
 import { Client } from 'src/app/_models/Client';
 //import {ClientsService} from '../../_services/clients.service'
 import { DatePipe } from '@angular/common';
+import { Order } from 'src/app/_models/Order';
+import { ReportingService } from '../../_services';
 
 @Component({
   selector: 'app-reporting-clients',
@@ -15,6 +17,9 @@ export class ReportingClientsComponent implements OnInit {
 
   @Input('client') client: Client;
   @Output('close') close: EventEmitter<boolean> = new EventEmitter();
+
+  currentOrders: Order[];
+  selectedOrder: Order;
 
   myDatepipe: DatePipe;
   
@@ -65,10 +70,21 @@ export class ReportingClientsComponent implements OnInit {
   constructor(
     private fb: FormBuilder, 
     // private clientService: ClientsService,
+    private reportService: ReportingService,
     datepipe: DatePipe
-    ) { this.myDatepipe = datepipe; }
+    ) { 
+      this.myDatepipe = datepipe;       
+    }
 
   ngOnInit() {
+    this.reportService.getOrdersByPassport(this.client.person.passports[0].passport).subscribe(
+      res =>{
+        this.currentOrders = res;
+      },
+      error => {
+
+      }
+    )
   }
 
   
@@ -89,5 +105,14 @@ export class ReportingClientsComponent implements OnInit {
   {
     console.log(data);
   }  
+
+  /* ORDERS TABLE */
+  selectRow(order: Order){
+    console.log(order);
+    if(this.selectedOrder == order)
+      this.selectedOrder = undefined
+    else
+      this.selectedOrder = order;
+  }
 
 }

@@ -48,7 +48,7 @@ export class EditableTableComponent implements OnInit {
     var newData = [];
     this.data.forEach((el, ind)=> {
       newData.push(new RowClass(el, ind + 1));
-      this.lastId = ind;
+      this.lastId = ind + 1;
     })
     this.dataSource.data = newData;  
     console.log("DATA")   
@@ -67,7 +67,7 @@ export class EditableTableComponent implements OnInit {
     return out;
   }
 
-  editRow(row) {
+  editRow(row) {    
     if (row.id !== 0) {
       var data = this.dataSource.data;
       for (var i = 0; i < data.length; i++ )
@@ -81,7 +81,7 @@ export class EditableTableComponent implements OnInit {
           }
           data[i].isEdit = false;          
         }
-      }        
+      }      
       this.dataSource.data = data;
       this.changed.emit(this.clearData());
     }
@@ -106,14 +106,21 @@ export class EditableTableComponent implements OnInit {
           break;
       }      
     }
+    
     var newData = new RowClass(data, ++this.lastId);
     var oldData = this.dataSource.data.slice();
-    oldData.push(newData);
+    oldData.push(newData);    
     this.dataSource.data = oldData;
-    this.changed.emit(this.clearData());
+    this.changed.emit(this.clearData());    
   }
 
   removeRow(id: number) {
+    console.log('delete')
+    console.log(id)
+    var data = this.dataSource.data;
+    data.splice(data.findIndex(e => e.id == id),1);
+    this.dataSource.data = data;
+    this.changed.emit(this.clearData());
     // this.userService.deleteUser(id).subscribe(() => {
     //   this.dataSource.data = this.dataSource.data.filter(
     //     (u: User) => u.id !== id

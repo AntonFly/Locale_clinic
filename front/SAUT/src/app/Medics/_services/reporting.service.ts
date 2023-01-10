@@ -12,7 +12,7 @@ export class ReportingService {
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { 
     this.baseUrl = baseUrl;                 
   }
-  updateimplants(id:number, impl:Implant[])
+  updateImplants(id:number, impl:Implant[])
   {
     var data = {"client_id":id, "implants":impl};
     return this.http.post(this.baseUrl+"medic/update_implants", data)

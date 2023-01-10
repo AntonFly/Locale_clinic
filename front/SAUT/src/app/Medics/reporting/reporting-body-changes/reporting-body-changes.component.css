@@ -1,0 +1,14 @@
+.round-button{
+    box-shadow: unset;
+  }
+  
+  .round-button-div{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    
+  }
+  
+  .mat-button-wrapper > mat-icon{
+    font-size: 20px;
+  }

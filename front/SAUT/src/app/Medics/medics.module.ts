@@ -29,7 +29,8 @@ import { ReportingComponent } from './reporting/reporting-main/reporting.compone
 import { SupportDialogComponent } from './support/support-dialog/support-dialog.component';
 import { ReportingClientsComponent } from './reporting/reporting-clients/reporting-clients.component';
 import { ReportingImplantsComponent } from './reporting/reporting-implants/reporting-implants.component';
-import { ReportingBodyChangesComponent } from './reporting/reporting-body-changes/reporting-body-changes.component'
+import { ReportingBodyChangesComponent } from './reporting/reporting-body-changes/reporting-body-changes.component';
+import { ReportingChangesFormComponent } from './reporting/reporting-changes-form/reporting-changes-form.component'
 
  
 const routes: Routes = [
@@ -51,7 +52,9 @@ const routes: Routes = [
     
   ReportingImplantsComponent,
     
-  ReportingBodyChangesComponent],
+  ReportingBodyChangesComponent,
+    
+  ReportingChangesFormComponent],
   imports: [
     SharedModule,
     MatPaginatorModule,

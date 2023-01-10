@@ -20,6 +20,8 @@ export class ReportingImplantsComponent implements OnInit {
 
   currentImplants: Implant[];
   user_data;
+
+  isDisabled: boolean = true;
  
   columns_schema = [
     {
@@ -63,9 +65,10 @@ export class ReportingImplantsComponent implements OnInit {
 
   saveImplants()
   {
-    this.reportingService.updateimplants(this.client.id, this.currentImplants).subscribe(
+    this.reportingService.updateImplants(this.client.id, this.currentImplants).subscribe(
       res => {
         console.log(res)
+        this.isDisabled = true;
       },
       error => {
         console.log(error)
@@ -75,7 +78,7 @@ export class ReportingImplantsComponent implements OnInit {
 
   previousChanged(event)
   {
-    console.log(event)
+    this.isDisabled = false;    
     this.currentImplants = event;    
   }  
 
