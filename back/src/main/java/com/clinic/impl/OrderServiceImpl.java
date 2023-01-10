@@ -104,8 +104,8 @@ public class OrderServiceImpl implements OrderService {
             bodyChanges.add(bodyChange);
         }
 
-        for (BodyChange bodyChange : bodyChanges)
-            System.out.println(bodyChange.getOrder().getId());
+//        for (BodyChange bodyChange : bodyChanges)
+//            System.out.println(bodyChange.getOrder().getId());
 
         bodyChangeRepository.saveAll(bodyChanges);
 

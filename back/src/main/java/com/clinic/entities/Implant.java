@@ -8,6 +8,7 @@ import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Table(name = "implants")
@@ -25,6 +26,11 @@ public class Implant {
     private String name;
 
     private String description;
+
+    private long number;
+
+    @Temporal(TemporalType.DATE)
+    private Date implantation_date;
 
     @JsonBackReference
     @ManyToMany

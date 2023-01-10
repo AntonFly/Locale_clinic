@@ -1,6 +1,7 @@
 package com.clinic.controllers;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
+import com.clinic.dto.SimpleImplantsUpdate;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
@@ -62,10 +63,28 @@ public class MedicController {
     }
 
     @DeleteMapping("/drop_change")
-    public Boolean updateBodyChangesForOrder(@RequestBody long bodyChangeId)
+    public Boolean dropBodyChange(@RequestBody long bodyChangeId)
             throws BodyChangeNotFoundException {
         return orderService.dropBodyChange(bodyChangeId);
     }
+
+    @GetMapping("/get_all_clients")
+    public List<Client> getAllClients(){
+        return clientService.getAllClients();
+    }
+
+    @PostMapping("/update_implants")
+    public Client addImplants(@RequestBody SimpleImplantsUpdate implantsUpdate) throws ClientNotFoundException {
+        return clientService.addImplants(implantsUpdate);
+    }
+
+    @DeleteMapping("/drop_implant")
+    public Boolean dropImplant(@RequestBody long implantId)
+            throws BodyChangeNotFoundException, ImplantNotFountException {
+        return clientService.dropImplant(implantId);
+    }
+
+
 
 
 }
