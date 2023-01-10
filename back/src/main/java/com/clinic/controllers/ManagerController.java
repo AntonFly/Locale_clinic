@@ -5,7 +5,7 @@ import com.clinic.entities.*;
 import com.clinic.exceptions.*;
 import com.clinic.services.*;
 import com.clinic.utilities.FileUploadResponse;
-import com.clinic.utilities.FileUploadUtil;
+import com.clinic.utilities.FileUtil;
 import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -22,6 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController()
@@ -206,10 +209,10 @@ public class ManagerController {
 
         String[] fileParts = StringUtils.cleanPath(multipartFile.getOriginalFilename()).split("\\.");
 
-        String fileName = "confirmationOrder_"+orderId+"."+fileParts[fileParts.length-1];
+        String fileName = "confirmationOrder_"+orderId+"_"+ LocalDate.now() +"."+fileParts[fileParts.length-1];
         long size = multipartFile.getSize();
 
-        fileName = FileUploadUtil.saveFile(fileName,"confirmation", multipartFile);
+        fileName =  Paths.get(FileUtil.saveFile(fileName,"confirmation", multipartFile)).getFileName().toString();
 
         FileUploadResponse response = new FileUploadResponse();
         response.setFileName(fileName);
@@ -221,4 +224,17 @@ public class ManagerController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/download_confirmation")
+    public ResponseEntity<InputStreamResource> get_confirmation(
+            @RequestParam String file
+    ) throws IOException {
+        try {
+            return FileUtil.downloadFile("confirmation/"+file);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 }
