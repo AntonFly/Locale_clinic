@@ -69,10 +69,10 @@ public class AdminServiceImpl implements AdminService{
             throws PwdDropRequestNotFoundException, PwdDropRequestAlreadySatisfiedException
     {
         PwdDropRequest pwdDropRequest = pwdDropRequestRepository.findById(dropRequestData.getId())
-                .orElseThrow(() -> new PwdDropRequestNotFoundException("No drop request is found with id: " + dropRequestData.getId()));
+                .orElseThrow(() -> new PwdDropRequestNotFoundException(dropRequestData.getId()));
 
         if (pwdDropRequest.isDropped())
-            throw new PwdDropRequestAlreadySatisfiedException("Drop request with id: " + pwdDropRequest.getId() + " was already satisfied");
+            throw new PwdDropRequestAlreadySatisfiedException(pwdDropRequest.getId(), pwdDropRequest.getDropDate());
 
         User user = pwdDropRequest.getUser();
 
@@ -112,10 +112,10 @@ public class AdminServiceImpl implements AdminService{
         Role role = roleRepository.findByName(ERole.valueOf(userData.getRole()));
 
         if (userService.getUsersByPersonId(person.getId()).stream().anyMatch(tmpUser -> tmpUser.getRole() == role))
-            throw new UserConflictException("There is already a user with given privileges");
+            throw new UserConflictException(role.getName().name());
 
         if (userService.existsByEmail(userData.getEmail()))
-            throw new UserConflictException("Ther is already a user with email: " + userData.getEmail());
+            throw new UserConflictException(userData.getEmail());
 
         user.setPerson(person);
         user.setRole(role);

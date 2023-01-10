@@ -2,12 +2,8 @@ package com.clinic.impl;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
 import com.clinic.entities.*;
-import com.clinic.exceptions.BodyChangeNotFoundException;
-import com.clinic.exceptions.ClientNotFoundException;
-import com.clinic.exceptions.OrderNotFoundException;
-import com.clinic.exceptions.ScenarioNotFoundException;
+import com.clinic.exceptions.*;
 import com.clinic.repositories.AccompanimentScriptRepository;
-import com.clinic.exceptions.PassportNotFoundException;
 import com.clinic.repositories.BodyChangeRepository;
 import com.clinic.repositories.OrderRepository;
 import com.clinic.repositories.PassportRepository;
@@ -68,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Set<Order> getAllOrdersByPassport(long id)
-            throws PassportNotFoundException, ClientNotFoundException
+            throws PassportNotFoundException, NoPersonToClientException
     { return clientService.getClientByPassport(id).getOrders(); }
 
     @Override
@@ -76,15 +72,15 @@ public class OrderServiceImpl implements OrderService {
             throws OrderNotFoundException
     {
         return orderRepository.findById(id)
-                .orElseThrow(()->new OrderNotFoundException("No order found with id: "+ id));
+                .orElseThrow(()->new OrderNotFoundException(id));
     }
 
     @Override
     public AccompanimentScript getScriptByOrderId(long id)
-            throws OrderNotFoundException, ScenarioNotFoundException {
+            throws OrderNotFoundException, NoScenarioForOrderException {
         Order currentOrder =  orderRepository
                 .findById(id)
-                .orElseThrow(()->new OrderNotFoundException("No order found with id: "+ id));
+                .orElseThrow(()->new OrderNotFoundException(id));
 
         AccompanimentScript script = currentOrder.getAccompanimentScript();
 
@@ -97,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
             throws OrderNotFoundException
     {
         Order order = orderRepository.findById(changesData.getOrderId())
-                .orElseThrow(() -> new OrderNotFoundException("No order found with id: "+ changesData.getOrderId()));
+                .orElseThrow(() -> new OrderNotFoundException(changesData.getOrderId()));
 
         List<BodyChange> bodyChanges = new ArrayList<>();
         for (String change : changesData.getChanges())
@@ -119,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<BodyChange> getBodyChanges(long orderId) throws OrderNotFoundException {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Не было найдено заказа с id: "+orderId));
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
         return order.getBodyChanges();
     }
 
@@ -130,11 +126,13 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    private AccompanimentScript generateAccompanimentScript(Order order) throws ScenarioNotFoundException {
+    private AccompanimentScript generateAccompanimentScript(Order order)
+            throws NoScenarioForOrderException
+    {
 
         Scenario currentScenario = order.getScenario();
         if (currentScenario == null)
-            throw new ScenarioNotFoundException("Не было найдено сценариев для заказа с id: "+ order.getId());
+            throw new NoScenarioForOrderException(order.getId());
 
 
 
@@ -159,11 +157,6 @@ public class OrderServiceImpl implements OrderService {
         order.setAccompanimentScript(accompanimentScript);
 
         order = orderRepository.save(order);
-
-
-
-
-
 
         return order.getAccompanimentScript();
     }

@@ -35,7 +35,7 @@ public class EngineerController {
     {
         Order order = orderService.getOrderById(orderId);
         if (!fileService.exists(order.getConfirmation()))
-            throw new ConfirmationMissingException("No confirmation is present for order with id: " + orderId);
+            throw new ConfirmationMissingException(orderId);
 
         return order.getAccompanimentScript();
     }

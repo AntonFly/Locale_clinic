@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
             throws UserNotFoundException
     {
         User user = userRepository.findByEmail(pwdDropRequestData.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("There is no user with email: " + pwdDropRequestData.getEmail()));
+                .orElseThrow(() -> new UserNotFoundException("email", pwdDropRequestData.getEmail()));
 
         PwdDropRequest pwdDropRequest = new PwdDropRequest();
         pwdDropRequest.setUser(user);

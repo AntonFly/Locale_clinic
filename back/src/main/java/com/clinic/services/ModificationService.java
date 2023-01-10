@@ -14,9 +14,6 @@ public interface ModificationService {
     @Transactional
     void delete(Modification specialization);
 
-    Modification getModificationByName(String name)
-        throws ModificationNotFoundException;
-
     Modification getModificationById(Long modId)
             throws ModificationNotFoundException;
 

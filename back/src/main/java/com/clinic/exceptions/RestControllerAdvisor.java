@@ -16,7 +16,6 @@ public class RestControllerAdvisor {
                     ClientConflictException.class,
                     UserConflictException.class,
                     PersonConflictException.class,
-                    ModSpecConflictException.class,
                     StockConflictException.class
             })
     @ResponseStatus(CONFLICT)

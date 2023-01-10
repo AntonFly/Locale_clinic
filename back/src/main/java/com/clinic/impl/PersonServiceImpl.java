@@ -53,10 +53,7 @@ public class PersonServiceImpl implements PersonService {
         Optional<Person> optionalPerson = personRepository.getPersonById(person.getId());
         if (optionalPerson.isPresent())
             if (!optionalPerson.get().equals(person))
-                throw new PersonConflictException(
-                        "There is already a person with " +
-                                person.getId() +
-                                ", but different parameters");
+                throw new PersonConflictException(person.getId());
             else
                 return optionalPerson.get();
 

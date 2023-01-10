@@ -72,7 +72,7 @@ public class ManagerController {
 
     @GetMapping("/get_client_by_passport")
     public Client clientExists(@RequestParam Long passport)
-            throws PassportNotFoundException, ClientNotFoundException
+            throws PassportNotFoundException, NoPersonToClientException
     {
        return clientService.getClientByPassport(passport);
     }
@@ -113,8 +113,7 @@ public class ManagerController {
             throws
             ClientNotFoundException,
             SpecializationNotFoundException,
-            ModificationNotFoundException,
-            ModSpecConflictException
+            ModificationNotFoundException
     {
         Order order = new Order();
         order.setClient(clientService.getClient(orderData.getClientId()));

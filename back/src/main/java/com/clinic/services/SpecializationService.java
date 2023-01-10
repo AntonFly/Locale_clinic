@@ -15,8 +15,6 @@ public interface SpecializationService {
     @Transactional
     void delete(Specialization specialization);
 
-    Specialization getSpecByName(String name) throws SpecializationNotFoundException;
-
     Specialization getSpecById (Long specId) throws SpecializationNotFoundException;
 
     List<Specialization> getAllSpecializations();

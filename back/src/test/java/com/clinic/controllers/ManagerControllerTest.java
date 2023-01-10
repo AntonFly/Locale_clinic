@@ -100,7 +100,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Getting existing client")
-    void clientExists() throws PersonConflictException, ClientConflictException, PassportConflictException, ClientNotFoundException {
+    void clientExists() throws NoPersonToClientException, PersonConflictException, ClientConflictException, PassportConflictException, ClientNotFoundException, PassportNotFoundException {
 
 
         assertNotNull(mc.clientExists(simpleClientRegistration.getPerson().getPassport()));
@@ -143,7 +143,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Create order")
-    void createOrder() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException {
+    void createOrder() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,
@@ -176,7 +176,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Generating commercial")
-    void generatingCommercial() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException, OrderNotFoundException, DocumentException, IOException {
+    void generatingCommercial() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, DocumentException, IOException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,
@@ -199,7 +199,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Generating risks")
-    void generatingRisks() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException, OrderNotFoundException, DocumentException, IOException {
+    void generatingRisks() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, DocumentException, IOException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,
@@ -216,7 +216,7 @@ class ManagerControllerTest {
 
     @Test
     @DisplayName("Upload confirmation")
-    void uploadConfirmation() throws ClientNotFoundException, SpecializationNotFoundException, ModSpecConflictException, ModificationNotFoundException, OrderNotFoundException, IOException {
+    void uploadConfirmation() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, IOException {
         SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
                 createdClient.getId(),
                 1L,

@@ -97,7 +97,7 @@ public class ScientistController {
 
     @GetMapping("/get_all_orders_by_passport")
     public Set<Order> getOrdersByPassport(@RequestParam long passport)
-            throws PassportNotFoundException, ClientNotFoundException
+            throws PassportNotFoundException, NoPersonToClientException
     { return orderService.getAllOrdersByPassport(passport); }
 
 }

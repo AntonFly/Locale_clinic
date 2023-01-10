@@ -7,10 +7,7 @@ import lombok.Getter;
 public class ClientNotFoundException extends Exception {
 
     private final String message;
-
-    public ClientNotFoundException(String massage)
-    { this.message = massage; }
     public ClientNotFoundException(long id)
-    { message = "Не было найдено клиента для персоны с id: " + id; }
+    { message = "Не было найдено клиента с id: " + id; }
 
 }

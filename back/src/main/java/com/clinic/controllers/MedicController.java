@@ -39,14 +39,13 @@ public class MedicController {
 
     @GetMapping("/get_orders_by_client_passport")
     public Set<Order> getOrdersByClientId(@RequestParam Long passport)
-            throws PassportNotFoundException, ClientNotFoundException
+            throws PassportNotFoundException, NoPersonToClientException
     { return orderService.getAllOrdersByPassport(passport); }
 
     @GetMapping("/get_script_by_order")
     public AccompanimentScript getScriptByOrder(@RequestParam long orderId)
-            throws OrderNotFoundException, ScenarioNotFoundException {
-        return orderService.getScriptByOrderId(orderId);
-    }
+            throws OrderNotFoundException, NoScenarioForOrderException
+    { return orderService.getScriptByOrderId(orderId); }
 
     @PutMapping("/update_changes")
     public Order updateBodyChangesForOrder(@RequestBody SimpleBodyChangesUpdate changesData)

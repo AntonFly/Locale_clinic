@@ -40,15 +40,6 @@ public class ScenarioServiceImpl implements ScenarioService {
         this.specializationRepository = slr;
     }
 
-    private SpecializationNotFoundException GenerateSpecException(long specId)
-    { return new SpecializationNotFoundException("There is no scenario for specialization with id: " + specId); }
-
-    private ModificationNotFoundException GenerateModException(long modId)
-    { return new ModificationNotFoundException("There is no scenario for modification with id: " + modId); }
-
-    private ScenarioNotFoundException GenerateScenException(long scenId)
-    { return new ScenarioNotFoundException("There is no scenario with id: " + scenId); }
-
     @Override
     public Scenario save(Scenario scenario) {
         scenario = scenarioRepository.save(scenario);
@@ -83,7 +74,7 @@ public class ScenarioServiceImpl implements ScenarioService {
         Set<Modification> modifications = new HashSet<>();
         for (Integer modId : scenarioData.getModIds())
             modifications.add(modificationRepository.findById(modId.longValue())
-                    .orElseThrow(() -> GenerateModException(modId)));
+                    .orElseThrow(() -> new ModificationNotFoundException(modId)));
 
         Scenario scenario = new Scenario();
         //scenario.setModifications(modifications);
@@ -95,7 +86,7 @@ public class ScenarioServiceImpl implements ScenarioService {
             throws SpecializationNotFoundException
     {
         Specialization specialization = specializationRepository.findById(specId)
-                .orElseThrow(() -> GenerateSpecException(specId));
+                .orElseThrow(() -> new SpecializationNotFoundException(specId));
 
         return specialization.getModifications();
     }
@@ -105,15 +96,15 @@ public class ScenarioServiceImpl implements ScenarioService {
             throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException
     {
         Scenario scenario = scenarioRepository.findById(updateData.getScenarioId())
-                .orElseThrow(() -> GenerateScenException(updateData.getScenarioId()));
+                .orElseThrow(() -> new ScenarioNotFoundException(updateData.getScenarioId()));
 
         Specialization specialization = specializationRepository.findById(updateData.getSpecId())
-                .orElseThrow(() -> GenerateSpecException(updateData.getSpecId()));
+                .orElseThrow(() -> new SpecializationNotFoundException(updateData.getSpecId()));
 
         Set<Modification> modifications = new HashSet<>();
         for (Long modId : updateData.getModIds())
             modifications.add(modificationRepository.findById(modId)
-                    .orElseThrow(() -> GenerateModException(modId)));
+                    .orElseThrow(() -> new ModificationNotFoundException(modId)));
 
         //scenario.setModifications(modifications);
 

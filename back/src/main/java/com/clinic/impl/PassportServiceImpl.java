@@ -28,11 +28,8 @@ public class PassportServiceImpl implements PassportService {
 
         Optional<Passport> optionalPassport = passportRepository.getPassportByPassport(passport.getPassport());
         if (optionalPassport.isPresent())
-            if (optionalPassport.get().getPerson().getId()!=person.getId())
-                throw new PassportConflictException(
-                        "There is already another person with passport " +
-                                passportNum +
-                                "");
+            if (optionalPassport.get().getPerson().getId() != person.getId())
+                throw new PassportConflictException(passportNum);
             else
                 return optionalPassport.get();
 

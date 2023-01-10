@@ -25,9 +25,10 @@ public interface ClientService {
     void delete(Client client);
 
     Client getClientByPassport(Long passport)
-            throws PassportNotFoundException, ClientNotFoundException;
+            throws PassportNotFoundException, NoPersonToClientException;
 
-    Client getClient(Long clientId) throws ClientNotFoundException;
+    Client getClient(Long clientId)
+            throws ClientNotFoundException;
 
     List<Client> getAllClients();
 

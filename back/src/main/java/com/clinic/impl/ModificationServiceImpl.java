@@ -41,21 +41,9 @@ public class ModificationServiceImpl implements ModificationService {
     }
 
     @Override
-    public Modification getModificationByName(String name)
-            throws ModificationNotFoundException {
-        Optional<Modification> modification = modificationRepository.findByName(name);
-        if (modification.isPresent())
-            return modification.get();
-
-        throw new ModificationNotFoundException(
-                "There is no modification associated with " +
-                (name.isEmpty() ? "empty name" : ("name: " + name)));
-    }
-
-    @Override
     public Modification getModificationById(Long modId) throws ModificationNotFoundException {
         return modificationRepository.findById(modId)
-                .orElseThrow(()-> new ModificationNotFoundException("Не было найдено модификаций с id: "+ modId));
+                .orElseThrow(()-> new ModificationNotFoundException(modId));
     }
 
     @Override

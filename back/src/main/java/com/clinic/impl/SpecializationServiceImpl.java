@@ -35,24 +35,10 @@ public class SpecializationServiceImpl implements SpecializationService {
     }
 
     @Override
-    public Specialization getSpecByName(String name) throws SpecializationNotFoundException
+    public Specialization getSpecById(Long specId) throws SpecializationNotFoundException
     {
-        Optional<Specialization> specialization = specializationRepository.findByName(name);
-        if (specialization.isPresent())
-            return specialization.get();
-
-        throw new SpecializationNotFoundException(
-                "No specialization with " +
-                        (name.isEmpty() ?
-                                "empty name" :
-                                ("the name " + name))
-                        + " was found");
-    }
-
-    @Override
-    public Specialization getSpecById(Long specId) throws SpecializationNotFoundException {
         return specializationRepository.findById(specId)
-                .orElseThrow(()->new SpecializationNotFoundException("Не было найдено специализации с id: "+ specId));
+                .orElseThrow(()->new SpecializationNotFoundException(specId));
     }
 
     @Override

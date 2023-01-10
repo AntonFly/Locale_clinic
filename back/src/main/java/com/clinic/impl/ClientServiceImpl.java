@@ -56,8 +56,7 @@ public class ClientServiceImpl implements ClientService {
 
         if (optionalClient.isPresent())
             if (optionalClient.get() != client)
-                throw new ClientConflictException(
-                        "There is already client associated with a given person");
+                throw new ClientConflictException(person.getId());
 
         client = clientRepository.save(client);
         clientRepository.flush();
@@ -75,8 +74,7 @@ public class ClientServiceImpl implements ClientService {
 
         if (optionalClient.isPresent())
             if (optionalClient.get() != client)
-                throw new ClientConflictException(
-                        "There is already client associated with a given person");
+                throw new ClientConflictException(clientData.getPerson().getId());
 
         client = clientRepository.save(client);
         clientRepository.flush();
@@ -90,24 +88,22 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClientByPassport(Long passportNum)
-            throws ClientNotFoundException
+            throws PassportNotFoundException, NoPersonToClientException
     {
-        Passport passport = passportRepository.getPassportByPassport(passportNum).orElseThrow(()->
-                new ClientNotFoundException(
-                        "There is no client associated with " +
-                                (passportNum == null ? "empty" : passportNum.toString()) +
-                                " passport number"));
+        Passport passport = passportRepository.getPassportByPassport(passportNum)
+                .orElseThrow(() -> new PassportNotFoundException((passportNum)));
 
-        Optional<Client> client = clientRepository.findByPersonId(passport.getPerson().getId());
-
-        return client.orElseThrow(()-> new ClientNotFoundException(
-                "An error occured while getting client by passort"));
-
+        return clientRepository.findByPersonId(passport.getPerson(). getId())
+                .orElseThrow(()-> new NoPersonToClientException(passport.getPerson().getId()));
     }
 
     @Override
-    public Client getClient(Long clientId) throws ClientNotFoundException { return  clientRepository.findById(clientId)
-            .orElseThrow(()->new ClientNotFoundException("Не было найдено клиента с Id: "+ clientId)); }
+    public Client getClient(Long clientId)
+            throws ClientNotFoundException
+    {
+        return  clientRepository.findById(clientId)
+            .orElseThrow(()->new ClientNotFoundException(clientId));
+    }
 
     @Override
     public List<Client> getAllClients() {
@@ -139,15 +135,16 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client addPreviousModifications(SimpleModificationAdd modificationAdd) throws ClientNotFoundException, ModificationNotFoundException {
+    public Client addPreviousModifications(SimpleModificationAdd modificationAdd)
+            throws ClientNotFoundException, ModificationNotFoundException
+    {
         Client client = clientRepository.findById(modificationAdd.getClientId())
                 .orElseThrow(()->new ClientNotFoundException(modificationAdd.getClientId()));
         Set<Modification> mods = new HashSet<>();
 
-
         for (long modId : modificationAdd.getModIds())
         {
-            mods.add(modificationRepository.findById(modId).orElseThrow(()-> new ModificationNotFoundException("Не было найдено модификации с id: "+ modId)));
+            mods.add(modificationRepository.findById(modId).orElseThrow(()-> new ModificationNotFoundException(modId)));
         }
 
         client.setModifications(mods);

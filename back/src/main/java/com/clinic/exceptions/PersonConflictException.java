@@ -5,9 +5,12 @@ import lombok.Getter;
 
 import java.util.function.Supplier;
 
-@AllArgsConstructor
 @Getter
 public class PersonConflictException extends Exception {
+
     private final String message;
+
+    public PersonConflictException(long id)
+    { message = "Уже зарегистрирована персона с id: " + id + ", но с другими параметрами"; }
 
 }
