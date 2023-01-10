@@ -135,7 +135,7 @@ public class AdminServiceImpl implements AdminService{
         registrationMessage.copyTo(message);
         message.setTo(user.getEmail());
         message.setText(text);
-        sender.send(message);
+//        sender.send(message);
 
         return user;
     }

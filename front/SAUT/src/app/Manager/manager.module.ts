@@ -18,7 +18,9 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {DragDropModule} from '@angular/cdk/drag-drop'
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DatePipe } from '@angular/common';
+import { MatPaginatorModule } from '@angular/material';
 
+import {SharedModule} from '../common/shared.module';
 
 import { ClientsComponent } from './clients/clients-main/clients.component';
 import { ClientsDialogComponent } from './clients/clients-dialog/clients-dialog.component';
@@ -30,7 +32,9 @@ import { ClientsService, OrderService } from './_services/index';
 import { AdvancedSearchDialogComponent } from './clients/advanced-search-dialog/advanced-search-dialog.component';
 import { NewRequestComponent } from './request/new-request/new-request.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
-import { RequestContainerComponent } from './request/request-container/request-container.component'
+import { RequestContainerComponent } from './request/request-container/request-container.component';
+import { ClientEditorComponent } from './clients/client-editor/client-editor.component';
+import { OrderConfirmationComponent } from './request/order-confirmation/order-confirmation.component'
  
 const routes: Routes = [
     {   path: 'manager', redirectTo: '/manager/clients', pathMatch: 'full'},
@@ -49,9 +53,13 @@ const routes: Routes = [
     AdvancedSearchDialogComponent,
     NewRequestComponent,
     RequestListComponent,
-    RequestContainerComponent
+    RequestContainerComponent,
+    ClientEditorComponent,
+    OrderConfirmationComponent
   ],
   imports: [
+    SharedModule,
+    MatPaginatorModule,
     MatButtonModule,
     CommonModule,
     RouterModule.forChild(routes),

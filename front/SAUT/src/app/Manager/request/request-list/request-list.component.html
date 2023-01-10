@@ -1,10 +1,10 @@
+<app-order-confirmation [order]="orderOpened" (close)="closeOrder()" *ngIf="isOrderOpened"></app-order-confirmation>
+<div *ngIf="!isOrderOpened">
 <div *ngIf="!orders&&!clientError" class="container" style="padding-left: 50%;">
     <mat-icon style="font-size: 60px;">access_time</mat-icon>
-  </div>
-  
-  
-  
-  <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="orders&&!clientError">
+</div>
+    
+<table class='table table-striped table-hover' aria-labelledby="tableLabel" *ngIf="orders&&!clientError">
     <thead>
       <tr>
         <th>Пасспорт</th>
@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let queueItem of orders">
+      <tr (dblclick)="openOrder(queueItem)" *ngFor="let queueItem of orders">
         <td>{{ queueItem.client.person.id }}</td>
         <td>{{ getFIO(queueItem.client.person) }}</td>      
         <td>{{ queueItem.specialization.name}}</td>
@@ -23,9 +23,10 @@
     </tbody>
   </table>
   
-  <div class="errorBox" *ngIf="clientError"> 
+<div class="errorBox" *ngIf="clientError"> 
     <div class="errorItem" style="padding-left: 47.5%;">
       <mat-icon style="font-size: 60px;">warning</mat-icon>
     </div>
     <div class="errorItem" style="font-size: 30px;text-align: center;">Не удалось получить список заявок</div>
-  </div>
+</div>
+</div>

@@ -1,0 +1,6 @@
+<h5>Список имплантов</h5>
+<button [disabled]="false" mat-raised-button class="client-btn" color="primary" (click)="saveImplants()">  
+    Сохранить
+</button>
+
+<app-editable-table [data]='user_data' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

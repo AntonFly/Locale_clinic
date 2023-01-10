@@ -6,7 +6,7 @@ import { LoginComponent } from './common/login/login.component'
 import { RoleGuard } from './_guards/role.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  // { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'admin', loadChildren: () => import('./Administrator/administrator.module').then(m => m.AdministratorModule), canActivate: [RoleGuard] },
   { path: 'manager', loadChildren: () => import('./Manager/manager.module').then(m => m.ManagerModule), canActivate: [RoleGuard]},

@@ -16,21 +16,26 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginatorModule } from '@angular/material';
 
-import {SupportService} from './_services/index'
+import { DatePipe } from '@angular/common';
 
-import { ManagerGuard } from '../_guards/manager.guard';
+import {ReportingService, SupportService} from './_services/index'
+
+import { SharedModule } from '../common/shared.module';
+
 import { SupportComponent } from './support/support/support.component';
-import { ReportingComponent } from './reporting/reporting.component';
-import { SupportDialogComponent } from './support/support-dialog/support-dialog.component'
+import { ReportingComponent } from './reporting/reporting-main/reporting.component';
+import { SupportDialogComponent } from './support/support-dialog/support-dialog.component';
+import { ReportingClientsComponent } from './reporting/reporting-clients/reporting-clients.component';
+import { ReportingImplantsComponent } from './reporting/reporting-implants/reporting-implants.component';
+import { ReportingBodyChangesComponent } from './reporting/reporting-body-changes/reporting-body-changes.component'
 
  
 const routes: Routes = [
     {   path: 'medic', redirectTo: '/medic/support', pathMatch: 'full'},
     {   path: 'support',   component: SupportComponent},
-    {   path: 'reporting',   component: ReportingComponent   },
-    // {   path: 'requests',   component: RequestContainerComponent   },
-    // {   path: 'services',   component: ServicesComponent   },
+    {   path: 'reporting',   component: ReportingComponent   },    
 ];
  
 @NgModule({
@@ -40,8 +45,16 @@ const routes: Routes = [
     
   ReportingComponent,
     
-  SupportDialogComponent],
+  SupportDialogComponent,
+    
+  ReportingClientsComponent,      
+    
+  ReportingImplantsComponent,
+    
+  ReportingBodyChangesComponent],
   imports: [
+    SharedModule,
+    MatPaginatorModule,
     MatButtonModule,
     CommonModule,
     RouterModule.forChild(routes),
@@ -62,8 +75,10 @@ const routes: Routes = [
     MatExpansionModule
   ],
   providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
     SupportService,
-    { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
+    ReportingService,    
+    DatePipe    
   ],
   entryComponents: [SupportDialogComponent]
 })

@@ -22,6 +22,7 @@ export class AuthenticationService {
   renewToken()
   {
     var token = localStorage.getItem("token");
+    this._token.next(JSON.parse(token));
 
     console.log("HOW TO CHECK TOKEN LMAO");
   }
@@ -40,7 +41,7 @@ export class AuthenticationService {
         (token:any) => 
         {          
           this._token.next(token);
-          localStorage.setItem('token', token.token);
+          localStorage.setItem('token', JSON.stringify(token));
           return token.roles[0];
         }
       ));

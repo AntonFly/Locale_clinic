@@ -1,23 +1,16 @@
-import { MatDialog, MatDialogRef } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import {ClientsDialogComponent} from '../clients-dialog/clients-dialog.component'
-import { AdvancedSearchDialogComponent } from '../advanced-search-dialog/advanced-search-dialog.component'
-import {PageEvent} from '@angular/material/paginator';
-
-import {ClientsService} from '../../_services/clients.service'
 import {Client} from '../../../_models/Client'
+import {PageEvent} from '@angular/material/paginator';
+import { ReportingService } from '../../_services';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.css']
+  selector: 'app-reporting',
+  templateUrl: './reporting.component.html',
+  styleUrls: ['./reporting.component.css']
 })
-export class ClientsComponent implements OnInit {
-
-  ClientsDialogRef: MatDialogRef<ClientsDialogComponent>;
-  AdvancedDialogRef: MatDialogRef<AdvancedSearchDialogComponent>;
-
+export class ReportingComponent implements OnInit {
+  
   allClientItems: Client[];  
   filteredItems: Client[];
   currentItems: Client[];
@@ -53,7 +46,7 @@ export class ClientsComponent implements OnInit {
   }
   /* pagination */
 
-  constructor(private dialog: MatDialog, private clientService: ClientsService) 
+  constructor(private reportingService: ReportingService) 
   {
     this.updateUsers();    
   }
@@ -67,26 +60,9 @@ export class ClientsComponent implements OnInit {
     console.log(this.shownItems)
   }
 
-  openClientDialog(){
-    this.ClientsDialogRef = this.dialog.open(ClientsDialogComponent,{
-      hasBackdrop:true
-    });
-
-    this.ClientsDialogRef
-      .afterClosed()
-      .pipe()
-      .subscribe(closed => {this.updateUsers()})
-
-  }
-
-  openAdvancedDialog(){
-    this.AdvancedDialogRef = this.dialog.open(AdvancedSearchDialogComponent,{
-      hasBackdrop:true
-    });
-  }
 
   updateUsers(){
-    this.clientService.getAll().subscribe(
+    this.reportingService.getAllClients().subscribe(
       result =>{        
         this.allClientItems = result;
         this.currentItems = result;        
@@ -151,4 +127,5 @@ export class ClientsComponent implements OnInit {
     this.showingEditor = false;
     this.editedClient = undefined;
   }
+
 }

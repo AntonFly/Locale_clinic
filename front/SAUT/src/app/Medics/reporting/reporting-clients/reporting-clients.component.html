@@ -1,0 +1,68 @@
+<div class = "header-div">
+    <span class="icon-div" (click)="closeClick()">
+        <mat-icon class="top-icon" [inline]="true">arrow_forward_ios</mat-icon>
+    </span>
+    <span class="header-name"> Клиенты </span>
+</div>
+
+<div [ngSwitch]="page">
+  <ng-template ngSwitchCase="changes">
+    <app-reporting-body-changes></app-reporting-body-changes>    
+  </ng-template>
+  <ng-template ngSwitchCase="implants">
+    <app-reporting-implants [client]="client"></app-reporting-implants>
+  </ng-template>
+  <ng-template ngSwitchCase="client">
+    <div class="action-btns"> 
+        <button mat-raised-button class="client-btn" color="primary" (click)="page='implants'">  
+            Импланты
+        </button>
+      
+        <button mat-raised-button class="client-btn" color="primary" (click)="page='changes'">  
+            Изменения
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>      
+          <tr>
+            <th class="text-center" scope="col" colspan="2">Данные клиента</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">Паспортные данные</td>
+            <td>{{client.person.passports[0].passport}}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Email</td>
+            <td>{{client.email}}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Фамилия</td>
+            <td>{{client.person.surname}}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Имя</td>
+            <td>{{client.person.name}}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Отчество</td>
+            <td>{{client.person.patronymic}}</td>
+          </tr>      
+          <tr>
+            <td class="label-cell">Дата рождения</td>
+            <td>{{client.person.dateOfBirth | date:'dd.MM.yyyy'}}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Комментарий</td>
+            <td>{{client.comment ? client.comment : "-"}}</td>
+          </tr>
+        </tbody>
+      </table>
+    
+    <br>
+    <h5>Предыдущие модификации</h5>
+  </ng-template>
+<!-- <app-editable-table [data]='user_data' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table> -->
+</div>

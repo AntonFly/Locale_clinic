@@ -1,0 +1,67 @@
+.icon-div{
+    /* position: fixed; */
+  /* left: 0; */
+  /* top: 0; */
+  font-size: 36px;
+  cursor: pointer;
+  width: min-content;
+  /* height: 100vh !important; */
+  /*width: 5%;*/  
+}
+
+.top-icon {
+    transform: rotate(180deg);
+    position: relative;
+    /* rotate: 180.0; */
+    /*left: 20%;*/
+    top: 50%;  
+}
+.header-div {    
+    width: 100%;
+    display: flex;
+    align-items: center;    
+}
+
+.header-name {
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.client-form {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-div{
+    width: 50%;
+}
+
+.form-btn{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+  
+  .double-line-hint {
+    .mat-input-hint-wrapper
+  
+  {
+    flex-wrap: wrap;
+    .hint-line
+  
+  {
+    flex: 0 0 100%;
+  }
+  
+  }
+  }

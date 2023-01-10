@@ -17,6 +17,10 @@ public class SimpleImplant {
 
     @NotNull
     @NotEmpty
+    private long id;
+
+    @NotNull
+    @NotEmpty
     private String name;
 
     @NotNull

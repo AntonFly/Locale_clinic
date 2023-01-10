@@ -12,6 +12,9 @@ export class RequestListComponent implements OnInit {
   orders: Order[];
   clientError: boolean;
 
+  isOrderOpened: boolean;
+  orderOpened: Order;
+
   constructor(private orderService:OrderService) { }
 
   ngOnInit() {
@@ -32,6 +35,18 @@ export class RequestListComponent implements OnInit {
 
   getFIO(client:any){    
     return client.surname+' '+client.name.substring(0,1)+'. '+client.patronymic.substring(0,1)+'.'
+  }
+
+  openOrder(queueItem)
+  {
+    this.isOrderOpened = true;
+    this.orderOpened = queueItem;
+  }
+
+  closeOrder()
+  {
+    this.isOrderOpened = false;
+    this.orderOpened = undefined;
   }
 
 }

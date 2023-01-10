@@ -1,11 +1,11 @@
-<app-client-editor [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-client-editor>
+<app-reporting-clients [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-reporting-clients> 
 <div *ngIf="!showingEditor">
   <h1 id="tableLabel">Клиенты</h1>
   <div class="clientsHead">
     <div>
-      <button mat-raised-button class="client-btn" color="primary" (click)="openClientDialog()">  
+      <!-- <button mat-raised-button class="client-btn" color="primary" (click)="openClientDialog()">  
         Создать клиента
-      </button>
+      </button> -->
     </div>
   
     <div class="right-hand">
@@ -23,7 +23,7 @@
       </div>
 
       <div>
-        <button mat-raised-button [matMenuTriggerFor]="menu">Еще</button>
+        <!-- <button mat-raised-button [matMenuTriggerFor]="menu">Еще</button> -->
 
         <mat-menu #menu="matMenu">
           <button (click)="openAdvancedDialog()" mat-menu-item>Расширенный поиск</button>        

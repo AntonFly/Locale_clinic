@@ -1,0 +1,70 @@
+<div class = "header-div">
+    <span class="icon-div" (click)="closeClick()">
+        <mat-icon class="top-icon" [inline]="true">arrow_forward_ios</mat-icon>
+    </span>
+    <span class="header-name">{{getFIO()}}</span>
+</div>
+
+<form class="client-form" [formGroup]="ClientForm" (ngSubmit)="onSubmitClient(ClientForm.value)">        
+    <div class="form-div">      
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Паспортные данные" formControlName="passport" required>
+            <mat-error *ngFor="let validation of validation_messages.passport">
+                <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Имя" formControlName="name" required>
+            <mat-error *ngFor="let validation of validation_messages.name">
+                <mat-error class="error-message" *ngIf="formControlName.hasError(validation.type) && (formControlName.dirty || formControlName.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Фамилия" formControlName="surname" required>
+            <mat-error *ngFor="let validation of validation_messages.surname">
+                <mat-error class="error-message" *ngIf="formControlSurname.hasError(validation.type) && (formControlSurname.dirty || formControlSurname.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Отчество" formControlName="patronymic" required>
+            <mat-error *ngFor="let validation of validation_messages.patronymic">
+                <mat-error class="error-message" *ngIf="formControlPatronymic.hasError(validation.type) && (formControlPatronymic.dirty || formControlPatronymic.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Email" formControlName="email" required>
+            <mat-error *ngFor="let validation of validation_messages.email">
+                <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput [matDatepicker]="picker" placeholder="Дата рождения" formControlName="dateOfBirth" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let validation of validation_messages.dateOfBirth">
+            <mat-error class="error-message" *ngIf="formControlDate.hasError(validation.type) && (formControlDate.dirty || formControlDate.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput formControlName="comment" #note maxlength="256" placeholder="Примечания">
+            <mat-hint align="start"><strong>Поле для дополнительной информации</strong> </mat-hint>
+            <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
+        </mat-form-field>    
+                    
+        
+        <div class="form-btn">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!ClientForm.valid" >Создать</button>
+            <button mat-button mat-dialog-close>Отмена</button>
+            <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+            <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
+        </div>
+    </div>  
+</form>
+
+<app-editable-table [data]='user_data' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

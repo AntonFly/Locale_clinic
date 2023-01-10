@@ -1,0 +1,28 @@
+.icon-div{
+    /* position: fixed; */
+  /* left: 0; */
+  /* top: 0; */
+  font-size: 36px;
+  cursor: pointer;
+  width: min-content;
+  /* height: 100vh !important; */
+  /*width: 5%;*/  
+}
+
+.top-icon {
+    transform: rotate(180deg);
+    position: relative;
+    /* rotate: 180.0; */
+    /*left: 20%;*/
+    top: 50%;  
+}
+.header-div {    
+    width: 100%;
+    
+}
+
+.header-name {
+    font-size: 18px;
+    /* TODO */
+    padding-bottom: 20px;
+}

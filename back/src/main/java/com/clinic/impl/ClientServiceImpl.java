@@ -168,6 +168,7 @@ public class ClientServiceImpl implements ClientService {
             implant.setName(item.getName());
             implant.setDescription(item.getDescription());
             implant.setNumber(item.getNumber());
+            implant.setId(item.getId());
             implants.add(implant);
         }
 
