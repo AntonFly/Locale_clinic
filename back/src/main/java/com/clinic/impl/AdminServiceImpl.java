@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -64,7 +65,7 @@ public class AdminServiceImpl implements AdminService{
     { return pwdDropRequestRepository.findAll(); }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public PwdDropRequest satisfyDropRequest(SimplePwdDropRequestSatisfaction dropRequestData)
             throws PwdDropRequestNotFoundException, PwdDropRequestAlreadySatisfiedException
     {
@@ -102,20 +103,27 @@ public class AdminServiceImpl implements AdminService{
 
         return pwdDropRequest;
     }
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User createUser(SimpleUserRegistration userData)
-            throws UserConflictException, PersonConflictException, PassportConflictException
+            throws UserConflictException, PassportConflictException, PersonConflictException
     {
-        Person person = personService.save(userData.getPerson());
+        Person person;
+        Optional<Person> optionalPerson = personService.getPersonByPassportNum(userData.getPerson().getPassport());
+        if (optionalPerson.isPresent())
+            person = optionalPerson.get();
+        else
+            person = personService.createPerson(userData.getPerson());
 
         User user = new User();
         Role role = roleRepository.findByName(ERole.valueOf(userData.getRole()));
 
         if (userService.getUsersByPersonId(person.getId()).stream().anyMatch(tmpUser -> tmpUser.getRole() == role))
-            throw new UserConflictException(role.getName().name());
+            throw new UserConflictException("role", role.getName().name());
 
         if (userService.existsByEmail(userData.getEmail()))
-            throw new UserConflictException(userData.getEmail());
+            throw new UserConflictException("email", userData.getEmail());
 
         user.setPerson(person);
         user.setRole(role);
@@ -128,14 +136,14 @@ public class AdminServiceImpl implements AdminService{
                 person.getName(),
                 person.getSurname(),
                 user.getEmail(),
-                user.getPassword()
+                    user.getPassword()
                 );
 
         SimpleMailMessage message = new SimpleMailMessage();
         registrationMessage.copyTo(message);
         message.setTo(user.getEmail());
         message.setText(text);
-//        sender.send(message);
+        //sender.send(message);
 
         return user;
     }

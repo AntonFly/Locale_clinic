@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
@@ -89,21 +87,15 @@ public class ManagerController {
 
     @PostMapping("/create_client")
     public Client createClient(@RequestBody SimpleClientRegistration clientData)
-            throws PersonConflictException, ClientConflictException, PassportConflictException {
-
-        return clientService.save(clientData);
-    }
+            throws PersonConflictException, ClientConflictException, PassportConflictException
+    { return clientService.createClient(clientData); }
 
     @PostMapping("/create_client_existing_person")
     public Client createClientWithExistingPerson(@RequestBody ExistingPersonClientRegistration clientData)
             throws PersonConflictException, ClientConflictException, PassportConflictException {
 
-        return clientService.save(clientData);
+        return clientService.createClient(clientData);
     }
-
-
-
-
 
     @GetMapping("/get_mods_by_spec")
     public Set<Modification> getModsBySpec(@RequestParam int specId)

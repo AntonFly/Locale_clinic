@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface SpecializationService {
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Specialization save(Specialization specialization);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Specialization specialization);
 
     Specialization getSpecById (Long specId) throws SpecializationNotFoundException;

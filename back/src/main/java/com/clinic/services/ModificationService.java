@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface ModificationService {
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Modification save(Modification specialization);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Modification specialization);
 
     Modification getModificationById(Long modId)

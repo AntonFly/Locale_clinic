@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         return  script != null ? script : generateAccompanimentScript(currentOrder);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Order createBodyChanges(SimpleBodyChangesUpdate changesData)
             throws OrderNotFoundException

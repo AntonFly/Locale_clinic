@@ -54,7 +54,7 @@ public class Order {
     private List<BodyChange> bodyChanges;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "order")
     private Scenario scenario;
 
 }

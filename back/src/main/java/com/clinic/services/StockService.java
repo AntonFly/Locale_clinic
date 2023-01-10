@@ -15,15 +15,15 @@ import java.util.List;
 public interface StockService {
 
     List<Stock> getAllItems();
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Stock createStockItem(SimpleStockCreate stockCreateData)
             throws StockConflictException, InvalidStockDataException, UserNotFoundException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Stock updateStockItemAmount(SimpleStockAmountUpdate stockUpdateData)
             throws StockNotFoundException, InvalidStockDataException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Stock updateStockItemMinAmount(SimpleStockMinAmountUpdate stockMinAmountUpdateData)
             throws StockNotFoundException, InvalidStockDataException;
 }

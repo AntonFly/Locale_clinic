@@ -13,13 +13,13 @@ public interface UserService {
     PwdDropRequest createPwdDropRequest(SimplePwdDropRequest pwdDropRequestData)
             throws UserNotFoundException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     User save(User user);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(User user);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     User setRole(User user, String roleName);
 
     boolean existsByEmail(String email);

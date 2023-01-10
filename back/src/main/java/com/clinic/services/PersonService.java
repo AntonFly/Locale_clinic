@@ -8,17 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface PersonService {
 
-    @Transactional
-    Person save(SimplePersonRegistration person) throws PersonConflictException, PassportConflictException;
+    @Transactional(rollbackFor = Exception.class)
+    Person createPerson(SimplePersonRegistration person)
+            throws PassportConflictException, PersonConflictException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Person person);
 
     Optional<Person> getPersonById(Long id);
+
+    Optional<Person> getPersonByPassportNum(long passportNum);
 
     List<Person> getAllPersons();
 

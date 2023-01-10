@@ -27,7 +27,7 @@ public class Scenario {
     private long id;
 
     @JsonBackReference
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 

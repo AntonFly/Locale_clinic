@@ -12,10 +12,9 @@ import java.util.Set;
 
 public interface OrderService {
 
-    @Transactional
     Order save(Order order);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Order order);
 
     List<Order> getAllOrders();
@@ -29,7 +28,7 @@ public interface OrderService {
     AccompanimentScript getScriptByOrderId(long id)
             throws OrderNotFoundException, NoScenarioForOrderException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Order createBodyChanges(SimpleBodyChangesUpdate changesData)
             throws OrderNotFoundException;
 

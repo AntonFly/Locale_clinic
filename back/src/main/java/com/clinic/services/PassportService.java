@@ -10,11 +10,13 @@ import java.util.Optional;
 
 public interface PassportService {
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Passport save(Person person, long passport) throws PassportConflictException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Passport person);
+
+    boolean exists(long id);
 
     Optional<Passport> getPassportById(Long id);
 

@@ -14,64 +14,54 @@ import com.clinic.services.PassportService;
 import com.clinic.services.PersonService;
 import com.clinic.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private PersonRepository personRepository;
-
     private PassportService passportService;
+
+    private PassportRepository passportRepository;
+    private PersonRepository personRepository;
 
 
 
     @Autowired
     public PersonServiceImpl(
-            PersonRepository pr,
-            PassportService ps
-            )
+            PassportService ps,
+            PassportRepository psr,
+            PersonRepository pr)
     {
-        this.personRepository = pr;
         this.passportService = ps;
+        this.passportRepository = psr;
+        this.personRepository = pr;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public Person save(SimplePersonRegistration personData)
-            throws PersonConflictException, PassportConflictException {
+    public Person createPerson(SimplePersonRegistration personData)
+            throws PassportConflictException
+    {
+        if (getPersonByPassportNum(personData.getPassport()).isPresent())
+            throw new PassportConflictException(personData.getPassport());
+
         Person person = new Person();
         person.setName(personData.getName());
         person.setSurname(personData.getSurname());
         person.setPatronymic(personData.getPatronymic());
         person.setDateOfBirth(personData.getDateOfBirth());
+        person = personRepository.save(person);
 
+        Passport passport = new Passport();
+        passport.setPassport(personData.getPassport());
+        passport.setPerson(person);
 
-        Optional<Person> optionalPerson = personRepository.getPersonById(person.getId());
-        if (optionalPerson.isPresent())
-            if (!optionalPerson.get().equals(person))
-                throw new PersonConflictException(person.getId());
-            else
-                return optionalPerson.get();
+        passportRepository.save(passport);
 
-        person = personRepository.saveAndFlush(person);
-
-        try {
-            passportService.save(person, personData.getPassport());
-        }catch (PassportConflictException ex){
-            personRepository.delete(person);
-            throw ex;
-        }
-
-
-        List<Passport> personPassports = passportService.findAllByPerson(person);
-
-        person.setPassports(personPassports);
-//        person = personRepository.getPersonById(person.getId()).orElseThrow(
-//                () -> new PersonConflictException("An error occurred while creating a person with the given passport: " + personData.getPassport()));
         return person;
     }
 
@@ -84,6 +74,10 @@ public class PersonServiceImpl implements PersonService {
     public Optional<Person> getPersonById(Long id) {
         return personRepository.findById(id);
     }
+
+    @Override
+    public Optional<Person> getPersonByPassportNum(long passportNum)
+    { return passportService.getPassportById(passportNum).map(Passport::getPerson); }
 
     @Override
     public List<Person> getAllPersons() {

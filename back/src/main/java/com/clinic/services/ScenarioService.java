@@ -14,10 +14,10 @@ import java.util.Set;
 
 public interface ScenarioService {
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     Scenario save(Scenario scenario);
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Scenario scenario);
 
     List<Scenario> getAllScenarios();

@@ -13,11 +13,13 @@ public interface AdminService {
 
     List<PwdDropRequest> getAllPwdDropRequests();
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     PwdDropRequest satisfyDropRequest(SimplePwdDropRequestSatisfaction dropRequestData)
             throws PwdDropRequestNotFoundException, PwdDropRequestAlreadySatisfiedException;
 
-    User createUser(SimpleUserRegistration clinicStaffData) throws PersonConflictException, UserConflictException, PassportConflictException;
+    @Transactional(rollbackFor = Exception.class)
+    User createUser(SimpleUserRegistration clinicStaffData)
+            throws PersonConflictException, UserConflictException, PassportConflictException;
 
     User changeUserData(User user);
 

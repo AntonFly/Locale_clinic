@@ -40,14 +40,20 @@ public class ClientServiceImpl implements ClientService {
         this.clientRepository = cr;
         this.passportRepository = pr;
         this.personRepository = personRepository;
-        this.modificationRepository =mr;
+        this.modificationRepository = mr;
         this.implantRepository = im;
     }
 
     @Override
-    public Client save(SimpleClientRegistration clientData)
-            throws PersonConflictException, ClientConflictException, PassportConflictException {
-        Person person = personService.save(clientData.getPerson());
+    public Client createClient(SimpleClientRegistration clientData)
+            throws PersonConflictException, ClientConflictException, PassportConflictException
+    {
+        Person person;
+        Optional<Person> optionalPerson = personService.getPersonByPassportNum(clientData.getPerson().getPassport());
+        if (optionalPerson.isPresent())
+            person = optionalPerson.get();
+        else
+            person = personService.createPerson(clientData.getPerson());
 
         Client client = new Client();
         client.setPerson(person);
@@ -60,13 +66,11 @@ public class ClientServiceImpl implements ClientService {
             if (optionalClient.get() != client)
                 throw new ClientConflictException(person.getId());
 
-        client = clientRepository.save(client);
-        clientRepository.flush();
-        return client;
+        return clientRepository.save(client);
     }
 
     @Override
-    public Client save(ExistingPersonClientRegistration clientData) throws PersonConflictException, ClientConflictException, PassportConflictException {
+    public Client createClient(ExistingPersonClientRegistration clientData) throws PersonConflictException, ClientConflictException, PassportConflictException {
         Client client = new Client();
         client.setPerson(clientData.getPerson());
         client.setEmail(clientData.getEmail());

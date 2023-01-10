@@ -23,8 +23,10 @@ public class PassportServiceImpl implements PassportService {
     }
 
     @Override
-    public Passport save(Person person, long passportNum) throws PassportConflictException {
-        Passport passport =  new Passport(person, passportNum);
+    public Passport save(Person person, long passportNum)
+            throws PassportConflictException
+    {
+        Passport passport = new Passport(person, passportNum);
 
         Optional<Passport> optionalPassport = passportRepository.getPassportByPassport(passport.getPassport());
         if (optionalPassport.isPresent())
@@ -35,7 +37,7 @@ public class PassportServiceImpl implements PassportService {
 
         passport = passportRepository.saveAndFlush(passport);
 
-        return  passport;
+        return passport;
     }
 
 
@@ -53,4 +55,8 @@ public class PassportServiceImpl implements PassportService {
 
     @Override
     public  List<Passport>  findAllByPerson(Person person) { return passportRepository.findAllByPerson(person); }
+
+    @Override
+    public boolean exists(long id)
+    { return passportRepository.existsById(id); }
 }

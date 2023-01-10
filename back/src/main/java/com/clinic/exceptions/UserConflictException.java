@@ -7,7 +7,7 @@ public class UserConflictException extends Exception {
 
     private final String message;
 
-    public UserConflictException(String param)
-    { message = "Уже существует пользователь с параметром: " + param; }
+    public UserConflictException(String paramName, String param)
+    { message = "Уже существует пользователь с " + paramName + ": " + param; }
 
 }

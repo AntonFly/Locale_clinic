@@ -20,6 +20,11 @@ public class SimpleScenarioRegistration {
 
     @NotEmpty
     @NotNull
+    @JsonProperty("order_id")
+    private int orderId;
+
+    @NotEmpty
+    @NotNull
     @JsonProperty("mod_ids")
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private List<Integer> modIds;

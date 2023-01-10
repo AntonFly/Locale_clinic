@@ -33,7 +33,7 @@ public class Client {
     private String comment;
 
     @JsonIgnore
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person", referencedColumnName = "id")
     private Person person;
 

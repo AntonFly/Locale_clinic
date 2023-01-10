@@ -5,24 +5,22 @@ import com.clinic.dto.SimpleClientRegistration;
 import com.clinic.dto.SimpleImplantsUpdate;
 import com.clinic.dto.SimpleModificationAdd;
 import com.clinic.entities.Client;
-import com.clinic.entities.User;
 import com.clinic.exceptions.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClientService {
 
-    @Transactional
-    Client save(SimpleClientRegistration clientData)
+    @Transactional(rollbackFor = Exception.class)
+    Client createClient(SimpleClientRegistration clientData)
             throws PersonConflictException, ClientConflictException, PassportConflictException;
 
-    @Transactional
-    Client save(ExistingPersonClientRegistration clientData)
+    @Transactional(rollbackFor = Exception.class)
+    Client createClient(ExistingPersonClientRegistration clientData)
             throws PersonConflictException, ClientConflictException, PassportConflictException;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     void delete(Client client);
 
     Client getClientByPassport(Long passport)
