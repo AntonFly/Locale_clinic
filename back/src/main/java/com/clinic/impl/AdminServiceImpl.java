@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService{
 
         User user = pwdDropRequest.getUser();
 
-        String password = "LAMAOOOO";//alphaNumericString(10);
+        String password = "LMAOOO";//alphaNumericString(10);
         String encodedPassword = passwordEncoder.encode(password);
 
         user.setPassword(encodedPassword);
@@ -87,8 +87,7 @@ public class AdminServiceImpl implements AdminService{
                 user.getPerson().getName(),
                 user.getPerson().getSurname(),
                 user.getEmail(),
-                password
-        );
+                password);
 
         SimpleMailMessage message = new SimpleMailMessage();
         pwdResetMessage.copyTo(message);
@@ -128,7 +127,11 @@ public class AdminServiceImpl implements AdminService{
         user.setPerson(person);
         user.setRole(role);
         user.setEmail(userData.getEmail());
-        user.setPassword(passwordEncoder.encode(userData.getPassword()));
+
+        String password = "LMAOOO";//alphaNumericString(10);
+        String encodedPassword = passwordEncoder.encode(password);
+
+        user.setPassword(encodedPassword);
 
         user = userService.save(user);
 
@@ -136,14 +139,13 @@ public class AdminServiceImpl implements AdminService{
                 person.getName(),
                 person.getSurname(),
                 user.getEmail(),
-                    user.getPassword()
-                );
+                password);
 
         SimpleMailMessage message = new SimpleMailMessage();
         registrationMessage.copyTo(message);
         message.setTo(user.getEmail());
         message.setText(text);
-        //sender.send(message);
+        sender.send(message);
 
         return user;
     }
