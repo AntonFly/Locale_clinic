@@ -80,6 +80,13 @@ public class ManagerController {
        return clientService.getClientByPassport(passport);
     }
 
+    @GetMapping("/get_order_by_passport")
+    public Set<Order> getOrders(@RequestParam Long passport)
+            throws PassportNotFoundException, NoPersonToClientException
+    {
+        return clientService.getClientByPassport(passport).getOrders();
+    }
+
     @PostMapping("/create_client")
     public Client createClient(@RequestBody SimpleClientRegistration clientData)
             throws PersonConflictException, ClientConflictException, PassportConflictException {
