@@ -35,7 +35,8 @@ public class RestControllerAdvisor {
                     OrderNotFoundException.class,
                     StockNotFoundException.class,
                     UserNotFoundException.class,
-                    BodyChangeNotFoundException.class
+                    BodyChangeNotFoundException.class,
+                    ImplantNotFountException.class
             })
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleMissingException(Exception exception) {

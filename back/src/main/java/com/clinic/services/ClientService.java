@@ -2,6 +2,7 @@ package com.clinic.services;
 
 import com.clinic.dto.ExistingPersonClientRegistration;
 import com.clinic.dto.SimpleClientRegistration;
+import com.clinic.dto.SimpleImplantsUpdate;
 import com.clinic.dto.SimpleModificationAdd;
 import com.clinic.entities.Client;
 import com.clinic.entities.User;
@@ -37,6 +38,10 @@ public interface ClientService {
     Client addPreviousModifications(SimpleModificationAdd modificationAdd)
             throws ClientNotFoundException, ModificationNotFoundException;;
 
+    Client addImplants(SimpleImplantsUpdate implantsUpdate)
+            throws ClientNotFoundException;
 
+    Boolean dropImplant(long implantId)
+            throws ImplantNotFountException;
 
 }

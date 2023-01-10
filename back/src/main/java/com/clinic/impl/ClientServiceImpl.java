@@ -1,17 +1,9 @@
 package com.clinic.impl;
 
-import com.clinic.dto.ExistingPersonClientRegistration;
-import com.clinic.dto.SimpleClientRegistration;
-import com.clinic.dto.SimpleModificationAdd;
-import com.clinic.entities.Client;
-import com.clinic.entities.Modification;
-import com.clinic.entities.Passport;
-import com.clinic.entities.Person;
+import com.clinic.dto.*;
+import com.clinic.entities.*;
 import com.clinic.exceptions.*;
-import com.clinic.repositories.ClientRepository;
-import com.clinic.repositories.ModificationRepository;
-import com.clinic.repositories.PassportRepository;
-import com.clinic.repositories.PersonRepository;
+import com.clinic.repositories.*;
 import com.clinic.services.ClientService;
 import com.clinic.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +24,24 @@ public class ClientServiceImpl implements ClientService {
 
     private ModificationRepository modificationRepository;
 
+    private ImplantRepository implantRepository;
+
 
     @Autowired
-    public ClientServiceImpl(PersonService ps, ClientRepository cr, PassportRepository pr,PersonRepository personRepository, ModificationRepository mr){
+    public ClientServiceImpl(
+            PersonService ps,
+            ClientRepository cr,
+            PassportRepository pr,
+            PersonRepository personRepository,
+            ModificationRepository mr,
+            ImplantRepository im
+    ){
         this.personService = ps;
         this.clientRepository = cr;
         this.passportRepository = pr;
         this.personRepository = personRepository;
         this.modificationRepository =mr;
+        this.implantRepository = im;
     }
 
     @Override
@@ -150,6 +152,39 @@ public class ClientServiceImpl implements ClientService {
         client.setModifications(mods);
 
         return clientRepository.save(client);
+    }
+
+    @Override
+    public Client addImplants(SimpleImplantsUpdate implantsUpdate) throws ClientNotFoundException {
+
+        Client client = clientRepository.findById(implantsUpdate.getClientId())
+                .orElseThrow(()->new ClientNotFoundException(implantsUpdate.getClientId()));
+
+        Set<Implant> implants = new HashSet<>();
+        for (SimpleImplant item : implantsUpdate.getImplants())
+        {
+            Implant implant = new Implant();
+            implant.setImplantation_date(item.getImplantation_date());
+            implant.setName(item.getName());
+            implant.setDescription(item.getDescription());
+            implant.setNumber(item.getNumber());
+            implant.setId(item.getId());
+            implants.add(implant);
+        }
+
+        implants = new HashSet<>(implantRepository.saveAll(implants));
+
+        client.setImplants(implants);
+
+        client = clientRepository.save(client);
+
+        return client;
+    }
+
+    @Override
+    public Boolean dropImplant(long implantId) throws ImplantNotFountException {
+            implantRepository.deleteById(implantId);
+            return true;
     }
 
 }
