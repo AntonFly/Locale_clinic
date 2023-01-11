@@ -87,12 +87,12 @@ public class ScientistController {
 
     @PostMapping("/create_scenario")
     public Scenario createScenario(@RequestBody SimpleScenarioRegistration createData)
-            throws SpecializationNotFoundException, ModificationNotFoundException
+            throws SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, ScenarioOrderException
     { return scenarioService.createScenario(createData); }
 
     @PutMapping("/update_scenario")
     public Scenario updateScenario(@RequestBody SimpleScenarioUpdate updateData)
-            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException
+            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException
     { return scenarioService.updateScenario(updateData); }
 
     @GetMapping("/get_all_orders_by_passport")

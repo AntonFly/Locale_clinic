@@ -16,17 +16,17 @@ public class SimpleScenarioRegistration {
     @NotEmpty
     @NotNull
     @JsonProperty("spec_id")
-    private int specId;
+    private long specId;
 
     @NotEmpty
     @NotNull
     @JsonProperty("order_id")
-    private int orderId;
+    private long orderId;
 
     @NotEmpty
     @NotNull
-    @JsonProperty("mod_ids")
+    @JsonProperty("mods")
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-    private List<Integer> modIds;
+    private List<Long> mods;
 
 }

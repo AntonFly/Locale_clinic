@@ -32,6 +32,11 @@ public class Scenario {
     private Order order;
 
     @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "spec_id")
+    private Specialization specialization;
+
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "scenario",
             cascade = CascadeType.ALL,

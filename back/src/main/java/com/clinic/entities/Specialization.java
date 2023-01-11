@@ -5,6 +5,7 @@ import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "specializations")
@@ -28,5 +29,9 @@ public class Specialization {
             joinColumns = @JoinColumn(name = "id_spec"),
             inverseJoinColumns = @JoinColumn(name = "id_mod"))
     Set<Modification> modifications;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "specialization")
+    private List<Scenario> scenarios;
 
 }

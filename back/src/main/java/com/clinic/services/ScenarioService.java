@@ -4,9 +4,7 @@ import com.clinic.dto.SimpleScenarioRegistration;
 import com.clinic.dto.SimpleScenarioUpdate;
 import com.clinic.entities.Modification;
 import com.clinic.entities.Scenario;
-import com.clinic.exceptions.ModificationNotFoundException;
-import com.clinic.exceptions.ScenarioNotFoundException;
-import com.clinic.exceptions.SpecializationNotFoundException;
+import com.clinic.exceptions.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,10 +29,12 @@ public interface ScenarioService {
     public List<Modification> getAllModificationsBySpecOrderedByRisk(int specId)
             throws SpecializationNotFoundException;
 
+    @Transactional(rollbackFor = Exception.class)
     public Scenario createScenario(SimpleScenarioRegistration scenarioData)
-            throws SpecializationNotFoundException, ModificationNotFoundException;
+            throws SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, ScenarioOrderException;
 
+    @Transactional(rollbackFor = Exception.class)
     public Scenario updateScenario(SimpleScenarioUpdate updateData)
-            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException;
+            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException;
 
 }
