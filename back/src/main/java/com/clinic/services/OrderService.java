@@ -1,6 +1,7 @@
 package com.clinic.services;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
+import com.clinic.dto.SimpleChange;
 import com.clinic.entities.AccompanimentScript;
 import com.clinic.entities.BodyChange;
 import com.clinic.entities.Order;
@@ -37,5 +38,7 @@ public interface OrderService {
 
     Boolean dropBodyChange(long bodyChangeId)
             throws BodyChangeNotFoundException;
+
+    BodyChange updateBodyChange(SimpleChange simpleChange, long orderId) throws OrderNotFoundException;
 }
 

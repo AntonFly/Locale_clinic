@@ -1,6 +1,7 @@
 package com.clinic.controllers;
 
 import com.clinic.dto.SimpleBodyChangesUpdate;
+import com.clinic.dto.SimpleChange;
 import com.clinic.dto.SimpleImplantsUpdate;
 import com.clinic.entities.*;
 import com.clinic.exceptions.*;
@@ -53,6 +54,13 @@ public class MedicController {
         throws OrderNotFoundException
     {
         return orderService.createBodyChanges(changesData);
+    }
+
+    @PutMapping("/update_change")
+    public BodyChange updateBodyChangeForOrder(@RequestBody SimpleChange changesData, @RequestParam long orderId )
+            throws OrderNotFoundException
+    {
+        return orderService.updateBodyChange(changesData,orderId);
     }
 
     @GetMapping("/get_body_changes")

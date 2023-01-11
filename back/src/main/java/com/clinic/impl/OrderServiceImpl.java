@@ -105,7 +105,9 @@ public class OrderServiceImpl implements OrderService {
             bodyChange.setActions(change.getActions());
             bodyChange.setDescription(change.getDescription());
             bodyChange.setSymptoms(change.getSymptoms());
+            bodyChange.setId(change.getId());
             bodyChanges.add(bodyChange);
+
         }
 
 //        for (BodyChange bodyChange : bodyChanges)
@@ -128,6 +130,23 @@ public class OrderServiceImpl implements OrderService {
            bodyChangeRepository.deleteById(bodyChangeId);
            return true;
 
+    }
+
+    @Override
+    public BodyChange updateBodyChange(SimpleChange simpleChange, long orderId) throws OrderNotFoundException {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        BodyChange bodyChange = new BodyChange(
+                simpleChange.getId(),
+                simpleChange.getChange(),
+                simpleChange.getDescription(),
+                simpleChange.getSymptoms(),
+                simpleChange.getActions(),
+                order
+        );
+        bodyChange = bodyChangeRepository.save(bodyChange);
+        return bodyChange;
     }
 
     private AccompanimentScript generateAccompanimentScript(Order order)
