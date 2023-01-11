@@ -1,8 +1,7 @@
 package com.clinic.impl;
 
-import com.clinic.entities.Modification;
-import com.clinic.entities.Order;
-import com.clinic.entities.Person;
+import com.clinic.entities.*;
+import com.clinic.exceptions.NoScenarioForOrderException;
 import com.clinic.services.PDFService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
@@ -26,9 +25,15 @@ public class PDFServiceImpl implements PDFService {
 
     String generalCommercialPath = "commercialForOrder_<order>.pdf";
     String generalCommercialFolder = "./commercial";
-    String generalRisksPath = "risksForOrder_<order>.pdf";
 
+    String generalRisksPath = "risksForOrder_<order>.pdf";
     String generalRisksFolder = "./risk";
+
+    String generalScenarioPath = "scenarioForOrder_<order>.pdf";
+    String generalScenarioFolder = "./scenario";
+
+
+
     String pathToFont = "/fonts/TimesNewRoman.ttf";
     String fontname;
     BaseFont baseFont;
@@ -177,6 +182,87 @@ public class PDFServiceImpl implements PDFService {
             //cell.setBorderWidth(2);
             table.addCell(cell);
         });
+
+        return  table;
+
+    }
+
+    @Override
+    public String generateScenario(Order order) throws IOException, DocumentException, NoScenarioForOrderException {
+        Person currentPerson = order.getClient().getPerson();
+
+        Scenario currentScenario = order.getScenario();
+
+        if(currentScenario == null)
+            throw new NoScenarioForOrderException(order.getId());
+
+        Document document = new Document();
+
+        Path uploadPath = Paths.get(generalScenarioFolder);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        Path filePath = uploadPath.resolve(this.generalScenarioPath.replace("<order>",String.valueOf(order.getId())));
+
+        PdfWriter writer =PdfWriter.getInstance(document, Files.newOutputStream(filePath));
+
+        document.open();
+        document.newPage();
+
+
+        Paragraph header = new Paragraph(
+                "Сценарий модификации к заказу №"+order.getId()+"\r\n",
+                new Font(baseFont,18)
+        );
+        header.setAlignment(Element.ALIGN_CENTER);
+        document.add(header);
+
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("\n"));
+
+        document.add(generateScenarioTable(order.getScenario()));
+
+        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("\n"));
+
+
+
+        document.close();
+
+        writer.close();
+        return filePath.toString();
+    }
+
+    ;
+
+    public PdfPTable generateScenarioTable(Scenario scenario){
+        PdfPTable table = new PdfPTable(2);
+
+        AtomicReference<Float> sum = new AtomicReference<>((float) 0);
+
+        Stream.of("Модификация", "Приоритет внедрения")
+                .forEach(columnTitle -> {
+                    PdfPCell header = new PdfPCell();
+                    header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    //header.setBorderWidth(2);
+                    header.setPhrase(new Phrase(columnTitle,new Font(baseFont,12)));
+                    table.addCell(header);
+                });
+
+        scenario.getModificationScenarios().sort(new Comparator<ModificationScenario>() {
+            @Override
+            public int compare(ModificationScenario o1, ModificationScenario o2) {
+                return Long.compare(o1.getPriority(), o2.getPriority());
+            }
+        });
+
+        scenario.getModificationScenarios().forEach( item -> {
+            table.addCell(new Phrase(item.getModification().getName(),new Font(baseFont,12)));
+            table.addCell(new Phrase(String.valueOf(item.getPriority()),new Font(baseFont,12)));
+        });
+
 
         return  table;
 

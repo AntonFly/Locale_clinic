@@ -8,13 +8,25 @@ import com.clinic.exceptions.NoPersonToClientException;
 import com.clinic.exceptions.OrderNotFoundException;
 import com.clinic.exceptions.PassportNotFoundException;
 import com.clinic.services.*;
+import com.clinic.utilities.FileUploadResponse;
+import com.clinic.utilities.FileUtil;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController()
@@ -26,16 +38,20 @@ public class EngineerController {
     private final FileService fileService;
     private final OrderService orderService;
 
+    private  PDFService pdfService;
+
     @Autowired
     public EngineerController(
             ClientService cs,
             FileService fs,
-            OrderService os
+            OrderService os,
+            PDFService pdfS
     )
     {
         this.clientService = cs;
         this.fileService = fs;
         this.orderService = os;
+        this.pdfService = pdfS;
     }
 
     @GetMapping("/get_scenario_by_order_id")
@@ -57,5 +73,67 @@ public class EngineerController {
     @GetMapping("/get_all_clients")
     public List<Client> getAllClients()
     { return clientService.getAllClients(); }
+
+
+    @PostMapping("/uploadGenome/{order}")
+    public ResponseEntity<FileUploadResponse> uploadConfirmation(
+            @RequestParam("file") MultipartFile multipartFile,
+            @PathVariable("order") Long orderId)
+            throws IOException, OrderNotFoundException {
+
+        String[] fileParts = StringUtils.cleanPath(multipartFile.getOriginalFilename()).split("\\.");
+
+        String fileName = "genomeOrder_"+orderId+"_"+ LocalDate.now() +"."+fileParts[fileParts.length-1];
+        long size = multipartFile.getSize();
+
+        fileName =  Paths.get(FileUtil.saveFile(fileName,"genome", multipartFile)).getFileName().toString();
+
+        FileUploadResponse response = new FileUploadResponse();
+        response.setFileName(fileName);
+        response.setSize(size);
+
+        Order currentOrder =  orderService.getOrderById(orderId);
+        currentOrder.setConfirmation(fileName);
+        orderService.save(currentOrder);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/downloadGenome")
+    public ResponseEntity<InputStreamResource> getConfirmation(
+            @RequestParam String file
+    ) throws IOException {
+        try {
+            return FileUtil.downloadFile("genome/"+file);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/getScenario/{order}")
+    public ResponseEntity<InputStreamResource> getScenario(
+            @PathVariable("order") Long orderId
+    ) throws OrderNotFoundException, IOException, DocumentException {
+        try
+        {
+            Order currentOrder = orderService.getOrderById(orderId);
+            String filePath = pdfService.generateScenario(currentOrder);
+
+            File file = new File(filePath);
+            HttpHeaders respHeaders = new HttpHeaders();
+            MediaType mediaType = MediaType.parseMediaType("application/pdf");
+            respHeaders.setContentType(mediaType);
+            respHeaders.setContentLength(file.length());
+            respHeaders.setContentDispositionFormData("attachment", file.getName());
+            InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
+            return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
