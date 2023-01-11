@@ -2,5 +2,64 @@
     <span class="icon-div" (click)="closeClick()">
         <mat-icon class="top-icon" [inline]="true">arrow_forward_ios</mat-icon>
     </span>
-    <span class="header-name">SMTH HERE</span>
+    <span class="header-name"> Список заявок </span>    
 </div>
+<h5>Ф.И.О.: {{getFIO()}}</h5>
+
+<h5>Согласие на медицинское вмешательство</h5>
+
+<br>
+
+<input style="display: none" type="file" (change)="uploadFiles($event)" #selectFile>
+<div *ngIf="!isChosen && !order.confirmation" class="dropzone" appDnd (fileDropped)="uploadFiles($event)">
+    <input type="file" #fileDropRef id="fileDropRef" (change)="uploadFiles($event.target.files)" />
+    <img width="50" alt="Download" src="/assets/download.png">
+    <h3>Перетащите файл согласия</h3>
+    <h3>или</h3>
+    <label for="fileDropRef"> Выберите вручную</label>
+</div>
+
+<div class="chosen-file-box" *ngIf="isChosen && !order.confirmation">
+    <div class="box-left">
+        <img alt="Download" src="/assets/download.png">
+        <div>
+            <h6>Загруженный файл</h6>
+            <span>{{"Наименование: "}}<b>{{currentFile.name}}</b></span><br>
+            <span>{{"Дата изменения: "+currentFile.lastModifiedDate | date:'dd.MM.yyyy HH:mm:ss'}}</span>
+        </div>
+    </div>
+    <div class="box-right">
+        <span *ngIf="isUploadError" class="message" style="color: red;">{{uploadMsg}}</span>
+        <button mat-raised-button class="file-btn" color="primary" (click)="confirmFile()">  
+            Подтвердить
+        </button>
+        <button mat-raised-button class="file-btn" color="primary" (click)="cancelFile()">  
+            Отмена
+        </button>
+    </div>
+</div>
+
+<div class="chosen-file-box" *ngIf="order.confirmation">
+    <div class="box-left">
+        <img alt="Download" src="/assets/download.png">
+        <div>
+            <h6>Загруженный файл</h6>
+            <span>{{"Наименование: "}}<b>{{newFileName}}</b></span><br>
+            <span>{{"Дата изменения: "+fileDate | date:'dd.MM.yyyy'}}</span>
+            <!-- {{newFileName}}<br>
+            {{fileDate}} -->
+        </div>
+    </div>
+    <div class="box-right">
+        <span *ngIf="isDownloadError" class="message" style="color: red;">{{downloadMsg}}</span>
+        <button mat-raised-button class="file-btn" color="primary" (click)="downloadFile()">  
+            Скачать
+        </button>        
+        <button mat-raised-button class="file-btn" color="primary" (click)="changeFile()">  
+            Заменить
+        </button>        
+    </div>
+</div>
+
+<br>
+<br>

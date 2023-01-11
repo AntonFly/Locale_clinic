@@ -19,7 +19,10 @@
         </div>
         <div class="side-link">
           <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/services']">Услуги</a>
-        </div>      
+        </div>
+        <div class="side-link">
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/stock']">Склад</a>
+        </div>
       </ng-template>
       <ng-template ngSwitchCase="ROLE_ADMIN">
         <div class="side-header">

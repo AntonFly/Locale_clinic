@@ -46,10 +46,11 @@ export class EditableTableComponent implements OnInit {
     this.displayedColumns = this.columnsSchema.map((col) => col.key);    
     
     var newData = [];
-    this.data.forEach((el, ind)=> {
-      newData.push(new RowClass(el, ind + 1));
-      this.lastId = ind + 1;
-    })
+    if(this.data)
+      this.data.forEach((el, ind)=> {
+        newData.push(new RowClass(el, ind + 1));
+        this.lastId = ind + 1;
+      })
     this.dataSource.data = newData;  
     console.log("DATA")   
     console.log(this.dataSource.data)

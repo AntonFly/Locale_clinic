@@ -3,22 +3,27 @@
 <div *ngIf="!orders&&!clientError" class="container" style="padding-left: 50%;">
     <mat-icon style="font-size: 60px;">access_time</mat-icon>
 </div>
-    
+СДЕЛАТЬ ЛИСТАЛКУ И ПОИСК    
+<!-- TODO -->
 <table class='table table-striped table-hover' aria-labelledby="tableLabel" *ngIf="orders&&!clientError">
     <thead>
       <tr>
         <th>Пасспорт</th>
         <th>Ф.И.О.</th>
         <th>Специализация</th>
-        <th>Комментарий</th>      
+        <th>Номер заявки</th>
+        <th>Комментарий</th>
+        <th>Подтверждение</th>     
       </tr>
     </thead>
     <tbody>
       <tr (dblclick)="openOrder(queueItem)" *ngFor="let queueItem of orders">
         <td>{{ queueItem.client.person.id }}</td>
         <td>{{ getFIO(queueItem.client.person) }}</td>      
-        <td>{{ queueItem.specialization.name}}</td>
-        <td>{{ queueItem.comment }}</td>
+        <td>{{ queueItem.specialization.name ? queueItem.specialization.name : "-"}}</td>
+        <td>{{ queueItem.id}}</td>
+        <td>{{ queueItem.comment ? queueItem.comment : "-"}}</td>
+        <td> {{queueItem.confirmation ? "Утверждено" : "В ожидании"}} </td>
       </tr>
     </tbody>
   </table>

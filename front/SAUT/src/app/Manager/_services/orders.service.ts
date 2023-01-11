@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
 
 import { Client } from '../../_models/Client';
 import { Order, Mod, Spec } from '../../_models/Order';
@@ -39,5 +40,43 @@ export class OrderService {
         
         console.log(JSON.stringify(body));
         return this.http.post<any>(this.baseUrl + `manager/create_order`,  JSON.stringify(body), options);            
+    }
+    
+    uploadConfirmation(file: File, orderId){
+        var formData = new FormData()
+        formData.append('file', file)
+        return this.http.post(this.baseUrl+'manager/uploadConfirmation/'+orderId, formData);
+    }
+
+    downloadConfirmation(oldName: string, filename:string){
+        return this.http.get(
+            this.baseUrl+'manager/download_confirmation/?file='+oldName,
+        { responseType: 'blob' as 'json' }
+        )
+          .pipe(map(
+            (response: any) =>
+            {
+              if (response)
+              {            
+                let dataType = response.type;
+    
+                let binaryData = [];
+                binaryData.push(response);
+    
+                let downloadLink = document.createElement('a');
+                downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+    
+                if (filename)
+                  downloadLink.setAttribute('download', filename);
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+    
+                downloadLink.parentNode.removeChild(downloadLink);
+    
+                return response;
+              }
+            },
+            err => {console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")}
+          ));
     }
 }

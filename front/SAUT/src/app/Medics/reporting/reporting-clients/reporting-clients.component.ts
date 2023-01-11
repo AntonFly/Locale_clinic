@@ -21,6 +21,9 @@ export class ReportingClientsComponent implements OnInit {
   currentOrders: Order[];
   selectedOrder: Order;
 
+  isOrderError: boolean = false;
+  isOrderLoading: boolean = true;
+
   myDatepipe: DatePipe;
   
   user_data = [
@@ -77,12 +80,15 @@ export class ReportingClientsComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.isOrderLoading = true;    
     this.reportService.getOrdersByPassport(this.client.person.passports[0].passport).subscribe(
       res =>{
+        this.isOrderLoading = false;
         this.currentOrders = res;
       },
       error => {
-
+        this.isOrderLoading = false;
+        this.isOrderError = true;
       }
     )
   }

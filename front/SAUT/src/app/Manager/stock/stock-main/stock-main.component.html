@@ -1,0 +1,7 @@
+<h4>Склад</h4>
+<div class="btn-div">
+    <button mat-raised-button class="stock-btn" color="primary" (click)="changeFile()">  
+        Сохранить
+    </button>
+</div>
+<app-editable-table *ngIf="currentStock" [data]='currentStock' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

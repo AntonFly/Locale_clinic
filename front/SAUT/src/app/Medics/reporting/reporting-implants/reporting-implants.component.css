@@ -1,0 +1,9 @@
+.first-line{
+    display: flex;
+    justify-content: right;
+    margin-left: auto;
+}
+.message{
+    padding-right: 5px;
+    padding-top: 5px;
+}

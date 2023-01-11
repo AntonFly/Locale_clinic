@@ -27,14 +27,14 @@
           </ng-container>
           <div class="btn-edit" *ngSwitchCase="'isEdit'">
             <button mat-button (click)="element.isEdit = !element.isEdit">
-              Edit
+              Изменить
             </button>
             <button
               mat-button
               class="button-remove"
               (click)="removeRow(element.id)"
             >
-              Delete
+              Удалить
             </button>
           </div>
           <span *ngSwitchCase="'date'">
@@ -52,7 +52,7 @@
               (click)="editRow(element)"
               [disabled]="disableSubmit(element.id)"
             >
-              Done
+              Готово
             </button>
           </div>
           <mat-form-field

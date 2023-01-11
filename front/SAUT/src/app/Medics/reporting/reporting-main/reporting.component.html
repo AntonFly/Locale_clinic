@@ -1,4 +1,4 @@
-<app-reporting-clients [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-reporting-clients> 
+<app-reporting-clients class="reporting-client" [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-reporting-clients> 
 <div *ngIf="!showingEditor">
   <h1 id="tableLabel">Клиенты</h1>
   <div class="clientsHead">

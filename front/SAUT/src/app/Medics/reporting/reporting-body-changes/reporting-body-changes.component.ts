@@ -6,6 +6,7 @@ import { Client } from 'src/app/_models/Client';
 //import {ClientsService} from '../../_services/clients.service'
 import { DatePipe } from '@angular/common';
 import { Order, BodyChange } from 'src/app/_models/Order';
+import { ReportingService } from '../../_services';
 
 @Component({
   selector: 'app-reporting-body-changes',
@@ -22,15 +23,33 @@ export class ReportingBodyChangesComponent implements OnInit {
 
   currentChanges: BodyChange[];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private report: ReportingService) { }
 
   ngOnInit() {
     this.currentChanges = this.order.bodyChanges;
   }
 
+  latestId:number = -1;
   addChange(){
     
-    // this.currentChanges.push()
+    this.currentChanges.push({id:this.latestId--, change:"",description:"", symptoms:"", actions:""})
+  }
+
+  updateList(){
+    this.report.getBodyChanges(this.order.id).subscribe(
+      (res : BodyChange[]) => 
+      {
+        this.currentChanges = res;
+      },
+      err => {
+
+      }
+    )
+  }
+
+  deleteItem(id){
+    
+    this.currentChanges.splice(this.currentChanges.findIndex(e => e.id === id),1);
   }
 
 }

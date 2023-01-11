@@ -1,5 +1,5 @@
-<div *ngFor="let change of currentChanges"> 
-  <app-reporting-changes-form [change]="change"> </app-reporting-changes-form>
+<div class="body-change" *ngFor="let change of currentChanges"> 
+  <app-reporting-changes-form (update)="updateList()" (delete)="deleteItem($event)" [change]="change" [order]="order"> </app-reporting-changes-form>
 </div>
 
 <div class="round-button-div">

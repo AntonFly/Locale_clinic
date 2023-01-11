@@ -53,38 +53,51 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-        <h3 style="padding-top:6px">Выберете заявку</h3>        
-        
-        <div class="RequestButtons">
-          <button (click)="generateScneario()" mat-raised-button color="primary" [disabled]="!passport.value||isClientError||selectedOrder===undefined" >Сгенерировать сценарий</button>              
-        </div>        
-
-        <div *ngIf="!currentOrders" >
+        <!-- TODO VALID ERRORS FOR EVERY REQUEST -->
+        <div *ngIf="!currentClient" >
+          <!-- <mat-icon style="font-size: 60px;">warning</mat-icon> -->
           Укажите действительного клиента
         </div>
 
-        <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="currentOrders">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>специализация</th>
-              <th>Комментарий</th>
-              <th>Модификации</th>      
-            </tr>
-          </thead>
-          <tbody>
-            <tr (click)="selectRow(order)" class="tableRow" *ngFor="let order of currentOrders; let i = index" [attr.data-index]="i" [ngStyle]="order==selectedOrder && {'background-color':'beige'}">
-              <td> {{i}} </td>
-              <td>{{ order.specialization.name }}</td>              
-              <td>{{ order.comment }}</td>
-              <td>
-                <li *ngFor="let mod of order.modifications">
-                  {{mod.name}}
-                </li>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div *ngIf="currentClient">
+          <h3 style="padding-top:6px">Выберете заявку</h3>        
+          
+          <div class="RequestButtons">
+            <button (click)="generateScneario()" mat-raised-button color="primary" 
+                    [disabled]="!passport.value||isClientError||!selectedOrder || !selectedOrder.confirmation" 
+              >
+              Сгенерировать сценарий
+            </button>              
+          </div>                  
+
+          <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="currentOrders">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>специализация</th>
+                <th>Комментарий</th>
+                <th>Модификации</th>
+                <th>Подтверждение</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="selectRow(order)" class="tableRow" *ngFor="let order of currentOrders; let i = index" [attr.data-index]="i" [ngStyle]="order==selectedOrder && {'background-color':'beige'}">
+                <td> {{order.id}} </td>
+                <td>{{ order.specialization.name ? order.specialization.name : "-"}}</td>              
+                <td>{{ order.comment ? order.comment : "-"}}</td>
+                <td>
+                  <li *ngFor="let mod of order.modifications">
+                    {{mod.name}}
+                  </li>
+                  <span *ngIf="!order.modifications || order.modifications.length == 0"> - </span>
+                </td>
+                <td>
+                  {{order.confirmation ? "Утверждено" : "В ожидании"}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </form>      
     </div>
 

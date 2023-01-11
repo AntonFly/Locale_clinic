@@ -1,6 +1,10 @@
 <h5>Список имплантов</h5>
-<button style="float: right;" [disabled]="isDisabled" mat-raised-button class="client-btn" color="primary" (click)="saveImplants()">  
-    Сохранить
-</button>
+<div class="first-line">
+    <span *ngIf="!isUpdateError" class="message" style="color: green;">{{updateMsg}}</span>
+    <span *ngIf="isUpdateError" class="message" style="color: red;">{{updateMsg}}</span>
+    <button style="float: right;" [disabled]="isDisabled" mat-raised-button class="client-btn" color="primary" (click)="saveImplants()">  
+        Сохранить
+    </button>
+</div>
 
 <app-editable-table [data]='user_data' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

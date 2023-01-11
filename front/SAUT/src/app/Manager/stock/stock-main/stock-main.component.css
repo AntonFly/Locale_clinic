@@ -1,0 +1,8 @@
+.btn-div{
+    display: flex;
+    align-items: baseline;
+}
+
+.stock-btn{
+    margin-left: auto;
+}

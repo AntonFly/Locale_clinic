@@ -28,20 +28,24 @@ import { ClientsDialogComponent } from './clients/clients-dialog/clients-dialog.
 import { ContractsComponent } from './contracts/contracts.component';
 import { ServicesComponent } from './services/services.component';
 
-import { ClientsService, OrderService } from './_services/index';
+import { ClientsService, OrderService, StockService } from './_services/index';
 import { AdvancedSearchDialogComponent } from './clients/advanced-search-dialog/advanced-search-dialog.component';
 import { NewRequestComponent } from './request/new-request/new-request.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
 import { RequestContainerComponent } from './request/request-container/request-container.component';
 import { ClientEditorComponent } from './clients/client-editor/client-editor.component';
 import { OrderConfirmationComponent } from './request/order-confirmation/order-confirmation.component'
+
+import { DndDirective } from './_directives/dnd.directive';
+import { StockMainComponent } from './stock/stock-main/stock-main.component';
  
 const routes: Routes = [
     {   path: 'manager', redirectTo: '/manager/clients', pathMatch: 'full'},
-    {   path: 'clients',   component: ClientsComponent  },
-    {   path: 'contracts',   component: ContractsComponent   },
-    {   path: 'requests',   component: RequestContainerComponent   },
-    {   path: 'services',   component: ServicesComponent   },
+    {   path: 'clients',    component: ClientsComponent             },
+    {   path: 'contracts',  component: ContractsComponent           },
+    {   path: 'requests',   component: RequestContainerComponent    },
+    {   path: 'services',   component: ServicesComponent            },
+    {   path: 'stock',      component: StockMainComponent           }
 ];
  
 @NgModule({
@@ -55,7 +59,9 @@ const routes: Routes = [
     RequestListComponent,
     RequestContainerComponent,
     ClientEditorComponent,
-    OrderConfirmationComponent
+    OrderConfirmationComponent,
+    DndDirective,
+    StockMainComponent
   ],
   imports: [
     SharedModule,
@@ -83,7 +89,8 @@ const routes: Routes = [
   providers: [
     DatePipe,
     ClientsService,
-    OrderService,    
+    OrderService,
+    StockService,    
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],
   entryComponents: [ClientsDialogComponent, AdvancedSearchDialogComponent]

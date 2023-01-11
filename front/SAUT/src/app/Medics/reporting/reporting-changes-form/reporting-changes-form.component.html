@@ -1,41 +1,78 @@
-<form [formGroup]="UserForm" (ngSubmit)="onSubmitClient(UserForm.value)">
+<div *ngIf="!isEdit"> 
+  <!-- {{change.id}} <br>
+  {{change.change}} <br>
+  {{change.description}} <br>
+  {{change.symptoms}}<br>
+  {{change.actions}}<br> -->  
+  <div class="first-line">
+    <div class="right-hand">
+      <span *ngIf="!isUpdateError" class="message" style="color: green;">{{updateMsg}}</span> 
+      <span *ngIf="isDeleteError" class="message" style="color: red;">{{deleteMsg}}</span>
+      <button mat-raised-button color="primary" (click)="isEdit=true">Редактировать</button>      
+      <button mat-raised-button color="primary" (click)="deleteChange()">Удалить</button>      
+    </div>
+  </div>
+    <table class="table table-striped">
+      <thead>      
+        <tr>
+          <th class="text-center" scope="col" colspan="2">Изменение тела #{{change.id?change.id:"x"}}</th>
+        </tr>
+      </thead>
+      <tbody>        
+        <tr>
+          <td class="label-cell">Название</td>
+          <td>{{change.change}}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Описание</td>
+          <td>{{change.description ? change.description : "-"}}</td>
+        </tr>      
+        <tr>
+          <td class="label-cell">Симптомы</td>
+          <td>{{change.symptoms ? change.symptoms : "-"}}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Действия</td>
+          <td>{{change.actions ? change.actions : "-"}}</td>
+        </tr>
+      </tbody>
+    </table>  
+</div>
 
+<div *ngIf="isEdit" class="form-wrapper">
+  <form class="edit-form" [formGroup]="UserForm" >
+<!-- (ngSubmit)="onSubmitClient(UserForm.value)">               -->
     <div class="first-line">
       <mat-form-field class="not-full-width">
-          <input matInput placeholder="Краткое название" formControlName="passport" required>
+          <input (change)="isFormEdited = true" matInput placeholder="Краткое название" formControlName="change" required>
           <mat-error *ngFor="let validation of validation_messages.Passport">
             <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
           </mat-error>
       </mat-form-field>
-      <div class="right-hand">      
-        <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>      
-        <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
-        <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
+      <div class="right-hand">
+        <span *ngIf="isUpdateError" class="message" style="color: red;">{{updateMsg}}</span>
+        <button *ngIf="change.id >= 0" mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid || !isFormEdited" (click)="updateChange(UserForm.value)">Обновить</button>
+        <button *ngIf="change.id < 0" mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid || !isFormEdited" (click)="createChange(UserForm.value)">Создать</button>      
+        <button mat-raised-button color="primary" (click)="cancelEdit()"> Отмена</button>              
       </div>
     </div>
   
       <mat-form-field class="full-width">
-          <textarea matInput formControlName="comment" #note maxlength="256" placeholder="Примечания"></textarea>        
+          <textarea (change)="isFormEdited = true" matInput formControlName="description" #note maxlength="256" placeholder="Примечания"></textarea>        
           <mat-hint align="start"><strong>Описание произошедшего</strong> </mat-hint>
           <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
       </mat-form-field>
   
       <mat-form-field class="full-width">
-          <textarea matInput formControlName="symptoms" #sym maxlength="256" placeholder="Примечания"></textarea>        
+          <textarea (change)="isFormEdited = true" matInput formControlName="symptoms" #sym maxlength="256" placeholder="Примечания"></textarea>        
           <mat-hint align="start"><strong>Симптомы</strong> </mat-hint>
           <mat-hint align="end">{{sym.value.length}} / 256</mat-hint>
       </mat-form-field>
         
       <mat-form-field class="full-width">
-          <textarea matInput formControlName="actions" #act maxlength="256" placeholder="Примечания"></textarea>        
+          <textarea (change)="isFormEdited = true" matInput formControlName="actions" #act maxlength="256" placeholder="Примечания"></textarea>        
           <mat-hint align="start"><strong>Предпринятые действия</strong> </mat-hint>
           <mat-hint align="end">{{act.value.length}} / 256</mat-hint>
-      </mat-form-field>      
-  
-      <div>      
-        <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>      
-        <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
-        <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
-      </div>
-    
+      </mat-form-field>                  
     </form>
+  </div>

@@ -1,3 +1,15 @@
+export interface User{
+  role: Role;
+  id: number;
+  person: Person,  
+  email: string;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+}
+
 export interface Client {
   id: number;
   person: Person,  
