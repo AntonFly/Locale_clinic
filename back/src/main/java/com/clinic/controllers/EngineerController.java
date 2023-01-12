@@ -55,7 +55,7 @@ public class EngineerController {
     }
 
     @GetMapping("/get_scenario_by_order_id")
-    public AccompanimentScript getSpecs(@RequestParam long orderId)
+    public AccompanimentScript getScript(@RequestParam long orderId)
             throws OrderNotFoundException, ConfirmationMissingException
     {
         Order order = orderService.getOrderById(orderId);
@@ -76,7 +76,7 @@ public class EngineerController {
 
 
     @PostMapping("/uploadGenome/{order}")
-    public ResponseEntity<FileUploadResponse> uploadConfirmation(
+    public ResponseEntity<FileUploadResponse> uploadGenome(
             @RequestParam("file") MultipartFile multipartFile,
             @PathVariable("order") Long orderId)
             throws IOException, OrderNotFoundException {
@@ -93,7 +93,7 @@ public class EngineerController {
         response.setSize(size);
 
         Order currentOrder =  orderService.getOrderById(orderId);
-        currentOrder.setConfirmation(fileName);
+        currentOrder.setGenome(fileName);
         orderService.save(currentOrder);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

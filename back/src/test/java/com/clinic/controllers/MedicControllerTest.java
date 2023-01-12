@@ -47,7 +47,6 @@ class MedicControllerTest {
     Order createdOrder;
     BodyChange createdBodyChange;
     Implant createdImplant;
-    Specialization selectedSpecialization;
 
     Modification selectedModification;
 
@@ -92,7 +91,6 @@ class MedicControllerTest {
 
         createdImplant = mc.addImplants(simpleImplantsUpdate).getImplants().iterator().next();
 
-        selectedSpecialization = specializationRepository.findById(1L).get();
         selectedModification = modificationRepository.findById(1L).get();
 
 

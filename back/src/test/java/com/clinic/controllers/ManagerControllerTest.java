@@ -241,12 +241,12 @@ class ManagerControllerTest {
         createdOrder = orderRepository.getOne(createdOrder.getId());
         Order finalCreatedOrder = createdOrder;
         assertAll(
-                ()->assertTrue(Files.exists(Path.of(Objects.requireNonNull(response.getBody()).getFileName()))),
+                ()->assertTrue(Files.exists(Path.of("confirmation/"+Objects.requireNonNull(response.getBody()).getFileName()))),
                 ()-> assertEquals(finalCreatedOrder.getConfirmation(), Objects.requireNonNull(response.getBody()).getFileName())
 
         );
 
-        Files.delete(Path.of(Objects.requireNonNull(response.getBody()).getFileName()));
+        Files.delete(Path.of("confirmation/"+Objects.requireNonNull(response.getBody()).getFileName()));
     }
 
 
