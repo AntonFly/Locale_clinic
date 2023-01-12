@@ -16,7 +16,7 @@ public class SimplePersonRegistration {
 
     @NotNull
     @NotEmpty
-    private Long passport;
+    private long passport;
 
     @NotNull
     @NotEmpty

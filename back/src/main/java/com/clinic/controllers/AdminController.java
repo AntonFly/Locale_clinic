@@ -27,21 +27,10 @@ public class AdminController {
         this.adminService = as;
     }
 
-    @GetMapping("/hm")
-    public String gmu(){
-        return "why spring?";
-    }
-
     @PostMapping("/create_user")
     public User createUser(@RequestBody SimpleUserRegistration clinicStaffData)
             throws PersonConflictException, UserConflictException, PassportConflictException
-    {
-        return adminService.createUser(clinicStaffData);
-    }
-
-    @GetMapping("/test")
-    public void findUsers() {
-    }
+    { return adminService.createUser(clinicStaffData); }
 
     @GetMapping("/get_all_users")
     public List<User> getAllUsers()

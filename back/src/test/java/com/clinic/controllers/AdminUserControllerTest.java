@@ -1,35 +1,24 @@
 package com.clinic.controllers;
 
-import com.clinic.dto.SimpleClientRegistration;
-import com.clinic.dto.SimpleOrderRegistration;
-import com.clinic.dto.SimplePersonRegistration;
-import com.clinic.entities.Client;
-import com.clinic.entities.Order;
+import com.clinic.dto.*;
+import com.clinic.entities.*;
+import com.clinic.entities.enums.ERole;
 import com.clinic.exceptions.*;
-import com.clinic.repositories.ClientRepository;
-import com.clinic.repositories.OrderRepository;
-import com.clinic.repositories.PassportRepository;
-import com.clinic.repositories.PersonRepository;
+import com.clinic.repositories.*;
 import com.clinic.services.*;
-import com.clinic.utilities.FileUploadResponse;
-import com.itextpdf.text.DocumentException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,229 +30,264 @@ class AdminUserControllerTest {
     static UserController uc;
 
     @Autowired
-    private SpecializationService ss;
+    private AdminService adminService;
     @Autowired
-    private ModificationService ms;
-    @Autowired
-    private ClientService cs;
-    @Autowired
-    private OrderService os;
-    @Autowired
-    private ScenarioService scenarioService;
-    @Autowired
-    PDFService pdfService;
+    private UserService userService;
 
     @Autowired
     ClientRepository clientRepository;
-
-    @Autowired
-    PersonRepository personRepository;
-
     @Autowired
     PassportRepository passportRepository;
     @Autowired
-    OrderRepository orderRepository;
+    PersonRepository personRepository;
+    @Autowired
+    PwdDropRequestRepository pwdDropRequestRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    UserRepository userRepository;
 
-    Client createdClient;
-    SimpleClientRegistration simpleClientRegistration;
+    User createdUser;
+    String createdUserPassword;
+    PwdDropRequest createdPwdDropRequest;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    void setUp()
-            throws PersonConflictException, ClientConflictException, PassportConflictException
+    @Transactional(rollbackFor = Exception.class)
+    void beforeEach()
     {
-        mc = new ManagerController(ss,ms,cs,os,scenarioService,pdfService);
-        simpleClientRegistration = generateTestPerson();
-        createdClient = mc.createClient(simpleClientRegistration);
+        ac = new AdminController(adminService);
+        uc = new UserController(userService);
+
+        Person person = createTestPerson();
+
+        createdUserPassword = "TEST_PASSWORD";
+        String encodedPassword = passwordEncoder.encode(createdUserPassword);
+
+        User user = new User();
+        user.setRole(roleRepository.findByName(ERole.ROLE_MEDIC));
+        user.setPassword(encodedPassword);
+        user.setEmail("black.hornetnikita+admintest@gmail.com");
+        user.setPerson(person);
+
+        createdUser = userRepository.save(user);
+
+        PwdDropRequest pwdDropRequest = new PwdDropRequest();
+        pwdDropRequest.setUser(createdUser);
+        pwdDropRequest.setRequestDate(Calendar.getInstance());
+        createdPwdDropRequest = pwdDropRequestRepository.save(pwdDropRequest);
     }
 
     @AfterEach
-    void afterEach(){
-        personRepository.delete(createdClient.getPerson());
-        createdClient = null;
+    @Transactional(rollbackFor = Exception.class)
+    void afterEach()
+    {
+        personRepository.delete(createdUser.getPerson());
+        createdUser = null;
+        createdUserPassword = null;
+        createdPwdDropRequest = null;
     }
 
     @Test
-    @DisplayName("Get all available specifications")
-    void getSpecs() {
-        assertTrue(mc.getSpecs().size()>0);
+    @DisplayName("Get all users")
+    @Transactional(rollbackFor = Exception.class)
+    void getAllUsers()
+    {
+        List<User> users = ac.getAllUsers();
+        List<User> checkUsers = userRepository.findAll();
+
+        assertIterableEquals(users, checkUsers);
+
+        List<User> usersWithEmail = users.stream().filter(x -> Objects.equals(x.getEmail(), createdUser.getEmail())).collect(Collectors.toList());
+        assertEquals(1, usersWithEmail.size());
+
+        User user = usersWithEmail.get(0);
+
+        assertEquals(createdUser, user);
     }
 
     @Test
-    @DisplayName("Get all available modifications")
-    void getMods() {
-        assertNotNull(mc.getMods());
-    }
+    @DisplayName("Get all drop requests")
+    @Transactional(rollbackFor = Exception.class)
+    void getAllDropRequests()
+    {
+        List<PwdDropRequest> users = ac.getAllDropRequests();
+        List<PwdDropRequest> checkUsers = pwdDropRequestRepository.findAll();
 
-    @Test
-    @DisplayName("Get all existing clients")
-    void getClients() { assertTrue(mc.getClients().size() >= 1 );
+        assertIterableEquals(users, checkUsers);
 
-    }
+        List<PwdDropRequest> pwdDropRequests = users.stream().filter(x -> Objects.equals(x.getUser(), createdUser)).collect(Collectors.toList());
+        assertEquals(1, pwdDropRequests.size());
 
-    @Test
-    @DisplayName("Getting existing client")
-    void clientExists() throws NoPersonToClientException, PersonConflictException, ClientConflictException, PassportConflictException, ClientNotFoundException, PassportNotFoundException {
+        PwdDropRequest pwdDropRequest = pwdDropRequests.get(0);
 
-
-        assertNotNull(mc.clientExists(simpleClientRegistration.getPerson().getPassport()));
-
-
-    }
-    @Test
-    @DisplayName("Getting not existing client")
-    void clientExistsNoValid() throws PersonConflictException, ClientConflictException, PassportConflictException, ClientNotFoundException {
-
-
-        assertThrows(ClientNotFoundException.class, () -> mc.clientExists(2211334455L));
-
-    }
-
-    @Test
-    @DisplayName("Valid new client")
-    void createValidClient() {
-
-        assertEquals(1, createdClient.getPerson().getPassports().stream()
-                .filter(passport -> passport.getPassport() == simpleClientRegistration.getPerson().getPassport())
-                .toArray().length);
-
-    }
-
-    @Test
-    @DisplayName("Invalid new client")
-    void createInValidClient() {
-
-        assertThrows(PassportConflictException.class,()->mc.createClient(simpleClientRegistration));
-
-    }
-
-    @Test
-    @DisplayName("Get all modifications for specialization")
-    void getModsBySpec() throws SpecializationNotFoundException {
-        assertEquals(7,mc.getModsBySpec(5).size());
+        assertEquals(createdPwdDropRequest, pwdDropRequest);
     }
 
 
     @Test
-    @DisplayName("Create order")
-    void createOrder() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException {
-        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
-                createdClient.getId(),
-                1L,
-                Arrays.asList(2L, 5L),
-                "Test Order"
-                );
-        Order createdOrder = mc.createOrder(simpleOrderRegistration);
-        assertEquals("Test Order",createdOrder.getComment());
-    }
-
-
-    @Test
-    @DisplayName("Change client")
-    void changeClient(){
-        SimpleClientRegistration temp = simpleClientRegistration;
-        SimplePersonRegistration tempPerson = temp.getPerson();
-        tempPerson.setPassport(1000000000L);
-        tempPerson.setName("TestName1");
-        temp.setPerson(tempPerson);
-        temp.setEmail("testemail1@email.com");
-
-        Client changedClient = mc.changeClient(temp, createdClient.getId());
-
-        assertAll(
-                ()-> assertEquals("testemail1@email.com",changedClient.getEmail()),
-                ()-> assertTrue(changedClient.getPerson().getPassports().stream().anyMatch(item-> item.getPassport() == 1000000000L)),
-                ()-> assertEquals("TestName1", changedClient.getPerson().getName())
-        );
-    }
-
-    @Test
-    @DisplayName("Generating commercial")
-    void generatingCommercial() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, DocumentException, IOException {
-        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
-                createdClient.getId(),
-                1L,
-                Arrays.asList(2L, 5L),
-                "Test Order"
-        );
-        Order createdOrder = mc.createOrder(simpleOrderRegistration);
-        String filePath = pdfService.generateCommercial(createdOrder);
-
-        assert(Files.exists(Path.of(filePath)));
-
-        Files.delete(Path.of(filePath));
-//        ResponseEntity<InputStreamResource> result  = mc.get_commercial(createdOrder.getId());
-//        byte[] content = result.getBody().getInputStream().readAllBytes();
-//        for (byte i: content
-//             ) {
-//            System.out.print((char) i);
-//        }
-    }
-
-    @Test
-    @DisplayName("Generating risks")
-    void generatingRisks() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, DocumentException, IOException {
-        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
-                createdClient.getId(),
-                1L,
-                Arrays.asList(2L, 5L),
-                "Test Order"
-        );
-        Order createdOrder = mc.createOrder(simpleOrderRegistration);
-        String filePath = pdfService.generateRiskList(createdOrder);
-
-        assert(Files.exists(Path.of(filePath)));
-
-        Files.delete(Path.of(filePath));
-    }
-
-    @Test
-    @DisplayName("Upload confirmation")
-    void uploadConfirmation() throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, OrderNotFoundException, IOException {
-        SimpleOrderRegistration simpleOrderRegistration = new SimpleOrderRegistration(
-                createdClient.getId(),
-                1L,
-                Arrays.asList(2L, 5L),
-                "Test Order"
-        );
-        Order createdOrder = mc.createOrder(simpleOrderRegistration);
-
-        Path path = Paths.get("/src/test/data/test_confirmation.docx");
-        String name = "test_confirmation.docx";
-        String originalFileName = "test_confirmation.docx";
-        String contentType = "text/plain";
-        byte[] content = null;
-        try {
-            content = Files.readAllBytes(path);
-        } catch (final IOException e) {
-        }
-
-        MultipartFile file = new MockMultipartFile(name,originalFileName,contentType,content);
-        ResponseEntity<FileUploadResponse> response = mc.uploadConfirmation(file,createdOrder.getId());
-
-        createdOrder = orderRepository.getOne(createdOrder.getId());
-        Order finalCreatedOrder = createdOrder;
-        assertAll(
-                ()->assertTrue(Files.exists(Path.of(Objects.requireNonNull(response.getBody()).getFileName()))),
-                ()-> assertEquals(finalCreatedOrder.getConfirmation(), Objects.requireNonNull(response.getBody()).getFileName())
-
-        );
-
-        Files.delete(Path.of(Objects.requireNonNull(response.getBody()).getFileName()));
-    }
-
-
-
-    private SimpleClientRegistration generateTestPerson(){
-        SimpleClientRegistration simpleClientRegistration = new SimpleClientRegistration();
-        simpleClientRegistration.setEmail("testemail@email.com");
+    @DisplayName("Create user with duplicate email")
+    @Transactional(rollbackFor = Exception.class)
+    void createUserDuplicateEmail()
+    {
         SimplePersonRegistration simplePersonRegistration = new SimplePersonRegistration();
-        simplePersonRegistration.setName("TestName");
-        simplePersonRegistration.setPassport(1122334455L);
-        simplePersonRegistration.setPatronymic("TestPat");
-        simplePersonRegistration.setSurname("TestSurname");
-        simplePersonRegistration.setDateOfBirth(Date.valueOf("2000-03-04"));
-        simpleClientRegistration.setPerson(simplePersonRegistration);
+        simplePersonRegistration.setName("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setSurname("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setPatronymic("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setDateOfBirth(Date.valueOf("1999-12-12"));
+        simplePersonRegistration.setPassport(1000000011);
 
-        return simpleClientRegistration;
+        SimpleUserRegistration simpleUserRegistration = new SimpleUserRegistration();
+        simpleUserRegistration.setPerson(simplePersonRegistration);
+        simpleUserRegistration.setEmail("black.hornetnikita+admintest@gmail.com");
+        simpleUserRegistration.setRole("ROLE_SCIENTIST");
+        simpleUserRegistration.setPassword("asdasdasd");
+
+        assertThrows(UserConflictException.class, () -> ac.createUser(simpleUserRegistration));
     }
+
+    @Test
+    @DisplayName("Create user with duplicate role")
+    @Transactional(rollbackFor = Exception.class)
+    void createUserDuplicateRole()
+    {
+        SimplePersonRegistration simplePersonRegistration = new SimplePersonRegistration();
+        simplePersonRegistration.setName("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setSurname("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setPatronymic("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setDateOfBirth(Date.valueOf("1999-12-12"));
+        simplePersonRegistration.setPassport(1000000011);
+
+        SimpleUserRegistration simpleUserRegistration = new SimpleUserRegistration();
+        simpleUserRegistration.setPerson(simplePersonRegistration);
+        simpleUserRegistration.setEmail("black.hornetnikita+admintest1@gmail.com");
+        simpleUserRegistration.setRole("ROLE_MEDIC");
+        simpleUserRegistration.setPassword("asdasdasd");
+
+        assertThrows(UserConflictException.class, () -> ac.createUser(simpleUserRegistration));
+    }
+
+    @Test
+    @DisplayName("Create valid user")
+    @Transactional(rollbackFor = Exception.class)
+    void createUser()
+    {
+        SimplePersonRegistration simplePersonRegistration = new SimplePersonRegistration();
+        simplePersonRegistration.setName("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setSurname("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setPatronymic("ADMIN CONTROLLER TEST");
+        simplePersonRegistration.setDateOfBirth(Date.valueOf("1999-12-12"));
+        simplePersonRegistration.setPassport(1000000011);
+
+        SimpleUserRegistration simpleUserRegistration = new SimpleUserRegistration();
+        simpleUserRegistration.setPerson(simplePersonRegistration);
+        simpleUserRegistration.setEmail("black.hornetnikita+admintest1@gmail.com");
+        simpleUserRegistration.setRole("ROLE_SCIENTIST");
+        simpleUserRegistration.setPassword("asdasdasd");
+
+        assertDoesNotThrow(() -> Thread.sleep(10000));
+        User user = assertDoesNotThrow(() -> ac.createUser(simpleUserRegistration));
+
+        Optional<User> optionalCreatedUser = userRepository.findById(user.getId());
+        assertTrue(optionalCreatedUser.isPresent());
+
+        assertEquals(optionalCreatedUser.get(), user);
+    }
+
+    @Test
+    @DisplayName("Create password reset request for non existing user")
+    @Transactional(rollbackFor = Exception.class)
+    void createPwdResetRequestNonExistingUser()
+    {
+        SimplePwdDropRequest simplePwdDropRequest = new SimplePwdDropRequest();
+        simplePwdDropRequest.setEmail("black.hornetnikita+admintestnonexistent@gmail.com");
+
+        assertThrows(UserNotFoundException.class, () -> uc.createPwdDropRequest(simplePwdDropRequest));
+    }
+
+    @Test
+    @DisplayName("Create password reset request for existing user")
+    @Transactional(rollbackFor = Exception.class)
+    void createPwdResetRequestExistingUser()
+    {
+        SimplePwdDropRequest simplePwdDropRequest = new SimplePwdDropRequest();
+        simplePwdDropRequest.setEmail("black.hornetnikita+admintest@gmail.com");
+
+        PwdDropRequest createdPwdDropRequest = assertDoesNotThrow(() -> uc.createPwdDropRequest(simplePwdDropRequest));
+
+        Optional<PwdDropRequest> pwdDropRequest = pwdDropRequestRepository.findById(createdPwdDropRequest.getId());
+        assertTrue(pwdDropRequest.isPresent());
+
+        assertEquals(createdPwdDropRequest, pwdDropRequest.get());
+    }
+
+    @Test
+    @DisplayName("Satisfy non existent password reset request")
+    @Transactional(rollbackFor = Exception.class)
+    void satisfyNonExistentPwdResetRequest()
+    {
+        SimplePwdDropRequestSatisfaction simplePwdDropRequestSatisfaction = new SimplePwdDropRequestSatisfaction();
+        simplePwdDropRequestSatisfaction.setId(1000000000);
+
+        assertThrows(PwdDropRequestNotFoundException.class, () -> ac.satisfyPwdDropRequest(simplePwdDropRequestSatisfaction));
+    }
+
+    @Test
+    @DisplayName("Satisfy already satisfied password reset request")
+    @Transactional(rollbackFor = Exception.class)
+    void satisfyAlreadySatisfiedPwdResetRequest()
+    {
+        createdPwdDropRequest.setDropped(true);
+        pwdDropRequestRepository.save(createdPwdDropRequest);
+
+        SimplePwdDropRequestSatisfaction simplePwdDropRequestSatisfaction = new SimplePwdDropRequestSatisfaction();
+        simplePwdDropRequestSatisfaction.setId(createdPwdDropRequest.getId());
+
+        assertThrows(PwdDropRequestAlreadySatisfiedException.class, () -> ac.satisfyPwdDropRequest(simplePwdDropRequestSatisfaction));
+    }
+
+    @Test
+    @DisplayName("Satisfy valid password reset request")
+    @Transactional(rollbackFor = Exception.class)
+    void satisfyValidPwdResetRequest()
+    {
+        SimplePwdDropRequestSatisfaction simplePwdDropRequestSatisfaction = new SimplePwdDropRequestSatisfaction();
+        simplePwdDropRequestSatisfaction.setId(createdPwdDropRequest.getId());
+
+        assertDoesNotThrow(() -> Thread.sleep(10000));
+        PwdDropRequest pwdDropRequest = assertDoesNotThrow(() -> ac.satisfyPwdDropRequest(simplePwdDropRequestSatisfaction));
+
+        Optional<PwdDropRequest> updatedPwdDropRequest = pwdDropRequestRepository.findById(pwdDropRequest.getId());
+        assertTrue(updatedPwdDropRequest.isPresent());
+
+        assertEquals(pwdDropRequest, updatedPwdDropRequest.get());
+
+        assertTrue(pwdDropRequest.isDropped());
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Person createTestPerson()
+    {
+        Passport passport = new Passport();
+        passport.setPassport(1000000011);
+
+        List<Passport> passports = new ArrayList<>();
+        passports.add(passport);
+
+        Person person = new Person();
+        person.setName("ADMIN CONTROLLER TEST");
+        person.setSurname("ADMIN CONTROLLER TEST");
+        person.setPatronymic("ADMIN CONTROLLER TEST");
+        person.setDateOfBirth(Calendar.getInstance().getTime());
+        person.setPassports(passports);
+        person = personRepository.save(person);
+
+        passport.setPerson(person);
+        passportRepository.save(passport);
+
+        return person;
+    }
+
 }
