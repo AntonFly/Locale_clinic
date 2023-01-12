@@ -1,5 +1,5 @@
 import { trigger } from '@angular/animations';
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -28,6 +28,7 @@ class RowClass {
 export class EditableTableComponent implements OnInit {
   @Input('schema') schema: any;
   @Input('data') data: any;
+  @Input('deletable') deletable: boolean = false;
   @Output('changed') changed: EventEmitter<any> = new EventEmitter();
 
   displayedColumns: string[];
@@ -35,6 +36,9 @@ export class EditableTableComponent implements OnInit {
   columnsSchema: any; 
   valid: any = {};
   lastId: number = 1;
+  
+  highlights_names=[];
+  highlights = {};
 
   constructor(
     //private global_utilities: AppUtilityService
@@ -42,18 +46,37 @@ export class EditableTableComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    console.log(this.deletable) 
+    this.init();
+  }
+
+  ngOnChanges() {
+    this.init();  
+  }   
+
+  init(){
     this.columnsSchema = this.schema;
     this.displayedColumns = this.columnsSchema.map((col) => col.key);    
+
+    this.schema.forEach( el => {
+      if(el.highlight)
+      {
+        this.highlights_names.push(el.highlight);
+        this.highlights[el.highlight] = el[el.highlight];
+      }
+    })
     
     var newData = [];
     if(this.data)
-      this.data.forEach((el, ind)=> {
+      this.data.forEach((el, ind)=> 
+      {        
+        this.highlights_names.forEach(name => {
+          el[name] = this.highlights[name];
+        })
         newData.push(new RowClass(el, ind + 1));
         this.lastId = ind + 1;
       })
-    this.dataSource.data = newData;  
-    console.log("DATA")   
-    console.log(this.dataSource.data)
+    this.dataSource.data = newData;      
   }
 
   clearData()
@@ -107,6 +130,10 @@ export class EditableTableComponent implements OnInit {
           break;
       }      
     }
+
+    this.highlights_names.forEach(name => {
+      data[name] = this.highlights[name];
+    })
     
     var newData = new RowClass(data, ++this.lastId);
     var oldData = this.dataSource.data.slice();

@@ -3,6 +3,42 @@
     align-items: baseline;
 }
 
+.message{
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
 .stock-btn{
     margin-left: auto;
+}
+
+.refresh-list-button {
+    cursor: pointer;
+  
+  }
+  
+.refresh-list-button-animation {
+      animation: rotate 1s ease-in-out 0s;
+  }
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+}
+  
+.tooltiptext-short{
+      font-size: 14px;
+}
+
+.tooltiptext-short {
+    bottom: 115%;
+    left: 50%;
+}
+
+.tooltip1{
+      height: 30px
 }

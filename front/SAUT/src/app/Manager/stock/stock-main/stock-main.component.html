@@ -1,7 +1,15 @@
 <h4>Склад</h4>
 <div class="btn-div">
-    <button mat-raised-button class="stock-btn" color="primary" (click)="changeFile()">  
-        Сохранить
-    </button>
+    <div class="stock-btn">
+        <span *ngIf="!isUpdateError" class="message" style="color: green;">{{updateMsg}}</span>
+        <span *ngIf="isUpdateError" class="message" style="color: red;">{{updateMsg}}</span>
+        <div class="tooltip1">
+            <mat-icon class="refresh-list-button"  appAnimation (click)="refreshList()">refresh</mat-icon>
+            <span class="tooltiptext-short">Обновить список</span>
+        </div>
+        <button [disabled]="!changedStock" mat-raised-button color="primary" (click)="submitChanges()">  
+            Сохранить
+        </button>
+    </div>
 </div>
-<app-editable-table *ngIf="currentStock" [data]='currentStock' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>
+<app-editable-table *ngIf="currentStock" [deletable]='true' [data]='currentStock' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

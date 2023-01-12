@@ -30,6 +30,7 @@
               Изменить
             </button>
             <button
+              *ngIf="!deletable"
               mat-button
               class="button-remove"
               (click)="removeRow(element.id)"
@@ -40,9 +41,27 @@
           <span *ngSwitchCase="'date'">
             {{ element.data[col.key] | date: 'dd.MM.yyyy' }}
           </span>
-          <span *ngSwitchDefault>
-            {{ element.data[col.key] }}
-          </span>
+          <div *ngSwitchDefault>
+            <span *ngIf="col.highlight && element.data[col.highlight]()" style="color: red;">
+              {{ element.data[col.key] }}              
+            </span>
+            <span *ngIf="col.highlight && !element.data[col.highlight]()" >
+              {{ element.data[col.key] }}              
+            </span>
+            <span *ngIf="!col.highlight">
+              {{ element.data[col.key] }}
+            </span>
+          </div>
+          <!-- <div *ngIf="!col.highlight"> -->
+            <!-- <span *ngSwitchDefault>
+              {{ element.data[col.key] }}
+            </span> -->
+          <!-- </div> -->
+          <!-- <div *ngIf="col.highlight">
+            <span style="color: red;" *ngSwitchDefault>
+              {{ element.data[col.key] }}              
+            </span>
+          </div> -->
         </div>
         <div [ngSwitch]="col.type" *ngIf="element.isEdit">
           <div *ngSwitchCase="'isSelected'"></div>

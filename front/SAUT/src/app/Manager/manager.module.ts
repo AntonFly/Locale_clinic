@@ -38,6 +38,7 @@ import { OrderConfirmationComponent } from './request/order-confirmation/order-c
 
 import { DndDirective } from './_directives/dnd.directive';
 import { StockMainComponent } from './stock/stock-main/stock-main.component';
+import { AnimationDirective } from './_directives/animation.directive';
  
 const routes: Routes = [
     {   path: 'manager', redirectTo: '/manager/clients', pathMatch: 'full'},
@@ -50,6 +51,7 @@ const routes: Routes = [
  
 @NgModule({
   declarations: [
+    AnimationDirective,
     ClientsComponent, 
     ClientsDialogComponent,
     ContractsComponent,
