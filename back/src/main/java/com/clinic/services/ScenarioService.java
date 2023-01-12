@@ -23,10 +23,10 @@ public interface ScenarioService {
 //    Set<Scenario> getAllScenariosBySpec(String specName)
 //            throws SpecializationMissingException;
 
-    public Set<Modification> getAllModificationsBySpec(int specId)
+    public Set<Modification> getAllModificationsBySpec(long specId)
             throws SpecializationNotFoundException;
 
-    public List<Modification> getAllModificationsBySpecOrderedByRisk(int specId)
+    public List<Modification> getAllModificationsBySpecOrderedByRisk(long specId)
             throws SpecializationNotFoundException;
 
     @Transactional(rollbackFor = Exception.class)
@@ -35,6 +35,6 @@ public interface ScenarioService {
 
     @Transactional(rollbackFor = Exception.class)
     public Scenario updateScenario(SimpleScenarioUpdate updateData)
-            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException;
+            throws ScenarioNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException;
 
 }

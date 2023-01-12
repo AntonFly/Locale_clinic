@@ -63,7 +63,7 @@ public class ScenarioServiceImpl implements ScenarioService {
 
 
     @Override
-    public List<Modification> getAllModificationsBySpecOrderedByRisk(int specId)
+    public List<Modification> getAllModificationsBySpecOrderedByRisk(long specId)
             throws SpecializationNotFoundException
     {
         return getAllModificationsBySpec(specId).stream()
@@ -115,7 +115,7 @@ public class ScenarioServiceImpl implements ScenarioService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Scenario updateScenario(SimpleScenarioUpdate updateData)
-            throws ScenarioNotFoundException, ModificationNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException {
+            throws ScenarioNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException {
         Scenario scenario = scenarioRepository.findById(updateData.getScenarioId())
                 .orElseThrow(() -> new ScenarioNotFoundException(updateData.getScenarioId()));
 
@@ -141,7 +141,7 @@ public class ScenarioServiceImpl implements ScenarioService {
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Set<Modification> getAllModificationsBySpec(int specId)
+    public Set<Modification> getAllModificationsBySpec(long specId)
             throws SpecializationNotFoundException
     {
         Specialization specialization = specializationRepository.findById(specId)

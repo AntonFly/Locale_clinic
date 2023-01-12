@@ -18,70 +18,21 @@ import java.util.Set;
 //@PreAuthorize("hasRole('ROLE_SCIENTIST')")
 @RequestMapping("/scientist")
 public class ScientistController {
-    private final AdminService adminService;
-    private final ClientService clientService;
-    private final ModificationService modificationService;
     private final OrderService orderService;
-    private final PersonService personService;
     private final ScenarioService scenarioService;
-    private final SpecializationService specializationService;
-    private final UserService userService;
-    private final ClientRepository clientRepository;
-    private final ModificationRepository modificationRepository;
-    private final OrderRepository orderRepository;
-    private final PersonRepository personRepository;
-    private final RoleRepository roleRepository;
-    private final ScenarioRepository scenarioRepository;
-    private final SpecializationRepository specializationRepository;
-    private final UserRepository userRepository;
-
-    private final StockRepository stockRepository;
-
-    private final PwdDropRequestRepository pwdDropRequestRepository;
 
     @Autowired
     public ScientistController(
-            AdminService as,
-            ClientService cs,
-            ModificationService ms,
             OrderService os,
-            PersonService ps,
-            ScenarioService sc,
-            SpecializationService ss,
-            UserService us,
-            ClientRepository cr,
-            ModificationRepository mr,
-            OrderRepository or,
-            PersonRepository pr,
-            RoleRepository rr,
-            ScenarioRepository sr,
-            SpecializationRepository ssr,
-            UserRepository ur,
-            PwdDropRequestRepository pwdr,
-            StockRepository str
-    ){
-        this.adminService = as;
-        this.clientService = cs;
-        this.modificationService = ms;
+            ScenarioService sc
+    )
+    {
         this.orderService = os;
-        this.personService = ps;
         this.scenarioService = sc;
-        this.specializationService = ss;
-        this.userService = us;
-        this.clientRepository = cr;
-        this.modificationRepository = mr;
-        this.orderRepository = or;
-        this.personRepository = pr;
-        this.roleRepository = rr;
-        this.scenarioRepository = sr;
-        this.specializationRepository = ssr;
-        this.userRepository = ur;
-        this.pwdDropRequestRepository = pwdr;
-        this.stockRepository = str;
     }
 
     @GetMapping("/get_ordered_mods_by_spec")
-    public List<Modification> getOrderedModsBySpec(@RequestParam int specId)
+    public List<Modification> getOrderedModsBySpec(@RequestParam long specId)
             throws SpecializationNotFoundException
     { return scenarioService.getAllModificationsBySpecOrderedByRisk(specId); }
 
@@ -92,7 +43,7 @@ public class ScientistController {
 
     @PutMapping("/update_scenario")
     public Scenario updateScenario(@RequestBody SimpleScenarioUpdate updateData)
-            throws ScenarioNotFoundException, SpecializationNotFoundException, ModificationNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException
+            throws ScenarioNotFoundException, UnspecifiedModScenarioException, UnknownModScenarioException
     { return scenarioService.updateScenario(updateData); }
 
     @GetMapping("/get_all_orders_by_passport")
