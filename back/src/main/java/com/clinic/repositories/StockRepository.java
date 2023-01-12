@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
+    void deleteAllByUser(User user);
     boolean existsByStockId(StockId stockId);
 
     Optional<Stock> findByStockId(StockId stockId);

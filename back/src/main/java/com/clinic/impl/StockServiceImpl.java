@@ -45,7 +45,7 @@ public class StockServiceImpl implements StockService {
     public Stock createStockItem(SimpleStockCreate stockCreateData)
             throws StockConflictException, InvalidStockDataException, UserNotFoundException
     {
-        if (stockCreateData.getAmount() < stockCreateData.getMinAmount() || stockCreateData.getAmount() <= 0 || stockCreateData.getMinAmount() <= 0)
+        if (stockCreateData.getAmount() <= 0 || stockCreateData.getMinAmount() <= 0)
             throw new InvalidStockDataException(stockCreateData.getAmount(), stockCreateData.getMinAmount());
 
         StockId stockId = new StockId();
@@ -75,7 +75,7 @@ public class StockServiceImpl implements StockService {
     public Stock updateStockItem(SimpleStockUpdate stockUpdateData)
             throws StockNotFoundException, InvalidStockDataException, UserNotFoundException
     {
-        if (stockUpdateData.getAmount() < stockUpdateData.getMinAmount() || stockUpdateData.getAmount() <= 0 || stockUpdateData.getMinAmount() <= 0)
+        if (stockUpdateData.getAmount() < 0 || stockUpdateData.getMinAmount() < 0)
             throw new InvalidStockDataException(stockUpdateData.getAmount(), stockUpdateData.getMinAmount());
 
         User user = userRepository.findById(stockUpdateData.getUserId())
@@ -109,7 +109,7 @@ public class StockServiceImpl implements StockService {
         Stock stock = stockRepository.findByStockId(stockId)
                 .orElseThrow(() -> new StockNotFoundException(stockId));
 
-        if (stock.getAmount() + stockUpdateData.getChange() < stock.getMinAmount())
+        if (stock.getAmount() + stockUpdateData.getChange() < 0)
             throw new InvalidStockDataException(stock.getAmount() + stockUpdateData.getChange(), stock.getMinAmount());
 
         stock.setAmount(stock.getAmount() + stockUpdateData.getChange());
@@ -129,7 +129,7 @@ public class StockServiceImpl implements StockService {
         Stock stock = stockRepository.findByStockId(stockId)
                 .orElseThrow(() -> new StockNotFoundException(stockId));
 
-        if (stock.getAmount() < stockMinAmountUpdateData.getMinAmount())
+        if (stockMinAmountUpdateData.getMinAmount() < 0)
             throw new InvalidStockDataException(stock.getAmount(), stockMinAmountUpdateData.getMinAmount());
 
         stock.setMinAmount(stockMinAmountUpdateData.getMinAmount());
