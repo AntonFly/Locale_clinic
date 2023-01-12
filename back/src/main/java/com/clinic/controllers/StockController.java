@@ -33,6 +33,11 @@ public class StockController {
             throws StockConflictException, InvalidStockDataException, UserNotFoundException
     { return stockService.createStockItem(createData); }
 
+    @PutMapping("/update_item")
+    public Stock updateStockItem(@RequestBody SimpleStockUpdate updateData)
+            throws StockNotFoundException, UserNotFoundException, InvalidStockDataException
+    { return  stockService.updateStockItem(updateData); }
+
     @PutMapping("/update_item_amount")
     public Stock updateStockItemAmount(@RequestBody SimpleStockAmountUpdate updateData)
             throws InvalidStockDataException, StockNotFoundException

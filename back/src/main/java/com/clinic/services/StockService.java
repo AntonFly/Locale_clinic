@@ -3,7 +3,9 @@ package com.clinic.services;
 import com.clinic.dto.SimpleStockCreate;
 import com.clinic.dto.SimpleStockMinAmountUpdate;
 import com.clinic.dto.SimpleStockAmountUpdate;
+import com.clinic.dto.SimpleStockUpdate;
 import com.clinic.entities.Stock;
+import com.clinic.entities.User;
 import com.clinic.exceptions.InvalidStockDataException;
 import com.clinic.exceptions.StockConflictException;
 import com.clinic.exceptions.StockNotFoundException;
@@ -18,6 +20,10 @@ public interface StockService {
     @Transactional(rollbackFor = Exception.class)
     Stock createStockItem(SimpleStockCreate stockCreateData)
             throws StockConflictException, InvalidStockDataException, UserNotFoundException;
+
+    @Transactional(rollbackFor = Exception.class)
+    Stock updateStockItem(SimpleStockUpdate stockUpdateData)
+            throws StockNotFoundException, InvalidStockDataException, UserNotFoundException;
 
     @Transactional(rollbackFor = Exception.class)
     Stock updateStockItemAmount(SimpleStockAmountUpdate stockUpdateData)

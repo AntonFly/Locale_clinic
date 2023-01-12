@@ -3,6 +3,7 @@ package com.clinic.impl;
 import com.clinic.dto.SimpleStockCreate;
 import com.clinic.dto.SimpleStockMinAmountUpdate;
 import com.clinic.dto.SimpleStockAmountUpdate;
+import com.clinic.dto.SimpleStockUpdate;
 import com.clinic.entities.Stock;
 import com.clinic.entities.User;
 import com.clinic.entities.keys.StockId;
@@ -12,6 +13,7 @@ import com.clinic.repositories.UserRepository;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
@@ -39,6 +41,7 @@ public class StockServiceImpl implements StockService {
     { return stockRepository.findAll(); }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Stock createStockItem(SimpleStockCreate stockCreateData)
             throws StockConflictException, InvalidStockDataException, UserNotFoundException
     {
@@ -62,6 +65,34 @@ public class StockServiceImpl implements StockService {
         stock.setName(stockCreateData.getName());
         stock.setMinAmount(stockCreateData.getMinAmount());
         stock.setUser(user);
+        stock.setLastUpdateTime(Calendar.getInstance());
+
+        return stockRepository.save(stock);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Stock updateStockItem(SimpleStockUpdate stockUpdateData)
+            throws StockNotFoundException, InvalidStockDataException, UserNotFoundException
+    {
+        if (stockUpdateData.getAmount() < stockUpdateData.getMinAmount() || stockUpdateData.getAmount() <= 0 || stockUpdateData.getMinAmount() <= 0)
+            throw new InvalidStockDataException(stockUpdateData.getAmount(), stockUpdateData.getMinAmount());
+
+        User user = userRepository.findById(stockUpdateData.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("id", String.valueOf(stockUpdateData.getUserId())));
+
+        StockId stockId = new StockId();
+        stockId.setId(stockUpdateData.getId());
+        stockId.setVendor(stockUpdateData.getVendorId());
+
+        Stock stock = stockRepository.findByStockId(stockId)
+                .orElseThrow(() -> new StockNotFoundException(stockId));
+
+        stock.setAmount(stockUpdateData.getAmount());
+        stock.setMinAmount(stockUpdateData.getMinAmount());
+        stock.setUser(user);
+        stock.setName(stockUpdateData.getName());
+        stock.setDescription(stock.getDescription());
         stock.setLastUpdateTime(Calendar.getInstance());
 
         return stockRepository.save(stock);
