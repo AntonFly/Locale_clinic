@@ -1,8 +1,21 @@
+
 <div class = "header-div">
     <span class="icon-div" (click)="closeClick()">
         <mat-icon class="top-icon" [inline]="true">arrow_forward_ios</mat-icon>
     </span>
     <span class="header-name">{{getFIO()}}</span>
+</div>
+
+<div class="one-liner">
+    <h5>Клиент</h5>
+    <div class="form-btn">
+        <span *ngIf="!formError" style="color: green;padding-right: 10px;">{{formMsg}}</span>
+        <span *ngIf="formError" style="color: red;padding-right: 10px;">{{formMsg}}</span>
+        <button 
+            mat-raised-button color="primary" type="submit" [disabled]="!ClientForm.valid" (click)="onSubmitClient(ClientForm.value)">
+            Сохранить
+        </button>        
+    </div>
 </div>
 
 <form class="client-form" [formGroup]="ClientForm" (ngSubmit)="onSubmitClient(ClientForm.value)">        
@@ -56,15 +69,17 @@
             <mat-hint align="start"><strong>Поле для дополнительной информации</strong> </mat-hint>
             <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
         </mat-form-field>    
-                    
-        
-        <div class="form-btn">
-            <button mat-raised-button color="primary" type="submit" [disabled]="!ClientForm.valid" >Создать</button>
-            <button mat-button mat-dialog-close>Отмена</button>
-            <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
-            <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
-        </div>
+                                    
     </div>  
 </form>
 
-<app-editable-table [data]='user_data' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>
+<br>
+<div class="one-liner">
+    <h5>Прошлые модификации</h5>
+    <div class="form-btn">    
+        <span *ngIf="!tableError" style="color: green;padding-right: 10px;">{{tableMsg}}</span>
+        <span *ngIf="tableError" style="color: red;padding-right: 10px;">{{tableMsg}}</span>
+        <button mat-raised-button color="primary" (click)="updateTable()" [disabled]="!tableValid" >Внести</button>                
+    </div>
+</div>
+<app-editable-table [autocomplete]='auto_data' [data]='user_data' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

@@ -11,6 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from '@env/environment';
 import { LoaderComponent } from './loader/loader.component';
@@ -22,6 +23,7 @@ import { EditableTableComponent } from './editable-table/editable-table.componen
     EditableTableComponent
   ],
   imports: [
+    MatAutocompleteModule,
     MatIconModule,
     FormsModule,
     MatTableModule,

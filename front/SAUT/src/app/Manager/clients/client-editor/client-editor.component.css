@@ -1,4 +1,8 @@
-.icon-div{
+.one-liner{
+  display: flex;
+  align-items: baseline;
+}
+.icon-div{  
     /* position: fixed; */
   /* left: 0; */
   /* top: 0; */
@@ -38,9 +42,11 @@
 }
 
 .form-btn{
-    display: flex;
+    margin-left: auto;
+    margin-right: 100px;
+    /* display: flex;
     justify-content: right;
-    align-items: center;
+    align-items: center; */
 }
 
 .full-width {

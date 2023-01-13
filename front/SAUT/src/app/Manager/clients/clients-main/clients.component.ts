@@ -110,8 +110,10 @@ export class ClientsComponent implements OnInit {
     let filterValue = this.searchField.value
     
     if(filterValue == "" || filterValue == undefined || filterValue == null)
-    {
-      this.currentItems = this.allClientItems
+    {      
+      this.shownItems = this.allClientItems;
+      this.currentItems = this.allClientItems;
+      this.length = this.currentItems.length;
       return;
     }
     filterValue = filterValue.toLowerCase();
@@ -121,7 +123,7 @@ export class ClientsComponent implements OnInit {
       return  el.person.surname.toLowerCase().includes(filterValue) ||
               el.person.name.toLowerCase().includes(filterValue) ||
               el.person.patronymic.toLowerCase().includes(filterValue) ||
-              String(el.person.id).toLowerCase().includes(filterValue) ||
+              String(el.person.passports[0].passport).toLowerCase().includes(filterValue) ||
               el.person.dateOfBirth.toLowerCase().includes(filterValue) ||
               el.email.toLowerCase().includes(filterValue)
     });
@@ -148,6 +150,7 @@ export class ClientsComponent implements OnInit {
 
   closeEditor()
   {
+    this.updateUsers();
     this.showingEditor = false;
     this.editedClient = undefined;
   }

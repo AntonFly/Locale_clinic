@@ -1,8 +1,11 @@
+/* auto complete feature works like hell nah, picks first auto field from schema and checks auto data obvs
+next it changes whole row based on autocomplete pick */
 import { trigger } from '@angular/animations';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { stringify } from 'querystring';
+import { Observable, Subscription } from 'rxjs';
 //import { AppUtilityService } from 'src/app/app-utility.service';
 
 class RowClass {
@@ -29,7 +32,15 @@ export class EditableTableComponent implements OnInit {
   @Input('schema') schema: any;
   @Input('data') data: any;
   @Input('deletable') deletable: boolean = false;
+  @Input('autocomplete') autocomplete: any;
   @Output('changed') changed: EventEmitter<any> = new EventEmitter();
+
+  schemeError: string = "";
+
+  /* auto */
+  autoColKey: string = undefined;
+  // filteredOptions: Observable<String[]>;
+  options: String[] = [];
 
   displayedColumns: string[];
   dataSource =  new MatTableDataSource<RowClass>();
@@ -45,9 +56,14 @@ export class EditableTableComponent implements OnInit {
   ) {     
   }
   
-  ngOnInit(): void {
-    console.log(this.deletable) 
+  ngOnInit(): void {    
+    this.verifySchema();
     this.init();
+
+    // this.filteredOptions = this.formControlSpec.valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => this._filter(value || '')),
+    // );
   }
 
   ngOnChanges() {
@@ -64,6 +80,14 @@ export class EditableTableComponent implements OnInit {
         this.highlights_names.push(el.highlight);
         this.highlights[el.highlight] = el[el.highlight];
       }
+
+      if(el.autoComplete && !this.autoColKey)
+        this.autoColKey = el.key;
+    })
+
+    if(this.autocomplete && this.autoColKey)
+      this.autocomplete.forEach(el => {
+        this.options.push(el[this.autoColKey]);
     })
     
     var newData = [];
@@ -73,10 +97,48 @@ export class EditableTableComponent implements OnInit {
         this.highlights_names.forEach(name => {
           el[name] = this.highlights[name];
         })
-        newData.push(new RowClass(el, ind + 1));
+        
+        var row = new RowClass(el, ind + 1);
+        if(this.autocomplete && this.autoColKey)
+        {
+          row["filteredOptions"] = [];          
+        }
+
+        newData.push(row);
         this.lastId = ind + 1;
       })
+    
     this.dataSource.data = newData;      
+  }
+
+  verifySchema()
+  {
+    var isAuto: Boolean = false;
+    this.schema.forEach(el => 
+      {
+        if(el.autoComplete)
+        {
+          if(!isAuto)
+            isAuto = true;
+          else this.schemeError = "Несколько полей с автодополнением"
+        }
+      })
+  }
+
+  updateAuto(event, id)
+  {
+    var data = this.dataSource.data;
+    var index = data.findIndex(e => e.id == id)    
+    
+    data[index]["filteredOptions"] = this._filter(this.dataSource.data[index].data[this.autoColKey]);
+    this.dataSource.data = data;  
+    
+  }
+
+  private _filter(value: string): String[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   clearData()
@@ -98,10 +160,18 @@ export class EditableTableComponent implements OnInit {
       {
         if(data[i].id === row.id)
         {
-          for(var j = 0; j < this.columnsSchema.length; j++)
+          if(this.autocomplete && this.autoColKey)
           {
-            var key = this.columnsSchema[j].key;
-            data[i].data[key] = row.data[key];
+            var index = this.autocomplete.findIndex(e => e[this.autoColKey] == row.data[this.autoColKey]);
+            data[i].data = this.autocomplete[index];
+          }
+          else
+          {
+            for(var j = 0; j < this.columnsSchema.length; j++)
+            {
+              var key = this.columnsSchema[j].key;
+              data[i].data[key] = row.data[key];
+            }
           }
           data[i].isEdit = false;          
         }
@@ -142,9 +212,7 @@ export class EditableTableComponent implements OnInit {
     this.changed.emit(this.clearData());    
   }
 
-  removeRow(id: number) {
-    console.log('delete')
-    console.log(id)
+  removeRow(id: number) {    
     var data = this.dataSource.data;
     data.splice(data.findIndex(e => e.id == id),1);
     this.dataSource.data = data;
@@ -180,6 +248,12 @@ export class EditableTableComponent implements OnInit {
   }
 
   disableSubmit(id: number) {
+    if(this.autocomplete && this.autoColKey)
+    {
+      var data = this.dataSource.data;
+      var el = data[data.findIndex(e => e.id == id)];
+      return !this.options.includes(el.data[this.autoColKey]);
+    }
     // if (this.valid[id]) {
     //   return Object.values(this.valid[id]).some((item) => item === false);
     // }

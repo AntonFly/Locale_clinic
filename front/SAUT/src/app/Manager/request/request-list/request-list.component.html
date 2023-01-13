@@ -3,9 +3,23 @@
 <div *ngIf="!orders&&!clientError" class="container" style="padding-left: 50%;">
     <mat-icon style="font-size: 60px;">access_time</mat-icon>
 </div>
-СДЕЛАТЬ ЛИСТАЛКУ И ПОИСК    
-<!-- TODO -->
-<table class='table table-striped table-hover' aria-labelledby="tableLabel" *ngIf="orders&&!clientError">
+
+<div class="right-hand">
+  <div class="search">
+    <mat-form-field class="no-wrapper" >
+      <input matInput placeholder="Поиск..." [(ngModel)]="searchField">
+      <!-- <input matInput placeholder="Поиск...">       -->
+      <button mat-button *ngIf="searchField.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchReset()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field> 
+    <!-- <div > -->
+      <mat-icon class="search-icon" (click)="orderSearch()" >search</mat-icon>        
+    <!--   </div> -->
+  </div>
+</div>
+
+<table class='table table-striped table-hover' aria-labelledby="tableLabel" *ngIf="shownItems&&!clientError">
     <thead>
       <tr>
         <th>Пасспорт</th>
@@ -17,7 +31,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr (dblclick)="openOrder(queueItem)" *ngFor="let queueItem of orders">
+      <tr (dblclick)="openOrder(queueItem)" *ngFor="let queueItem of shownItems">
         <td>{{ queueItem.client.person.id }}</td>
         <td>{{ getFIO(queueItem.client.person) }}</td>      
         <td>{{ queueItem.specialization.name ? queueItem.specialization.name : "-"}}</td>
@@ -27,6 +41,20 @@
       </tr>
     </tbody>
   </table>
+
+  <mat-paginator *ngIf="shownItems&&!clientError"
+                 #paginator
+                 class="demo-paginator"
+                 (page)="handlePageEvent($event)"
+                 [length]="length"
+                 [pageSize]="pageSize"
+                 [disabled]="disabled"
+                 [showFirstLastButtons]="showFirstLastButtons"
+                 [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                 [hidePageSize]="hidePageSize"
+                 [pageIndex]="pageIndex"
+                 aria-label="Select page">
+  </mat-paginator>
   
 <div class="errorBox" *ngIf="clientError"> 
     <div class="errorItem" style="padding-left: 47.5%;">

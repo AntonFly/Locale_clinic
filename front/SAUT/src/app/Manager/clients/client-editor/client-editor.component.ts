@@ -1,4 +1,5 @@
 import { Component, Input, Output, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, AfterViewInit } from '@angular/core'
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
@@ -16,46 +17,48 @@ export class ClientEditorComponent implements OnInit {
   @Output('close') close: EventEmitter<boolean> = new EventEmitter();
 
   ClientForm: FormGroup;
+  
   formMsg: string;
   formError: boolean;
 
+  tableMsg: string;
+  tableError: boolean;
+
+
   myDatepipe: DatePipe;
   
-  user_data = [
-    {
-      mod: 'John Smith',
-      comment: 'Advisor',
-      date: '1984-05-05',    
-    },
-    {
-      mod: 'Muhi Masri',
-      comment: 'Developer',
-      date: '1992-02-02',    
-    },
-    { mod: 'Peter Adams', comment: 'HR', date: '2000-01-01' },
-    {
-      mod: 'HugeA$$',
-      comment: 'Marketing',
-      date: '1977-03-03',    
-    },
-  ];
+  user_data;
+  auto_data;
+
+  tableValid: boolean = false;
+  
+  tableChosen;
   
   columns_schema = [
     {
-      key: 'mod',
+      key: 'name',
       type: 'text',
-      label: 'Модификация'
-    },
+      label: 'Модификация',
+      autoComplete: true
+    },    
     {
-      key: 'date',
-      type: 'date',
-      label: 'Дата'
-    },
-    {
-      key: 'comment',
+      key: 'risk',
       type: 'text',
-      label: 'Комментарий'
+      label: 'Риск',
+      notEditable: true
     },  
+    {
+      key: 'price',
+      type: 'text',
+      label: 'Цена                                ',
+      notEditable: true
+    },
+    {
+      key: 'currency',
+      type: 'text',
+      label: 'Валюта',
+      notEditable: true
+    },
     {
       key: 'isEdit',
       type: 'isEdit',
@@ -88,15 +91,31 @@ export class ClientEditorComponent implements OnInit {
   };
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private fb: FormBuilder, 
     private clientService: ClientsService,
     datepipe: DatePipe
-    ) { this.myDatepipe = datepipe; console.log("CLINET_EDITOR"); console.log(this.user_data)}
+    ) { this.myDatepipe = datepipe;}
 
   ngOnInit() {
+    this.user_data = this.client.modifications;
+    this.getAllMods();
     this.createForms();    
     this.formMsg = "";
-    this.formError = false;
+    this.formError = false;    
+  }
+
+  getAllMods(){
+    this.clientService.getModifications().subscribe(
+      res => {
+        this.auto_data = res;
+        // console.log(res)
+        // this.user_data = res;
+      },
+      err => {
+        console.log(err)
+      }
+    )
   }
 
   get formControlName() {
@@ -137,6 +156,8 @@ export class ClientEditorComponent implements OnInit {
       dateOfBirth: [date, Validators.required],
       comment:[this.client.comment, Validators.maxLength]      
     })
+
+    this.cdr.detectChanges();
   }
 
   getFIO(){        
@@ -146,15 +167,72 @@ export class ClientEditorComponent implements OnInit {
 
 
   onSubmitClient(value)
-  {
+  {    
     value.dateOfBirth = this.myDatepipe.transform(this.ClientForm.value.dateOfBirth, 'yyyy-MM-dd');
     
-    console.log(value);
+    this.clientService.updateClient(value, this.client.id).subscribe(
+      res => {
+          console.log(res);
+        this.formError = false;
+        this.formMsg = "Изменения сохранены";
+        setTimeout(() => {
+          this.formMsg = "";
+          this.formError = false;
+        }, 5000);            
+      },
+      error => {
+        console.log(error)
+        this.formError = true;
+        this.formMsg = "Не удалось сохранить изменения";
+        setTimeout(() => {
+          this.formMsg = "";
+          this.formError = false;
+        }, 5000);            
+      }
+    )    
+  }
+
+  updateTable(){
+    if(!this.tableValid)
+      return;
+      
+      var ids = this.tableChosen.map(obj =>{
+        return [obj.id]
+      }).flat();
+
+      this.clientService.addPreviousModification(this.client.id, ids).subscribe(
+        res => {
+            console.log(res);
+          this.tableError = false;
+          this.tableMsg = "Изменения сохранены";
+          setTimeout(() => {
+            this.tableMsg = "";
+            this.tableError = false;
+          }, 5000);            
+        },
+        error => {
+          console.log(error)
+          this.tableError = true;
+          this.tableMsg = "Не удалось сохранить изменения";
+          setTimeout(() => {
+            this.tableMsg = "";
+            this.tableError = false;
+          }, 5000);            
+        }
+      )
+    
   }
 
   previousChanged(data)
   {
-    console.log(data);
-  }  
+    this.tableValid = true;
+    
+    data.forEach(el => {
+      if(!el.id || !el.name)
+        this.tableValid = false;
+    })
+
+    this.tableChosen = data;
+  }
 }
 
