@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +26,9 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-//@PreAuthorize("hasRole('ROLE_MANAGER')")
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/manager")
 public class ManagerController {
 

@@ -29,8 +29,9 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-//@PreAuthorize("hasRole('ROLE_ENGINEER')")
+@PreAuthorize("hasRole('ROLE_ENGINEER')")
 @RequestMapping("/engineer")
 public class EngineerController {
 

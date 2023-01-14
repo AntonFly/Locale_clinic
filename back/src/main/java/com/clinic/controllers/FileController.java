@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
 @PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/file")
