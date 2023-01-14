@@ -34,15 +34,12 @@ export class LoginComponent implements OnInit {
     "ROLE_SCIENTIST": "scientist/"
     };
 
-  validation_messages = {    
-    'eventType': [
-      { type: 'required', message: 'Выберете роль' },
-    ],
+  validation_messages = {        
     'username':[
-      {type: 'required', message:''}
+      {type: 'required', message:'Укажите email'}
     ],
     'password':[
-      {type: 'required', message:''}
+      {type: 'required', message:'Укажите пароль'}
     ]    
   };
 
@@ -58,10 +55,10 @@ export class LoginComponent implements OnInit {
   }
 
   get formControlEmail() {
-    return this.UserForm.get('Email');
+    return this.UserForm.get('username');
   }
   get formControlPass() {
-    return this.UserForm.get('Pass');
+    return this.UserForm.get('password');
   }
 
   get formControlEvent() {
@@ -79,21 +76,7 @@ export class LoginComponent implements OnInit {
     });
   }
   
-  onSubmitFileDetails(event: any) {
-    console.log(event);
-    
-    this.authenticationService.login(
-      {
-        id: 1,
-        email: "divand@divand.divand",
-        name: "Ivan",
-        surname: "Davydov",
-        patronymic: "Denisovich",
-        role: event.eventType,
-        password: "xd313"
-      });
-    this.router.navigateByUrl(this.defaultRoutes[event.eventType]);
-  }
+  
 
   logout($event){
     this.authenticationService.logout();

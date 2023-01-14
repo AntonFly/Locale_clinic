@@ -82,6 +82,12 @@ public class MedicController {
         return clientService.getAllClients();
     }
 
+    @GetMapping("/get_client_by_passport")
+    public Client clientExists(@RequestParam Long passport)
+            throws PassportNotFoundException, NoPersonToClientException
+    {
+        return clientService.getClientByPassport(passport);
+    }
     @PostMapping("/update_implants")
     public Client addImplants(@RequestBody SimpleImplantsUpdate implantsUpdate) throws ClientNotFoundException {
         return clientService.addImplants(implantsUpdate);

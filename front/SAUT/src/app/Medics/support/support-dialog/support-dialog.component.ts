@@ -17,7 +17,7 @@ export class SupportDialogComponent implements OnInit {
   modsNum: number;
 
   constructor(  private dialogRef: MatDialogRef<SupportDialogComponent>,
-                @Inject(MAT_DIALOG_DATA) private data    
+                @Inject(MAT_DIALOG_DATA) public data    
   ) { 
     
     if(data.error)

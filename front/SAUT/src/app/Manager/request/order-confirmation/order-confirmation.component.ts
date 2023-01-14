@@ -50,7 +50,7 @@ export class OrderConfirmationComponent implements OnInit {
     return this.client.person.surname+' '+this.client.person.name.substring(0,1)+'. '+this.client.person.patronymic.substring(0,1)+'.'
   }
 
-  closeClick(event) { this.close.emit(true); }
+  closeClick() { this.close.emit(true); }
 
   uploadFiles(file){
     console.log(file);

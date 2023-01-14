@@ -5,7 +5,7 @@
   <div class="form-div">
     <mat-form-field class="full-width">
         <input matInput placeholder="Email" formControlName="username" required>
-        <mat-error *ngFor="let validation of validation_messages.Email">
+        <mat-error *ngFor="let validation of validation_messages.username">
           <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
         </mat-error>
     </mat-form-field>
@@ -13,7 +13,7 @@
     <mat-form-field class="full-width">
         <input matInput placeholder="Пароль" formControlName="password" required [type]="hide ? 'password' : 'text'">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        <mat-error *ngFor="let validation of validation_messages.Pass">
+        <mat-error *ngFor="let validation of validation_messages.password">
           <mat-error class="error-message" *ngIf="formControlPass.hasError(validation.type) && (formControlPass.dirty || formControlPass.touched)">{{validation.message}}</mat-error>
         </mat-error>
     </mat-form-field>              

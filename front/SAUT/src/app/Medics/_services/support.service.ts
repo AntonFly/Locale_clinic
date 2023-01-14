@@ -19,6 +19,11 @@ export class SupportService {
     return this.http.get<Order[]>(this.baseUrl+"medic/get_scenarios_by_spec/"+body);
   }
 
+  getClient(pass: number) {
+    let body = "?passport=" + pass;
+    return this.http.get<Client>(this.baseUrl+"medic/get_client_by_passport/" + body);                
+  }
+
   getOrdersByPassport(id: number) {
     let body = "?passport="+id;
     return this.http.get<Order[]>(this.baseUrl+"medic/get_orders_by_client_passport/"+body);

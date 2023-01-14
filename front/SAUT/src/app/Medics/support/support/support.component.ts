@@ -92,7 +92,7 @@ export class SupportComponent implements OnInit {
     }
 
     this.selectedOrder=undefined;
-    this.clientService.getClient(parseInt(id)).subscribe(
+    this.supportService.getClient(parseInt(id)).subscribe(
       result => {                              
         this.isClientError = false;
         this.clientErrorMsg = "";

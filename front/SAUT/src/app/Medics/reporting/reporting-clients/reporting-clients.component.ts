@@ -97,7 +97,7 @@ export class ReportingClientsComponent implements OnInit {
   getFIO(){        
     return this.client.person.surname+' '+this.client.person.name.substring(0,1)+'. '+this.client.person.patronymic.substring(0,1)+'.';
   }  
-  closeClick(event) { 
+  closeClick() { 
     if(this.page == "client")
       this.close.emit(true); 
     else this.page = "client";
