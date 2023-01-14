@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@RequestMapping("/test")
+@RequestMapping({"/test"})
 public class TestController {
     private final AdminService adminService;
     private final ClientService clientService;
@@ -75,6 +75,18 @@ public class TestController {
         this.pwdDropRequestRepository = pwdr;
         this.stockRepository = str;
     }
+
+    @GetMapping()
+    public String test1()
+    { return "why spring?"; }
+
+    @GetMapping({"/lol"})
+    public String test2()
+    { return "suja?"; }
+
+    @GetMapping("/test1")
+    public String test3()
+    { return "????"; }
 
     @GetMapping("/test")
     public List<Modification> test() throws SpecializationNotFoundException {

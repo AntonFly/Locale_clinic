@@ -146,7 +146,7 @@ class MedicControllerTest {
     void getScriptByOrder() throws OrderNotFoundException, NoScenarioForOrderException, ScenarioOrderException, SpecializationNotFoundException, ModificationNotFoundException {
 
 
-        sc.createScenario(new SimpleScenarioRegistration(1L, createdOrder.getId(), List.of(1L)));
+        //sc.createScenario(new SimpleScenarioRegistration(1L, createdOrder.getId(), List.of(1L)));
 
         assertEquals(selectedModification.getAccompaniment(),mc.getScriptByOrder(createdOrder.getId()).getScenarios().replace("\r\n",""));
 
