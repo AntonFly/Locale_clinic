@@ -4,8 +4,6 @@ import com.clinic.configs.security.jwt.JwtUtils;
 import com.clinic.configs.security.services.UserDetailsImpl;
 import com.clinic.dto.SimpleJwtResponse;
 import com.clinic.dto.SimpleLoginRequest;
-import com.clinic.repositories.RoleRepository;
-import com.clinic.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,25 +21,23 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    public AuthController(
+            AuthenticationManager am,
+            JwtUtils ju
+    )
+    {
+        this.authenticationManager = am;
+        this.jwtUtils = ju;
+    }
 
     @PostMapping("/sign_in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody SimpleLoginRequest loginRequest)
     {
-        System.out.println("logreq: " + loginRequest);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 

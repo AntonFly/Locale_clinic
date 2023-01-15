@@ -19,11 +19,8 @@ public class StockController {
     private final StockService stockService;
 
     @Autowired
-    public StockController(
-            StockService ss
-    ){
-        this.stockService = ss;
-    }
+    public StockController(StockService ss)
+    { this.stockService = ss; }
 
     @GetMapping("/get_all_items")
     public List<Stock> getAllItems()

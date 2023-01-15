@@ -186,9 +186,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean dropImplant(long implantId) throws ImplantNotFountException {
-            implantRepository.deleteById(implantId);
-            return true;
+    public Boolean dropImplant(long implantId)
+            throws ImplantNotFountException
+    {
+        Implant implant = implantRepository.findById(implantId)
+                .orElseThrow(() -> new ImplantNotFountException(implantId));
+
+        implantRepository.delete(implant);
+        return true;
     }
 
 }

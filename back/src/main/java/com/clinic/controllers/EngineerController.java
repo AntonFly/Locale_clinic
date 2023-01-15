@@ -3,10 +3,7 @@ package com.clinic.controllers;
 import com.clinic.entities.AccompanimentScript;
 import com.clinic.entities.Client;
 import com.clinic.entities.Order;
-import com.clinic.exceptions.ConfirmationMissingException;
-import com.clinic.exceptions.NoPersonToClientException;
-import com.clinic.exceptions.OrderNotFoundException;
-import com.clinic.exceptions.PassportNotFoundException;
+import com.clinic.exceptions.*;
 import com.clinic.services.*;
 import com.clinic.utilities.FileUploadResponse;
 import com.clinic.utilities.FileUtil;
@@ -39,7 +36,7 @@ public class EngineerController {
     private final FileService fileService;
     private final OrderService orderService;
 
-    private  PDFService pdfService;
+    private final PDFService pdfService;
 
     @Autowired
     public EngineerController(
@@ -77,11 +74,9 @@ public class EngineerController {
 
 
     @PostMapping("/uploadGenome/{order}")
-    public ResponseEntity<FileUploadResponse> uploadGenome(
-            @RequestParam("file") MultipartFile multipartFile,
-            @PathVariable("order") Long orderId)
-            throws IOException, OrderNotFoundException {
-
+    public ResponseEntity<FileUploadResponse> uploadGenome(@RequestParam("file") MultipartFile multipartFile, @PathVariable("order") Long orderId)
+            throws IOException, OrderNotFoundException
+    {
         String[] fileParts = StringUtils.cleanPath(multipartFile.getOriginalFilename()).split("\\.");
 
         String fileName = "genomeOrder_"+orderId+"_"+ LocalDate.now() +"."+fileParts[fileParts.length-1];
@@ -101,40 +96,25 @@ public class EngineerController {
     }
 
     @GetMapping("/downloadGenome")
-    public ResponseEntity<InputStreamResource> getConfirmation(
-            @RequestParam String file
-    ) throws IOException {
-        try {
-            return FileUtil.downloadFile("genome/"+file);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            return null;
-        }
-    }
+    public ResponseEntity<InputStreamResource> getConfirmation(@RequestParam String file)
+            throws IOException
+    { return FileUtil.downloadFile("genome/"+file); }
 
     @GetMapping("/getScenario/{order}")
-    public ResponseEntity<InputStreamResource> getScenario(
-            @PathVariable("order") Long orderId
-    ) throws OrderNotFoundException, IOException, DocumentException {
-        try
-        {
-            Order currentOrder = orderService.getOrderById(orderId);
-            String filePath = pdfService.generateScenario(currentOrder);
+    public ResponseEntity<InputStreamResource> getScenario(@PathVariable("order") Long orderId)
+            throws OrderNotFoundException, IOException, DocumentException, NoScenarioForOrderException
+    {
+        Order currentOrder = orderService.getOrderById(orderId);
+        String filePath = pdfService.generateScenario(currentOrder);
 
-            File file = new File(filePath);
-            HttpHeaders respHeaders = new HttpHeaders();
-            MediaType mediaType = MediaType.parseMediaType("application/pdf");
-            respHeaders.setContentType(mediaType);
-            respHeaders.setContentLength(file.length());
-            respHeaders.setContentDispositionFormData("attachment", file.getName());
-            InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
-            return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        File file = new File(filePath);
+        HttpHeaders respHeaders = new HttpHeaders();
+        MediaType mediaType = MediaType.parseMediaType("application/pdf");
+        respHeaders.setContentType(mediaType);
+        respHeaders.setContentLength(file.length());
+        respHeaders.setContentDispositionFormData("attachment", file.getName());
+        InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
+        return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
     }
 
 }

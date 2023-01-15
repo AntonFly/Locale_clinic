@@ -19,25 +19,17 @@ import java.util.Set;
 @RequestMapping("/medic")
 public class MedicController {
 
-    private SpecializationService specializationService;
-    private ModificationService modificationService;
-    private ClientService clientService;
-    private OrderService orderService;
-    private ScenarioService scenarioService;
+    private final ClientService clientService;
+    private final OrderService orderService;
 
     @Autowired
     public MedicController(
-            SpecializationService ss,
-            ModificationService ms,
             ClientService cs,
-            OrderService os,
-            ScenarioService scs
-    ){
-        this.specializationService = ss;
-        this.modificationService = ms;
+            OrderService os
+    )
+    {
         this.clientService = cs;
         this.orderService = os;
-        this.scenarioService = scs;
     }
 
     @GetMapping("/get_orders_by_client_passport")
@@ -60,16 +52,12 @@ public class MedicController {
     @PutMapping("/update_change")
     public BodyChange updateBodyChangeForOrder(@RequestBody SimpleChange changesData, @RequestParam long orderId )
             throws OrderNotFoundException
-    {
-        return orderService.updateBodyChange(changesData,orderId);
-    }
+    { return orderService.updateBodyChange(changesData,orderId); }
 
     @GetMapping("/get_body_changes")
     public List<BodyChange> getBodyChangesForOrder(@RequestParam long orderId)
             throws OrderNotFoundException
-    {
-        return orderService.getBodyChanges(orderId);
-    }
+    { return orderService.getBodyChanges(orderId); }
 
     @DeleteMapping("/drop_change")
     public Boolean dropBodyChange(@RequestBody long bodyChangeId)
@@ -85,19 +73,17 @@ public class MedicController {
     @GetMapping("/get_client_by_passport")
     public Client clientExists(@RequestParam Long passport)
             throws PassportNotFoundException, NoPersonToClientException
-    {
-        return clientService.getClientByPassport(passport);
-    }
+    { return clientService.getClientByPassport(passport); }
+
     @PostMapping("/update_implants")
-    public Client addImplants(@RequestBody SimpleImplantsUpdate implantsUpdate) throws ClientNotFoundException {
-        return clientService.addImplants(implantsUpdate);
-    }
+    public Client addImplants(@RequestBody SimpleImplantsUpdate implantsUpdate)
+            throws ClientNotFoundException
+    { return clientService.addImplants(implantsUpdate); }
 
     @DeleteMapping("/drop_implant")
     public Boolean dropImplant(@RequestBody long implantId)
-            throws BodyChangeNotFoundException, ImplantNotFountException {
-        return clientService.dropImplant(implantId);
-    }
+            throws ImplantNotFountException
+    { return clientService.dropImplant(implantId); }
 
 
 

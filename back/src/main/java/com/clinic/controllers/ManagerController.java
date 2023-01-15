@@ -32,14 +32,14 @@ import java.util.*;
 @RequestMapping("/manager")
 public class ManagerController {
 
-    private SpecializationService specializationService;
-    private ModificationService modificationService;
-    private ClientService clientService;
-    private OrderService orderService;
+    private final SpecializationService specializationService;
+    private final ModificationService modificationService;
+    private final ClientService clientService;
+    private final OrderService orderService;
 
-    private  ScenarioService scenarioService;
+    private final ScenarioService scenarioService;
 
-    private  PDFService pdfService;
+    private final PDFService pdfService;
 
     @Autowired
     public ManagerController(
@@ -49,7 +49,8 @@ public class ManagerController {
             OrderService os,
             ScenarioService scenarioService,
             PDFService pdfService
-    ){
+    )
+    {
         this.specializationService = ss;
         this.modificationService = ms;
         this.clientService = cs;
@@ -59,33 +60,26 @@ public class ManagerController {
     }
 
     @GetMapping("/get_specs")
-    public List<Specialization> getSpecs(){
-        return specializationService.getAllSpecializations();
-    }
+    public List<Specialization> getSpecs()
+    { return specializationService.getAllSpecializations(); }
 
     @GetMapping("/get_mods")
-    public List<Modification> getMods(){
-        return modificationService.getAllModifications();
-    }
+    public List<Modification> getMods()
+    { return modificationService.getAllModifications(); }
 
     @GetMapping("/get_clients")
-    public List<Client> getClients(){
-        return clientService.getAllClients();
-    }
+    public List<Client> getClients()
+    { return clientService.getAllClients(); }
 
     @GetMapping("/get_client_by_passport")
     public Client clientExists(@RequestParam Long passport)
             throws PassportNotFoundException, NoPersonToClientException
-    {
-       return clientService.getClientByPassport(passport);
-    }
+    { return clientService.getClientByPassport(passport); }
 
     @GetMapping("/get_order_by_passport")
     public Set<Order> getOrders(@RequestParam Long passport)
             throws PassportNotFoundException, NoPersonToClientException
-    {
-        return clientService.getClientByPassport(passport).getOrders();
-    }
+    { return clientService.getClientByPassport(passport).getOrders(); }
 
     @PostMapping("/create_client")
     public Client createClient(@RequestBody SimpleClientRegistration clientData)
@@ -94,30 +88,21 @@ public class ManagerController {
 
     @PostMapping("/create_client_existing_person")
     public Client createClientWithExistingPerson(@RequestBody ExistingPersonClientRegistration clientData)
-            throws PersonConflictException, ClientConflictException, PassportConflictException {
-
-        return clientService.createClient(clientData);
-    }
+            throws PersonConflictException, ClientConflictException, PassportConflictException
+    { return clientService.createClient(clientData); }
 
     @GetMapping("/get_mods_by_spec")
     public Set<Modification> getModsBySpec(@RequestParam int specId)
             throws SpecializationNotFoundException
-    {
-        return scenarioService.getAllModificationsBySpec(specId);
-    }
+    { return scenarioService.getAllModificationsBySpec(specId); }
 
     @GetMapping("/get_orders")
     public List<Order> getOrders()
-    {
-        return orderService.getAllOrders();
-    }
+    { return orderService.getAllOrders(); }
 
     @PostMapping("/create_order")
     public Order createOrder(@RequestBody SimpleOrderRegistration orderData)
-            throws
-            ClientNotFoundException,
-            SpecializationNotFoundException,
-            ModificationNotFoundException
+            throws ClientNotFoundException, SpecializationNotFoundException, ModificationNotFoundException
     {
         Order order = new Order();
         order.setClient(clientService.getClient(orderData.getClientId()));
@@ -136,78 +121,52 @@ public class ManagerController {
     }
 
     @PostMapping("/update_client")
-    public Client changeClient(@RequestBody SimpleClientRegistration clientInfo, @RequestParam Long clientId){
-        return clientService.updateClient(clientInfo, clientId);
-    }
+    public Client changeClient(@RequestBody SimpleClientRegistration clientInfo, @RequestParam Long clientId)
+    { return clientService.updateClient(clientInfo, clientId); }
 
     @PostMapping("/add_previous_modification")
-    public  Client addPreviousModifications(@RequestBody SimpleModificationAdd modificationAdd) throws ClientNotFoundException {
-
-        try {
-            return  clientService.addPreviousModifications(modificationAdd);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            return null;
-        }
-
-
-    }
+    public  Client addPreviousModifications(@RequestBody SimpleModificationAdd modificationAdd)
+            throws ClientNotFoundException, ModificationNotFoundException
+    { return  clientService.addPreviousModifications(modificationAdd); }
 
     @GetMapping("/get_commercial/{order}")
-    public ResponseEntity<InputStreamResource> get_commercial(
-            @PathVariable("order") Long orderId
-    ) throws OrderNotFoundException, IOException, DocumentException {
+    public ResponseEntity<InputStreamResource> get_commercial(@PathVariable("order") Long orderId)
+            throws OrderNotFoundException, IOException, DocumentException
+    {
         Order currentOrder = orderService.getOrderById(orderId);
         String filePath = pdfService.generateCommercial(currentOrder);
 
-        try
-        {
-            File file = new File(filePath);
-            HttpHeaders respHeaders = new HttpHeaders();
-            MediaType mediaType = MediaType.parseMediaType("application/pdf");
-            respHeaders.setContentType(mediaType);
-            respHeaders.setContentLength(file.length());
-            respHeaders.setContentDispositionFormData("attachment", file.getName());
-            InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
-            return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        File file = new File(filePath);
+        HttpHeaders respHeaders = new HttpHeaders();
+        MediaType mediaType = MediaType.parseMediaType("application/pdf");
+        respHeaders.setContentType(mediaType);
+        respHeaders.setContentLength(file.length());
+        respHeaders.setContentDispositionFormData("attachment", file.getName());
+        InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
+        return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
     }
 
     @GetMapping("/get_risks/{order}")
-    public ResponseEntity<InputStreamResource> get_risks(
-            @PathVariable("order") Long orderId
-    ) throws OrderNotFoundException, IOException, DocumentException {
-        try
-        {
-            Order currentOrder = orderService.getOrderById(orderId);
-            String filePath = pdfService.generateRiskList(currentOrder);
+    public ResponseEntity<InputStreamResource> get_risks(@PathVariable("order") Long orderId)
+            throws OrderNotFoundException, IOException, DocumentException
+    {
+        Order currentOrder = orderService.getOrderById(orderId);
+        String filePath = pdfService.generateRiskList(currentOrder);
 
-            File file = new File(filePath);
-            HttpHeaders respHeaders = new HttpHeaders();
-            MediaType mediaType = MediaType.parseMediaType("application/pdf");
-            respHeaders.setContentType(mediaType);
-            respHeaders.setContentLength(file.length());
-            respHeaders.setContentDispositionFormData("attachment", file.getName());
-            InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
-            return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return new ResponseEntity<InputStreamResource>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        File file = new File(filePath);
+        HttpHeaders respHeaders = new HttpHeaders();
+        MediaType mediaType = MediaType.parseMediaType("application/pdf");
+        respHeaders.setContentType(mediaType);
+        respHeaders.setContentLength(file.length());
+        respHeaders.setContentDispositionFormData("attachment", file.getName());
+        InputStreamResource isr = new InputStreamResource(Files.newInputStream(file.toPath()));
+        return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/uploadConfirmation/{order}")
-    public ResponseEntity<FileUploadResponse> uploadConfirmation(
-            @RequestParam("file") MultipartFile multipartFile,
-            @PathVariable("order") Long orderId)
-            throws IOException, OrderNotFoundException {
-
+    public ResponseEntity<FileUploadResponse> uploadConfirmation(@RequestParam("file") MultipartFile multipartFile, @PathVariable("order") Long orderId)
+            throws IOException, OrderNotFoundException
+    {
         String[] fileParts = StringUtils.cleanPath(multipartFile.getOriginalFilename()).split("\\.");
 
         String fileName = "confirmationOrder_"+orderId+"_"+ LocalDate.now() +"."+fileParts[fileParts.length-1];
@@ -227,15 +186,8 @@ public class ManagerController {
     }
 
     @GetMapping("/download_confirmation")
-    public ResponseEntity<InputStreamResource> get_confirmation(
-            @RequestParam String file
-    ) throws IOException {
-        try {
-            return FileUtil.downloadFile("confirmation/"+file);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            return null;
-        }
-    }
+    public ResponseEntity<InputStreamResource> get_confirmation(@RequestParam String file)
+            throws IOException
+    { return FileUtil.downloadFile("confirmation/" + file); }
 
 }

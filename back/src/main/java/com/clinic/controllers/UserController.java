@@ -15,12 +15,8 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(
-            UserService userService
-    )
-    {
-        this.userService = userService;
-    }
+    public UserController(UserService userService)
+    { this.userService = userService; }
 
     @PostMapping("/create_pwd_drop_request")
     public PwdDropRequest createPwdDropRequest(@RequestBody SimplePwdDropRequest pwdDropRequestData)
