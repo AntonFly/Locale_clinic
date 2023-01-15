@@ -85,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
         AccompanimentScript script = currentOrder.getAccompanimentScript();
 
+
         return  script != null ? script : generateAccompanimentScript(currentOrder);
     }
 

@@ -69,12 +69,11 @@
 
 /* ////////////////////////////////// */
 
-::ng-deep {
+/*::ng-deep {
   .mat-form-field-appearance-fill .mat-form-field-flex{
     background-color: rgba(1,1,1,0) !important;
   }
-}
-
+}*/
 .formContainer{
     padding-top: 20px;
 }
