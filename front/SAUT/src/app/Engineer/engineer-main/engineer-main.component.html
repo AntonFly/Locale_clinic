@@ -1,0 +1,112 @@
+<app-add-genome [client]="currentClient" [order]="selectedOrder" (close)="isGenomePage=!isGenomePage" *ngIf="isGenomePage"></app-add-genome>
+<div *ngIf="!isGenomePage">
+  <h1>Сопровождение трансформации</h1>
+  <div class="formContainer">
+    <form class="example-form">
+      <h3>Введите идентификатор клиента</h3>
+      <mat-form-field class="full-width">
+        <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" [formControl]="passport" required>
+        <mat-error *ngFor="let validation of validation_messages.passport">
+          <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
+        </mat-error>          
+        <!-- <mat-hint *ngIf="currentClient!==undefined&&!isClientError">
+          {{"Клиент: "+getFIO(currentClient.person)}}
+        </mat-hint> -->
+        <mat-hint style="color: red;" *ngIf="isClientError">
+          {{clientErrorMsg}}
+        </mat-hint>
+      </mat-form-field>
+        
+      <mat-accordion *ngIf="currentClient!==undefined" class="headers-align">          
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Данные клиента
+            </mat-panel-title>              
+            <mat-panel-description>
+              {{panelOpenState ? "" : "Ф.И.О.: "+getFIO(currentClient.person)}}
+              <mat-icon *ngIf="!panelOpenState">account_circle</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>            
+          <mat-divider style="margin-top: -13px;"></mat-divider>
+          <div style="padding-top:6px">
+            <table class='table table-striped' aria-labelledby="tableLabel">                        
+              <tbody>
+                <tr>
+                  <td> Ф.И.О </td>
+                  <td>{{currentClient.person.name+" "+currentClient.person.surname+" "+ currentClient.person.patronymic}} </td>                      
+                </tr>
+                <tr>
+                  <td> Примечания </td>
+                  <td>{{currentClient.comment}} </td>                      
+                </tr>
+                <tr>
+                  <td> Дата рождения </td>
+                  <td>{{currentClient.person.dateOfBirth | date:'dd.MM.yyyy'}} </td>                      
+                </tr>
+                <tr>
+                  <td> Email </td>
+                  <td>{{currentClient.email}} </td>                      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+        <!-- TODO VALID ERRORS FOR EVERY REQUEST -->
+      <div *ngIf="!currentClient" >
+        <!-- <mat-icon style="font-size: 60px;">warning</mat-icon> -->
+        Укажите действительного клиента
+      </div> 
+      <div *ngIf="currentClient">
+        <h3 style="padding-top:6px">Выберете заявку</h3>                                    
+        <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="currentOrders">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>специализация</th>
+              <th>Комментарий</th>
+              <th>Модификации</th>
+              <th>Подтверждение</th>
+              <th>Сценарий</th>
+              <th>Геном</th>
+            </tr>
+          </thead>
+          <tbody>            
+            <tr 
+              (dblclick)="selectOrder(order)" 
+              [ngClass]="{'valid-row-hov': order.scenario&&order.confirmation&&order.hover}" 
+              class="tableRow" 
+              *ngFor="let order of currentOrders; let i = index" 
+              [attr.data-index]="i" 
+              (mouseenter)="order.hover=true"
+              (mouseleave)="order.hover=false"
+              >
+              <td> {{order.id}} </td>
+              <td>{{ order.specialization.name ? order.specialization.name : "-"}}</td>              
+              <td>{{ order.comment ? order.comment : "-"}}</td>
+              <td>
+                <li *ngFor="let mod of order.modifications">
+                  {{mod.name}}
+                </li>
+                <span *ngIf="!order.modifications || order.modifications.length == 0"> - </span>
+              </td>
+              <td>
+                {{order.confirmation ? "Есть" : "Нет"}}
+              </td>
+              <td>
+                {{order.scenario ? "Есть" : "Нет"}}
+              </td>
+              <td>
+                {{order.genome ? "Есть" : "Нет"}}
+              </td>              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>      
+  </div>
+</div>
+    

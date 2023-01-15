@@ -4,9 +4,10 @@ import { NotFoundComponent } from './common/not-found/not-found.component';
 import { HomeComponent } from './common/home/home.component';
 import { LoginComponent } from './common/login/login.component'
 import { RoleGuard } from './_guards/role.guard';
+import { RootGuard } from './_guards/root.guard';
 
 const routes: Routes = [
-  // { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [RootGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'admin', loadChildren: () => import('./Administrator/administrator.module').then(m => m.AdministratorModule), canActivate: [RoleGuard] },
   { path: 'manager', loadChildren: () => import('./Manager/manager.module').then(m => m.ManagerModule), canActivate: [RoleGuard]},

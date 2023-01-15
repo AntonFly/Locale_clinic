@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
@@ -67,6 +68,11 @@ public class EngineerController {
     public Client getClientByPassport(@RequestParam long passport) throws
             PassportNotFoundException, NoPersonToClientException
     { return clientService.getClientByPassport(passport); }
+
+    @GetMapping("/get_orders_by_client_passport")
+    public Set<Order> getOrdersByClientId(@RequestParam Long passport)
+            throws PassportNotFoundException, NoPersonToClientException
+    { return orderService.getAllOrdersByPassport(passport); }
 
     @GetMapping("/get_all_clients")
     public List<Client> getAllClients()

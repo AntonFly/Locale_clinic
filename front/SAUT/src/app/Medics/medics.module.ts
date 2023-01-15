@@ -34,7 +34,7 @@ import { ReportingChangesFormComponent } from './reporting/reporting-changes-for
 
  
 const routes: Routes = [
-    {   path: 'medic', redirectTo: '/medic/support', pathMatch: 'full'},
+    {   path: '', redirectTo: '/medic/support', pathMatch: 'full'},
     {   path: 'support',   component: SupportComponent},
     {   path: 'reporting',   component: ReportingComponent   },    
 ];

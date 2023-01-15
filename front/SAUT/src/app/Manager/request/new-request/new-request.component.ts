@@ -1,3 +1,5 @@
+import { MatDialog, MatDialogRef } from '@angular/material';
+import {ClientsDialogComponent} from '../../clients/clients-dialog/clients-dialog.component'
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -17,12 +19,14 @@ import { Order, Mod, Spec } from '../../../_models/Order';
 })
 export class NewRequestComponent implements OnInit {
   
-  RequestForm: FormGroup;   
+  ClientsDialogRef: MatDialogRef<ClientsDialogComponent>;
+
+  RequestForm: FormGroup;
 
   panelOpenState = false;
 
-  toSelect: string[] = [];
-  selected: string[] = [];
+  toSelect = [];
+  selected = [];
   
   currentClient: Client;
   isClientError: boolean = false;
@@ -43,7 +47,9 @@ export class NewRequestComponent implements OnInit {
   filteredOptionsSpec: Observable<String[]>;
   nameToId= {};
 
-  constructor(  private orderService: OrderService, 
+  constructor(  
+                private dialog: MatDialog,
+                private orderService: OrderService, 
                 private clientService: ClientsService,
                 private fb: FormBuilder) { }
 
@@ -138,13 +144,24 @@ export class NewRequestComponent implements OnInit {
     this.currentClient = undefined;
   }
 
-  //~~~~~~~~~~~~~~~~REQUESTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-  onSubmitRequest(event: any){
-      console.log('Request submit '+event)
-      this.orderService.createOrder(event, this.selected).subscribe(
-        result => {
-          console.log(result);          
+  openClientDialog(){
+    this.ClientsDialogRef = this.dialog.open(ClientsDialogComponent,{
+      hasBackdrop:true
+    });
 
+    this.ClientsDialogRef
+      .afterClosed()
+      .pipe()
+      .subscribe(closed => {/*this.updateUsers()*/})
+
+  }
+
+  //~~~~~~~~~~~~~~~~REQUESTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+  onSubmitRequest(event: any){      
+      var modIds = this.selected.map(el => { return this.modsToId[el]});
+
+      this.orderService.createOrder(this.currentClient.id,this.nameToId[event.Specialization],event.comment,modIds).subscribe(
+        result => {          
           this.formMsg = "Заявка успешно добавлена";
           this.isFormError = false;
 
@@ -155,8 +172,7 @@ export class NewRequestComponent implements OnInit {
           
 
         },
-        error => {
-          console.log(error);
+        error => {          
           this.isFormError = true;
           if(error.error.status === "CONFLICT")
             this.formMsg = error.error.message;
@@ -174,8 +190,7 @@ export class NewRequestComponent implements OnInit {
 
   updateSpecs(){
     this.orderService.getSpecializations().subscribe(
-      result => {
-        console.log(result);
+      result => {        
         result.forEach(item => {
           this.optionsSpec.push(item.name);
           this.nameToId[item.name] = item.id;
@@ -217,30 +232,28 @@ export class NewRequestComponent implements OnInit {
       });        
   }
 
+  modsToId = {};
   getModsBySpec(){
-    let spec = this.formControlSpec.value;
-    console.log(this.optionsSpec);
+    let spec = this.formControlSpec.value;    
     if( this.optionsSpec.indexOf(spec) > -1)
     {    
       this.isSpecError = false;
       this.specErrorMsg = "";
 
       this.orderService.getModsBySpec(this.nameToId[spec]).subscribe(
-        result => {                                
-          console.log("get mods by spec() succ");
-          console.log(result);          
+        result => {                                          
           this.toSelect = [];
           this.selected = [];
 
-          this.currentMods = result;          
-          result.forEach(item => {
+          this.currentMods = result;
+          result.forEach(item => {            
             this.toSelect.push(item.name);
-          });          
+            this.modsToId[item.name] = item.id;
+          });
           this.isModsError = false;
           this.modsErrorMsg = "";
         },
-        error => {        
-          console.log("get mods by spec() error");
+        error => {                  
           console.log(error);                  
           this.toSelect = [];
           this.selected = [];
@@ -255,6 +268,10 @@ export class NewRequestComponent implements OnInit {
       this.isSpecError = true;
       this.specErrorMsg = "Такой специализации не существует";
     }
+  }
+  checkPatch(opt){    
+    this.RequestForm.patchValue({Specialization: opt})
+    this.getModsBySpec();
   }
 
 }

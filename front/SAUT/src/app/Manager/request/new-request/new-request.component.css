@@ -6,6 +6,15 @@
   vertical-align: top;
 }
 
+.form-header{
+  display: flex;
+  align-items: baseline;
+  margin: 0 auto;
+  min-width: 150px;
+  max-width: 520px;
+  width: 100%;
+}
+
 .example-list {
   width: 500px;
   max-width: 100%;
@@ -84,11 +93,14 @@
 
 
 
+.header-button{
+  position:absolute;
+  margin-left: 70%;
+}
 
-
-.RequestButtons {
-      margin: 5px;
-  }
+.RequestButtons {  
+  margin: 5px;
+}
 
   .headers-align .mat-expansion-panel-header-title,
 .headers-align .mat-expansion-panel-header-description {
@@ -101,7 +113,7 @@
 }
 
 .client-id{
-  width: 70%;
+  /* width: 100%; */
 }
 
 .client-id-div{
@@ -109,7 +121,9 @@
 }
 
 .new-client-btn{
-   margin-bottom: 20px;
+  margin-bottom: 20px;
+  position:absolute;
+  margin-left: 80%;
 }
 
 

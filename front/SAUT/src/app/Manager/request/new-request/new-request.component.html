@@ -1,8 +1,13 @@
 <div class="formContainer">
-  <form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">
-    <h3>Введите идентификатор клиента</h3>
+  <button mat-raised-button color="primary" class="new-client-btn" (click)="openClientDialog()">Создать клиента</button>
+  <div class="form-header">
+    <h3>Введите идентификатор клиента</h3>    
+  </div>
+
+  <form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">    
     <div class="client-id-div">
-    <mat-form-field class="client-id">
+    
+      <mat-form-field class="full-width">
       <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" formControlName="passport" required >
       <mat-error *ngFor="let validation of validation_messages.passport">
         <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
@@ -13,9 +18,9 @@
       <mat-hint style="color: red;" *ngIf="isClientError">
         {{clientErrorMsg}}
       </mat-hint>
-    </mat-form-field>
-    <button class="RequestButtons" mat-raised-button color="primary" class="new-client-btn">Создать клиента</button>
+    </mat-form-field>    
     </div>
+
     <mat-accordion *ngIf="currentClient!==undefined" class="headers-align">
       <mat-expansion-panel (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">
@@ -67,7 +72,7 @@
           formControlName="Specialization"
           [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete" >
-        <mat-option *ngFor="let option of filteredOptionsSpec | async" [value]="option">
+        <mat-option (click)="checkPatch(option)" *ngFor="let option of filteredOptionsSpec | async" [value]="option">
             {{option}}
         </mat-option>
       </mat-autocomplete>
@@ -122,8 +127,8 @@
 
     <div>
       <button class="RequestButtons" mat-raised-button color="primary" type="submit" [disabled]="!RequestForm.valid||checkErrors()">Создать заявку</button>
-      <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить стоимость</button>
-      <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить риски</button>
+      <!-- <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить стоимость</button>
+      <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить риски</button> -->
     <!-- !RequestForm.valid&&selected.length===0 <button mat-button >Отмена</button> -->
     </div>
     <span *ngIf="isFormError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>

@@ -43,6 +43,11 @@ export class StockMainComponent implements OnInit {
       label: '',
     },
   ];
+  deletable = function(row) {
+    if(row.stockId)
+      return false;
+    else return true;
+  }
 
   isGlobalError: boolean = false;
 
@@ -93,6 +98,7 @@ export class StockMainComponent implements OnInit {
     this.stockService.submitStock(this.changedStock).subscribe(
       res =>{
         console.log(res)
+        this.refreshList();
         this.isUpdateError = false;
         this.updateMsg = "Успешно сохранено";
         setTimeout(() => {

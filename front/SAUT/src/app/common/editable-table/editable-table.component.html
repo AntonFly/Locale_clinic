@@ -33,7 +33,7 @@
               Изменить
             </button>
             <button
-              *ngIf="!deletable"
+              *ngIf="deletable(element.data)"
               mat-button
               class="button-remove"
               (click)="removeRow(element.id)"

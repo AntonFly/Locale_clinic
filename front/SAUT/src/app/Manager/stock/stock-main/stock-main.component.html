@@ -12,4 +12,4 @@
         </button>
     </div>
 </div>
-<app-editable-table *ngIf="currentStock" [deletable]='true' [data]='currentStock' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>
+<app-editable-table *ngIf="currentStock" [deletable]='deletable' [data]='currentStock' [schema]='columns_schema' (changed)='previousChanged($event)'></app-editable-table>

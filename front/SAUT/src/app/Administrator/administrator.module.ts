@@ -23,7 +23,7 @@ import { AnimationDirective } from './_directives/animation.directive';
 
 
 const routes: Routes = [
-    {   path: 'admin', redirectTo: '/admin/addUser', pathMatch: 'full'},
+    {   path: '', redirectTo: '/admin/addUser', pathMatch: 'full'},
     {   path: 'addUser',   component: NewUserComponent   },
     {   path: 'recoverPass',   component: PassRecoveryComponent },
 ];

@@ -20,6 +20,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
  
 const routes: Routes = [
+  {   path: '', redirectTo: '/scientist/smth', pathMatch: 'full'},
     // {   path: 'support',   component: SupportComponent},
     // {   path: 'reporting',   component: ReportingComponent   },
     // {   path: 'requests',   component: RequestContainerComponent   },

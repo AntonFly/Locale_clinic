@@ -105,7 +105,7 @@
       font-size: 12px;
     }
     
-    .double-line-hint {
+    /* .double-line-hint {
       .mat-input-hint-wrapper
     
     {
@@ -117,7 +117,7 @@
     }
     
     }
-}
+} */
 
 /* FILE DROP */
 .dropzone {

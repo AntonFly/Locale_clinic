@@ -40,6 +40,7 @@ import { EngineersModule } from './Engineer/engineers.module';
 
 /* GUARDS */
 import {RoleGuard} from './_guards/role.guard'
+import { RootGuard } from './_guards/root.guard';
 
 /* INTERCEPTORS */
 import { AuthInterceptor } from './_interceptors/authInterceptor';
@@ -86,7 +87,8 @@ import { AuthInterceptor } from './_interceptors/authInterceptor';
     AuthenticationService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
     { provide: 'BASE_URL', useValue: environment.apiRoot },
-    RoleGuard
+    RoleGuard,
+    RootGuard
   ],
   bootstrap: [AppComponent]
 })

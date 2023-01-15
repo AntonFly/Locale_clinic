@@ -31,7 +31,7 @@ class RowClass {
 export class EditableTableComponent implements OnInit {
   @Input('schema') schema: any;
   @Input('data') data: any;
-  @Input('deletable') deletable: boolean = false;
+  @Input('deletable') deletable = function(row){return true};
   @Input('autocomplete') autocomplete: any;
   @Output('changed') changed: EventEmitter<any> = new EventEmitter();
 

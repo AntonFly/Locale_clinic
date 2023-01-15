@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     "ROLE_ADMIN": "admin/addUser",
     "ROLE_MANAGER": "manager/clients",
     "ROLE_MEDIC": "medic/support",
-    "ROLE_ENGINEER": "engineer/",
+    "ROLE_ENGINEER": "engineer/clients",
     "ROLE_SCIENTIST": "scientist/"
     };
 

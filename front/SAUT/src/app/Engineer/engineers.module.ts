@@ -16,9 +16,13 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { EngineerMainComponent } from './engineer-main/engineer-main.component';
+import { AddGenomeComponent } from './add-genome/add-genome.component';
+import { EngineerService } from './_services';
  
 const routes: Routes = [
-    // {   path: 'support',   component: SupportComponent},
+    {   path: '', redirectTo: '/engineer/main', pathMatch: 'full'},
+    {   path: 'main',   component: EngineerMainComponent},
     // {   path: 'reporting',   component: ReportingComponent   },
     // {   path: 'requests',   component: RequestContainerComponent   },
     // {   path: 'services',   component: ServicesComponent   },
@@ -26,7 +30,8 @@ const routes: Routes = [
  
 @NgModule({
   declarations: [
-      ],
+      EngineerMainComponent,
+      AddGenomeComponent],
   imports: [
     MatButtonModule,
     CommonModule,
@@ -47,7 +52,8 @@ const routes: Routes = [
     MatAutocompleteModule,
     MatExpansionModule
   ],
-  providers: [  
+  providers: [
+    EngineerService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],
   entryComponents: []

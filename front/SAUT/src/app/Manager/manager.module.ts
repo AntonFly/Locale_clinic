@@ -41,7 +41,7 @@ import { StockMainComponent } from './stock/stock-main/stock-main.component';
 import { AnimationDirective } from './_directives/animation.directive';
  
 const routes: Routes = [
-    {   path: 'manager', redirectTo: '/manager/clients', pathMatch: 'full'},
+    {   path: '', redirectTo: '/manager/clients', pathMatch: 'full'},
     {   path: 'clients',    component: ClientsComponent             },
     {   path: 'contracts',  component: ContractsComponent           },
     {   path: 'requests',   component: RequestContainerComponent    },

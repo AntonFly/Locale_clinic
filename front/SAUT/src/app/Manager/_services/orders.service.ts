@@ -31,8 +31,8 @@ export class OrderService {
         return this.http.get<Mod[]>(this.baseUrl+"manager/get_mods_by_spec/"+body);
     }
 
-    createOrder(request: any, mods: string[]) {        
-        let body = {"passport":request.passport, "specName":request.Specialization, "comment":request.comment, "modNames":mods};
+    createOrder(clientId: number, specId: number, comm, mods: number[]) {        
+        let body = {"clientId": clientId, "specId": specId, "comment":comm, "modIds":mods};
     
         let headers = new HttpHeaders({
         'Content-Type': 'application/json'});
