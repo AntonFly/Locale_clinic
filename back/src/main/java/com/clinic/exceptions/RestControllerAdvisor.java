@@ -14,9 +14,10 @@ public class RestControllerAdvisor {
     @ExceptionHandler(
             {
                     ClientConflictException.class,
-                    UserConflictException.class,
+                    PassportConflictException.class,
                     PersonConflictException.class,
-                    StockConflictException.class
+                    StockConflictException.class,
+                    UserConflictException.class
             })
     @ResponseStatus(CONFLICT)
     public ErrorResponse handleConflictException(Exception exception) {
@@ -29,14 +30,18 @@ public class RestControllerAdvisor {
 
     @ExceptionHandler(
             {
-                    SpecializationNotFoundException.class,
-                    ModificationNotFoundException.class,
-                    ClientNotFoundException.class,
-                    OrderNotFoundException.class,
-                    StockNotFoundException.class,
-                    UserNotFoundException.class,
                     BodyChangeNotFoundException.class,
-                    ImplantNotFountException.class
+                    ClientNotFoundException.class,
+                    ConfirmationNotFoundException.class,
+                    FileNotFoundException.class,
+                    ImplantNotFountException.class,
+                    ModificationNotFoundException.class,
+                    OrderNotFoundException.class,
+                    PwdDropRequestNotFoundException.class,
+                    ScenarioOrderException.class,
+                    SpecializationNotFoundException.class,
+                    StockNotFoundException.class,
+                    UserNotFoundException.class
             })
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleMissingException(Exception exception) {
@@ -49,7 +54,11 @@ public class RestControllerAdvisor {
 
     @ExceptionHandler(
             {
-                    InvalidStockDataException.class
+                    InvalidStockDataException.class,
+                    NoPersonToClientException.class,
+                    NoScenarioForOrderException.class,
+                    UnknownModScenarioException.class,
+                    UnspecifiedModScenarioException.class
             })
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleInvalidDataException(Exception exception) {
@@ -64,11 +73,11 @@ public class RestControllerAdvisor {
             {
                     Exception.class
             })
-    @ResponseStatus(BAD_REQUEST)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleOtherException(Exception exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
-                .status(BAD_REQUEST)
+                .status(INTERNAL_SERVER_ERROR)
                 .timestamp(now())
                 .build();
     }

@@ -1,7 +1,6 @@
 package com.clinic.impl;
 
-import com.clinic.exceptions.ConfirmationMissingException;
-import com.clinic.exceptions.FileMissingException;
+import com.clinic.exceptions.FileNotFoundException;
 import com.clinic.services.FileService;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +11,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File getFile(String filename)
-            throws FileMissingException
+            throws FileNotFoundException
     {
         File file = new File("D:\\" + filename);
         if (!file.exists())
-            throw new FileMissingException(file);
+            throw new FileNotFoundException(file);
 
         return file;
     }

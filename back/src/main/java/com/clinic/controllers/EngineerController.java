@@ -54,11 +54,11 @@ public class EngineerController {
 
     @GetMapping("/get_scenario_by_order_id")
     public AccompanimentScript getScript(@RequestParam long orderId)
-            throws OrderNotFoundException, ConfirmationMissingException
+            throws OrderNotFoundException, ConfirmationNotFoundException
     {
         Order order = orderService.getOrderById(orderId);
         if (!fileService.exists(order.getConfirmation()))
-            throw new ConfirmationMissingException(orderId);
+            throw new ConfirmationNotFoundException(orderId);
 
         return order.getAccompanimentScript();
     }

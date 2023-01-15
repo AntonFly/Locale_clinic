@@ -5,11 +5,11 @@ import lombok.Getter;
 import java.io.File;
 
 @Getter
-public class FileMissingException extends Exception {
+public class FileNotFoundException extends Exception {
 
     private final String message;
 
-    public FileMissingException(File file)
+    public FileNotFoundException(File file)
     { message = "Отсутствует файл по пути: " + file.getAbsolutePath(); }
 
 }

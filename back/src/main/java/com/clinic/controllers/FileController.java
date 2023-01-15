@@ -1,7 +1,7 @@
 package com.clinic.controllers;
 
 
-import com.clinic.exceptions.FileMissingException;
+import com.clinic.exceptions.FileNotFoundException;
 import com.clinic.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -30,7 +30,7 @@ public class FileController {
 
     @RequestMapping(method = { RequestMethod.GET }, value = { "/downloadPdf/{file_name}" })
     public ResponseEntity<InputStreamResource> downloadPdf(@PathVariable("file_name") String fileName)
-            throws IOException, FileMissingException
+            throws IOException, FileNotFoundException
     {
         File file = fileService.getFile(fileName);
         HttpHeaders respHeaders = new HttpHeaders();
