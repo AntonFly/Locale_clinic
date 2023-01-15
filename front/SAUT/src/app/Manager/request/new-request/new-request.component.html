@@ -1,8 +1,9 @@
 <div class="formContainer">
   <form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">
     <h3>Введите идентификатор клиента</h3>
-    <mat-form-field class="full-width">
-      <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" formControlName="passport" required>
+    <div class="client-id-div">
+    <mat-form-field class="client-id">
+      <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" formControlName="passport" required >
       <mat-error *ngFor="let validation of validation_messages.passport">
         <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
       </mat-error>
@@ -13,50 +14,51 @@
         {{clientErrorMsg}}
       </mat-hint>
     </mat-form-field>
-
-    <mat-accordion *ngIf="currentClient!==undefined" class="headers-align">          
+    <button class="RequestButtons" mat-raised-button color="primary" class="new-client-btn">Создать клиента</button>
+    </div>
+    <mat-accordion *ngIf="currentClient!==undefined" class="headers-align">
       <mat-expansion-panel (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Данные клиента
-          </mat-panel-title>              
+          </mat-panel-title>
           <mat-panel-description>
             {{panelOpenState ? "" : "Ф.И.О.: "+getFIO(currentClient.person)}}
             <mat-icon *ngIf="!panelOpenState">account_circle</mat-icon>
           </mat-panel-description>
-        </mat-expansion-panel-header>            
+        </mat-expansion-panel-header>
         <mat-divider style="margin-top: -13px;"></mat-divider>
-        <div style="padding-top:6px">          
-          <table class='table table-striped' aria-labelledby="tableLabel">                        
+        <div style="padding-top:6px">
+          <table class='table table-striped' aria-labelledby="tableLabel">
             <tbody>
               <tr>
                 <td> Ф.И.О </td>
-                <td>{{currentClient.person.name+" "+currentClient.person.surname+" "+ currentClient.person.patronymic}} </td>                      
+                <td>{{currentClient.person.name+" "+currentClient.person.surname+" "+ currentClient.person.patronymic}} </td>
               </tr>
               <tr>
                 <td> Примечания </td>
-                <td>{{currentClient.comment}} </td>                      
+                <td>{{currentClient.comment}} </td>
               </tr>
               <tr>
                 <td> Дата рождения </td>
-                <td>{{currentClient.person.dateOfBirth | date:'dd.MM.yyyy'}} </td>                      
+                <td>{{currentClient.person.dateOfBirth | date:'dd.MM.yyyy'}} </td>
               </tr>
               <tr>
                 <td> Email </td>
-                <td>{{currentClient.email}} </td>                      
+                <td>{{currentClient.email}} </td>
               </tr>
             </tbody>
           </table>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-  
-  
+
+
     <h3 style="padding-top: 10px;">Выберете специализацию</h3>
     <mat-form-field class="full-width" appearance="fill">
       <mat-label>Специализация...</mat-label>
-        <input 
+        <input
           (focusout)="getModsBySpec()"
           type="text"
           placeholder="Выберете одну"
@@ -82,13 +84,13 @@
       <mat-hint align="start"><strong>Поле для дополнительной информации</strong> </mat-hint>
       <mat-hint align="end">{{note.value.length}} / 256</mat-hint>
     </mat-form-field>
-    
-    <h3 style="padding-top: 20px;" *ngIf="!isModsError&&(selected.length>0 || toSelect.length > 0)">Выберете модификации</h3>  
-    <div style="width: 130%;margin-left: -10%;" *ngIf="!isModsError&&(selected.length>0 || toSelect.length > 0)"> 
-        
+
+    <h3 style="padding-top: 20px;" *ngIf="!isModsError&&(selected.length>0 || toSelect.length > 0)">Выберете модификации</h3>
+    <div style="width: 130%;margin-left: -10%;" *ngIf="!isModsError&&(selected.length>0 || toSelect.length > 0)">
+
       <div class="example-container">
         <h5 style="margin-left: 30%;">Доступно</h5>
-  
+
         <div
           cdkDropList
           #todoList="cdkDropList"
@@ -98,14 +100,14 @@
           (cdkDropListDropped)="drop($event)">
           <div class="example-box" *ngFor="let item of toSelect" cdkDrag>
             <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-              {{item}}            
+              {{item}}
           </div>
         </div>
       </div>
-  
+
       <div class="example-container">
         <h5 style="margin-left: 30%;">Выбрано</h5>
-  
+
         <div
           cdkDropList
           #doneList="cdkDropList"
@@ -117,15 +119,15 @@
         </div>
       </div>
     </div>
-    
+
     <div>
-      <button class="RequestButtons" mat-raised-button color="primary" type="submit" [disabled]="!RequestForm.valid||checkErrors()">Создать заявку</button>      
+      <button class="RequestButtons" mat-raised-button color="primary" type="submit" [disabled]="!RequestForm.valid||checkErrors()">Создать заявку</button>
       <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить стоимость</button>
       <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить риски</button>
     <!-- !RequestForm.valid&&selected.length===0 <button mat-button >Отмена</button> -->
     </div>
     <span *ngIf="isFormError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
     <span *ngIf="isFormError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
-  </form>  
-  
+  </form>
+
 </div>

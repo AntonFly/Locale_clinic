@@ -62,7 +62,7 @@
 
 ::ng-deep {
   .mat-form-field-appearance-fill .mat-form-field-flex{
-    background-color: rgba(1,1,1,0) !important; 
+    background-color: rgba(1,1,1,0) !important;
   }
 }
 
@@ -76,12 +76,17 @@
     max-width: 520px;
     width: 100%;
   }
-  
+
   .full-width {
     width: 100%;
   }
 
-  .RequestButtons {
+
+
+
+
+
+.RequestButtons {
       margin: 5px;
   }
 
@@ -89,8 +94,22 @@
 .headers-align .mat-expansion-panel-header-description {
     flex-basis: 0;
 }
-  
+
 .headers-align .mat-expansion-panel-header-description {
     justify-content: space-between;
     align-items: center;
 }
+
+.client-id{
+  width: 70%;
+}
+
+.client-id-div{
+  display: flex;
+}
+
+.new-client-btn{
+   margin-bottom: 20px;
+}
+
+
