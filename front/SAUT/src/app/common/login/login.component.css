@@ -19,24 +19,33 @@
 
 .form-btn{
     display: flex;
-    justify-content: right;
     align-items: center;
 }
-  
+
+.form-btn > button {
+    margin-left: auto;
+}
+
+
   .error-message {
     font-size: 12px;
   }
-  
-  .double-line-hint {
-    .mat-input-hint-wrapper
-  
-  {
-    flex-wrap: wrap;
-    .hint-line
-  
-  {
-    flex: 0 0 100%;
-  }
-  
-  }
-  }
+
+.form-info{
+  color: green;
+  margin-right: 10px;
+  margin-left: auto;
+}
+
+.form-error{
+  color: red;
+  margin-right: 10px;
+  margin-left: auto;
+}
+
+.form-info, .form-error + button{
+  margin-left: unset;
+}
+
+
+

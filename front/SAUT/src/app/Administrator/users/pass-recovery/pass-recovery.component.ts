@@ -20,13 +20,11 @@ export class PassRecoveryComponent implements OnInit {
     this.refreshList();
   }
 
-  refreshList()
-  {
-    this.loading = true
+  refreshList() {
+    this.loading = true;
 
     this.adminService.getToRecover().subscribe(
-      (data:any) =>
-      {
+      (data: any) => {
         this.events = data.filter((item) => !item.dropped);
         this.loading = false;
       },
@@ -35,18 +33,17 @@ export class PassRecoveryComponent implements OnInit {
         console.log(error);
         this.isError = true;
       }
-    )
+    );
   }
 
-  openDialog(event)
-  {
+  openDialog(event) {
     const dialogRef = this.dialog.open
       (
-        RecoverDialogComponent,{
-          hasBackdrop:true,
-          width:'30%',
+        RecoverDialogComponent, {
+          hasBackdrop: true,
+          width: '30%',
           // height:'27.78%',
-          data:event
+          data: event
         },
       );
     dialogRef.afterClosed().subscribe( () => this.refreshList());

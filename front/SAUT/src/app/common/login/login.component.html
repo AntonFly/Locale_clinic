@@ -4,7 +4,7 @@
 <form class="client-form" [formGroup]="UserForm" (ngSubmit)="onSubmitClient(UserForm.value)">
   <div class="form-div">
     <mat-form-field class="full-width">
-        <input matInput placeholder="Email" formControlName="username" required>
+        <input matInput placeholder="Email" formControlName="username" required (input)="onEmailChange()" >
         <mat-error *ngFor="let validation of validation_messages.username">
           <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
         </mat-error>
@@ -16,14 +16,15 @@
         <mat-error *ngFor="let validation of validation_messages.password">
           <mat-error class="error-message" *ngIf="formControlPass.hasError(validation.type) && (formControlPass.dirty || formControlPass.touched)">{{validation.message}}</mat-error>
         </mat-error>
-    </mat-form-field>              
+    </mat-form-field>
 
-    <div class="form-btn">      
-      <span *ngIf="formError===false" style="color: green;padding-right: 10px;">{{formMsg}}</span>
-      <span *ngIf="formError===true" style="color: red;padding-right: 10px;">{{formMsg}}</span>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" >Войти</button>    
+    <div class="form-btn">
+      <span *ngIf="retried>0" class="forgotPass" (click)="openDialog()">Восстановить пароль</span>
+      <span *ngIf="formError===false"  class="form-info">{{formMsg}}</span>
+      <span *ngIf="formError===true"  class="form-error">{{formMsg}}</span>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" >Войти</button>
     </div>
-    <span *ngIf="retried>2" class="forgotPass">Восстановить пароль</span>
+
   </div>
   </form>
 
@@ -45,8 +46,8 @@
   <button class="submit-btn" color="primary" mat-raised-button type="submit" [disabled]="!fileDetailsForm.valid">
     Залогиниться
   </button>
-  
+
 </form>
 <button class="submit-btn" color="red" mat-raised-button (click)="logout($event)">
-    Разлогиниться 
+    Разлогиниться
 </button> -->

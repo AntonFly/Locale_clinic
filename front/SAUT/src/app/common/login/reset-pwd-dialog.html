@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Сброс пароля</h1>
+<div mat-dialog-content *ngIf="send == null">
+  Вы действительно хотите сбросить пароль для пользователя {{this.data.value}};
+
+</div>
+<span *ngIf="send===true" >{{formMsg}}</span>
+<span *ngIf="send===false"  class="form-error">{{formMsg}}</span>
+<br>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial mat-dialog-close>Нет</button>
+  <button mat-button (click)="resetPwd()">Да</button>
+</div>

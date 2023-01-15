@@ -11,8 +11,8 @@ export class AdminService {
   constructor(private http: HttpClient, private router: Router, @Inject('BASE_URL') baseUrl: string) { this.baseUrl = baseUrl; }
 
   addUser(user: any) {
-
-    const personData = {'passport': user.passport, 'name': user.name, 'surname': user.surname, 'patronymic': user.patronymic, 'dateOfBirth': user.dateOfBirth };
+    const personData = {'passport': user.passport, 'name': user.name, 'surname': user.surname,
+      'patronymic': user.patronymic, 'dateOfBirth': user.dateOfBirth };
     const body = {'person': personData, 'role': user.role, 'email': user.email, 'password': user.password};
 
     const headers = new HttpHeaders({

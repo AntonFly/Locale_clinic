@@ -16,11 +16,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from '@env/environment';
 import { LoaderComponent } from './loader/loader.component';
 import { EditableTableComponent } from './editable-table/editable-table.component';
+import {ResetPWDDialogComponent} from './login/login.component';
 
 @NgModule({
   declarations: [
     LoaderComponent,
-    EditableTableComponent
+    EditableTableComponent,
+    ResetPWDDialogComponent
   ],
   imports: [
     MatAutocompleteModule,
@@ -37,7 +39,11 @@ import { EditableTableComponent } from './editable-table/editable-table.componen
   ],
   exports: [
     LoaderComponent,
-    EditableTableComponent
-  ]  
+    EditableTableComponent,
+    ResetPWDDialogComponent
+  ],
+  entryComponents: [
+    ResetPWDDialogComponent
+  ]
 })
 export class SharedModule { }
