@@ -37,6 +37,7 @@ public class RestControllerAdvisor {
                     ImplantNotFountException.class,
                     ModificationNotFoundException.class,
                     OrderNotFoundException.class,
+                    PassportNotFoundException.class,
                     PwdDropRequestNotFoundException.class,
                     ScenarioOrderException.class,
                     SpecializationNotFoundException.class,
