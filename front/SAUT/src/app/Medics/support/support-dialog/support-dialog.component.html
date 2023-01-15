@@ -10,21 +10,21 @@
     <thead>
       <tr>
         <th>№ Шага</th>
-        <th>Действие</th>        
-        <th *ngIf="modsNum>1">Из-за</th>        
+        <th>Действие</th>
+        <th *ngIf="modsNum>1">Из-за</th>
       </tr>
     </thead>
     <tbody>
       <tr class="tableRow" *ngFor="let step of orderedSteps; let i = index" [attr.data-index]="i">
         <td> {{i}} </td>
-        <td>{{step.name}}</td>                              
-        <td *ngIf="modsNum>1">{{step.mod.name}}</td>                      
+        <td>{{step.modification.accompaniment}}</td>
+        <td *ngIf="modsNum>1">{{step.modification.name}}</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div mat-dialog-content class="errorBox" *ngIf="isError"> 
+<div mat-dialog-content class="errorBox" *ngIf="isError">
     <div class="errorItem"  style="text-align: center;">
       <mat-icon style="font-size: 40px;">warning</mat-icon>
     </div>
