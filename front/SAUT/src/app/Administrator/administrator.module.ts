@@ -13,21 +13,21 @@ import { MatDialogModule } from '@angular/material';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatDividerModule} from '@angular/material/divider';
 import {NewUserComponent} from './users/new-user/new-user.component';
-import { PassRecoveryComponent } from './users/pass-recovery/pass-recovery.component'
-import { AdminService } from './_services/admin.service'
+import { PassRecoveryComponent } from './users/pass-recovery/pass-recovery.component';
+import { AdminService } from './_services';
 import { DatePipe } from '@angular/common';
 import {SharedModule} from '../common/shared.module';
-import { RecoverDialogComponent } from './users/recover-dialog/recover-dialog.component'
+import { RecoverDialogComponent } from './users/recover-dialog/recover-dialog.component';
 
-import { AnimationDirective } from './_directives/animation.directive'
+import { AnimationDirective } from './_directives/animation.directive';
 
-  
+
 const routes: Routes = [
     {   path: 'admin', redirectTo: '/admin/addUser', pathMatch: 'full'},
     {   path: 'addUser',   component: NewUserComponent   },
-    {   path: 'recoverPass',   component: PassRecoveryComponent },    
+    {   path: 'recoverPass',   component: PassRecoveryComponent },
 ];
- 
+
 @NgModule({
   declarations: [NewUserComponent, PassRecoveryComponent, RecoverDialogComponent, AnimationDirective],
   imports: [
@@ -36,7 +36,7 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes),
     FormsModule,
-    ReactiveFormsModule,        
+    ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,
@@ -48,9 +48,10 @@ const routes: Routes = [
     MatDividerModule
   ],
   providers: [
+    DatePipe,
     AdminService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' },
-    DatePipe    
+    DatePipe
   ],
   entryComponents: [RecoverDialogComponent]
 })

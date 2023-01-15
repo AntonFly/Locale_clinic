@@ -76,7 +76,7 @@ class EngineerControllerTest {
         );
         createdOrder = managerController.createOrder(simpleOrderRegistration);
 
-        sc.createScenario(new SimpleScenarioRegistration(1L, createdOrder.getId(), List.of(1L)));
+        sc.createScenario(new SimpleScenarioRegistration(1L, createdOrder.getId(), Arrays.asList(1L)));
 
 
     }
@@ -107,12 +107,12 @@ class EngineerControllerTest {
         createdOrder = orderRepository.getOne(createdOrder.getId());
         Order finalCreatedOrder = createdOrder;
         assertAll(
-                ()->assertTrue(Files.exists(Path.of("genome/"+Objects.requireNonNull(response.getBody()).getFileName()))),
+                ()->assertTrue(Files.exists(Paths.get("genome/"+Objects.requireNonNull(response.getBody()).getFileName()))),
                 ()-> assertEquals(finalCreatedOrder.getGenome(), Objects.requireNonNull(response.getBody()).getFileName())
 
         );
 
-        assertDoesNotThrow(()-> Files.delete(Path.of("genome/"+Objects.requireNonNull(response.getBody()).getFileName())));
+        assertDoesNotThrow(()-> Files.delete(Paths.get("genome/"+Objects.requireNonNull(response.getBody()).getFileName())));
 
     }
 
@@ -122,9 +122,9 @@ class EngineerControllerTest {
         createdOrder = orderRepository.getOne(createdOrder.getId());
         String filePath = pdfService.generateScenario(createdOrder);
 
-        assert(Files.exists(Path.of(filePath)));
+        assert(Files.exists(Paths.get(filePath)));
 
-        Files.delete(Path.of(filePath));
+        Files.delete(Paths.get(filePath));
     }
 
     @Test

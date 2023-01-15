@@ -4,11 +4,16 @@
         <mat-icon class="refresh-list-button"  appAnimation (click)="refreshList()">refresh</mat-icon>
         <span class="tooltiptext-short">Обновить список</span>
     </div>
+    <div class="no-requests" >
+      <span *ngIf="events && events.length == 0" >Нет запросов на сброс пароля</span>
+      <span *ngIf="isError" class="request-error">При получении списка запросов произошла ошибка!</span>
+
+    </div>
     <div (click)="openDialog(event)" class="bublik" *ngFor="let event of events">
-        <span class="bublik-email">{{event.email}}</span>
+        <span class="bublik-email">{{event.user.email}}</span>
         <div class="bublik-event">
-            <span class="bublik-event-body">{{event.request_date}}</span>
-            <span class="bublik-event-body">Запрос на сброс пароля</span>            
+            <span class="bublik-event-body">{{event.requestDate| date: "dd.MM.yyyy hh:mm"}}</span>
+            <span class="bublik-event-body">Запрос на сброс пароля</span>
             <mat-icon class="bublik-icon">arrow_right_alt</mat-icon>
         </div>
     </div>

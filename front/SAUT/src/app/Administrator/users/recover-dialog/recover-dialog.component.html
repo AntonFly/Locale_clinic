@@ -19,27 +19,27 @@
   <tbody>
     <tr>
       <td class="label-cell">Фамилия</td>
-      <td>{{data.surname}}</td>
+      <td>{{data.user.person.surname}}</td>
     </tr>
     <tr>
       <td class="label-cell">Имя</td>
-      <td>{{data.name}}</td>
+      <td>{{data.user.person.name}}</td>
     </tr>
     <tr>
       <td class="label-cell">Отчество</td>
-      <td>{{data.patronymic}}</td>
+      <td>{{data.user.person.patronymic}}</td>
     </tr>
     <tr>
       <td class="label-cell">Дата рождения</td>
-      <td>{{data.dateOfBirth}}</td>
+      <td>{{data.user.person.dateOfBirth}}</td>
     </tr>
     <tr>
       <td class="label-cell">Дата запроса</td>
-      <td>{{data.request_date}}</td>
+      <td>{{data.requestDate | date: "dd.MM.yyyy hh:mm"}}</td>
     </tr>
     <tr>
       <td class="label-cell">Email</td>
-      <td>{{data.email}} <a href={{link}}>Связаться</a></td>
+      <td>{{data.user.email}} <a href={{link}}>Связаться</a></td>
     </tr>
   </tbody>
 </table>
@@ -48,7 +48,7 @@
   {{resultMsg}}
 </div>
 </mat-dialog-content>
-<div *ngIf="!loading&&!loadingComplete" class="action-button">    
+<div *ngIf="!loading&&!loadingComplete" class="action-button">
     <button color="primary" mat-raised-button (click)="generate()">
         Сгенерировать
       </button>

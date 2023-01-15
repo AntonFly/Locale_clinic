@@ -1,5 +1,5 @@
 <app-header></app-header>
-<mat-drawer-container class="drawer-container" autosize>  
+<mat-drawer-container class="drawer-container" autosize>
   <mat-drawer #drawer class="drawer-side side-shadow" mode="over" role="navigation">
     <div [ngSwitch]='role' class="side-contents">
       <ng-template ngSwitchCase="ROLE_MANAGER">
@@ -31,12 +31,12 @@
         </div>
         <mat-divider></mat-divider>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['admin/addUser']">Клиенты</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['admin/addUser']">Пользователи</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['admin/recoverPass']">События</a>
+          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['admin/recoverPass']">Заявки на сброс пароля</a>
         </div>
-        
+
       </ng-template>
 
       <ng-template ngSwitchCase="ROLE_MEDIC">
@@ -72,7 +72,7 @@
             <mat-divider></mat-divider>
             <div class="side-link">
               <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['scientists/test']">TEST</a>
-            </div>            
+            </div>
       </ng-template>
     </div>
   </mat-drawer>
@@ -80,9 +80,9 @@
   <div *ngIf="router.url !== '/login'" class="side-icon-div" (click)="drawer.toggle()">
     <mat-icon class="side-icon" [inline]="true">arrow_forward_ios</mat-icon>
   </div>
-  
+
   <div class="container">
     <router-outlet></router-outlet>
   </div>
-  
+
 </mat-drawer-container>

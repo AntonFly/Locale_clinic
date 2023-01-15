@@ -10,10 +10,11 @@ import { RecoverDialogComponent } from '../recover-dialog/recover-dialog.compone
 })
 export class PassRecoveryComponent implements OnInit {
 
-  loading: boolean = true;
+  loading = true;
   events = undefined;
+  isError = false;
 
-  constructor(private dialog: MatDialog, private adminService:AdminService) { }
+  constructor(private dialog: MatDialog, private adminService: AdminService) { }
 
   ngOnInit() {
     this.refreshList();
@@ -26,10 +27,14 @@ export class PassRecoveryComponent implements OnInit {
     this.adminService.getToRecover().subscribe(
       (data:any) =>
       {
-        this.events = data;
-        this.loading = false
+        this.events = data.filter((item) => !item.dropped);
+        this.loading = false;
       },
-      error => {this.loading = false; console.log(error)}
+      error => {
+        this.loading = false;
+        console.log(error);
+        this.isError = true;
+      }
     )
   }
 
@@ -39,10 +44,11 @@ export class PassRecoveryComponent implements OnInit {
       (
         RecoverDialogComponent,{
           hasBackdrop:true,
-          width:'30%', 
+          width:'30%',
           // height:'27.78%',
-          data:event          
+          data:event
         },
       );
+    dialogRef.afterClosed().subscribe( () => this.refreshList());
   }
 }

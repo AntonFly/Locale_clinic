@@ -2,7 +2,7 @@
 <mat-divider></mat-divider>
 <form [formGroup]="UserForm" (ngSubmit)="onSubmitClient(UserForm.value)">
     <div mat-dialog-content>
-      
+
       <mat-form-field class="full-width">
         <input matInput placeholder="Паcпорт" formControlName="passport" required>
         <mat-error *ngFor="let validation of validation_messages.Passport">
@@ -25,7 +25,7 @@
           <mat-error class="error-message" *ngIf="formControlEmail.hasError(validation.type) && (formControlEmail.dirty || formControlEmail.touched)">{{validation.message}}</mat-error>
         </mat-error>
       </mat-form-field>
-      
+
       <mat-form-field class="full-width">
         <input matInput placeholder="Имя" formControlName="name" required>
         <mat-error *ngFor="let validation of validation_messages.Name">
@@ -46,7 +46,7 @@
           <mat-error class="error-message" *ngIf="formControlPatron.hasError(validation.type) && (formControlPatron.dirty || formControlPatron.touched)">{{validation.message}}</mat-error>
         </mat-error>
       </mat-form-field>
-  
+
       <mat-form-field class="full-width">
         <mat-select placeholder="Роль" formControlName="role">
           <mat-option *ngFor="let Role of Roles" [value]="Role">
@@ -57,21 +57,21 @@
           <mat-error class="error-message" *ngIf="formControlRole.hasError(validation.type) && (formControlRole.dirty || formControlRole.touched)">{{validation.message}}</mat-error>
         </mat-error>
       </mat-form-field>
-  
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Пароль" formControlName="password" required>
-        <mat-error *ngFor="let validation of validation_messages.Password">
-          <mat-error class="error-message" *ngIf="formControlPassword.hasError(validation.type) && (formControlPassword.dirty || formControlPassword.touched)">{{validation.message}}</mat-error>
-        </mat-error>
-      </mat-form-field>
-  
+
+<!--      <mat-form-field class="full-width">-->
+<!--        <input matInput placeholder="Пароль" formControlName="password" required>-->
+<!--        <mat-error *ngFor="let validation of validation_messages.Password">-->
+<!--          <mat-error class="error-message" *ngIf="formControlPassword.hasError(validation.type) && (formControlPassword.dirty || formControlPassword.touched)">{{validation.message}}</mat-error>-->
+<!--        </mat-error>-->
+<!--      </mat-form-field>-->
+
     </div>
     <!-- mat-dialog-actions -->
 
-    <div>      
-      <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>      
+    <div>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>
       <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
       <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
     </div>
-  
+
   </form>
