@@ -17,6 +17,14 @@
     width: 50%;
 }
 
+.forgotPass{
+  cursor: pointer;
+  text-decoration: underline;
+}
+.forgotPass:hover {
+  color: red;
+}
+
 .form-btn{
     display: flex;
     align-items: center;

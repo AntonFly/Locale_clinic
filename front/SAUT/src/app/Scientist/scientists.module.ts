@@ -16,12 +16,15 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ScientistClientsComponent } from './scientist-clients/scientist-clients.component';
+import { ScientistClientsInfoComponent } from './scientist-clients-info/scientist-clients-info.component';
+import { ScenarioMainComponent } from './scenario-main/scenario-main.component';
 
 
  
 const routes: Routes = [
-  {   path: '', redirectTo: '/scientist/smth', pathMatch: 'full'},
-    // {   path: 'support',   component: SupportComponent},
+  {   path: '', redirectTo: '/scientist/scenario', pathMatch: 'full'},
+  {   path: 'scenario',   component: ScenarioMainComponent},
     // {   path: 'reporting',   component: ReportingComponent   },
     // {   path: 'requests',   component: RequestContainerComponent   },
     // {   path: 'services',   component: ServicesComponent   },
@@ -29,7 +32,9 @@ const routes: Routes = [
  
 @NgModule({
   declarations: [
-   ],
+   ScientistClientsComponent,
+   ScientistClientsInfoComponent,
+   ScenarioMainComponent],
   imports: [
     MatButtonModule,
     CommonModule,

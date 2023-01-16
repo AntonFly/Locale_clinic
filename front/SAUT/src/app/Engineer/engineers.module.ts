@@ -16,14 +16,17 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginatorModule } from '@angular/material';
 import { EngineerMainComponent } from './engineer-main/engineer-main.component';
 import { AddGenomeComponent } from './add-genome/add-genome.component';
 import { EngineerService } from './_services';
+import { ClientsComponent } from './clients/clients.component';
+import { ClientsInfoComponent } from './clients-info/clients-info.component';
  
 const routes: Routes = [
     {   path: '', redirectTo: '/engineer/main', pathMatch: 'full'},
     {   path: 'main',   component: EngineerMainComponent},
-    // {   path: 'reporting',   component: ReportingComponent   },
+    {   path: 'clients',   component: ClientsComponent   },
     // {   path: 'requests',   component: RequestContainerComponent   },
     // {   path: 'services',   component: ServicesComponent   },
 ];
@@ -31,8 +34,11 @@ const routes: Routes = [
 @NgModule({
   declarations: [
       EngineerMainComponent,
-      AddGenomeComponent],
+      AddGenomeComponent,
+      ClientsComponent,
+      ClientsInfoComponent],
   imports: [
+    MatPaginatorModule,
     MatButtonModule,
     CommonModule,
     RouterModule.forChild(routes),

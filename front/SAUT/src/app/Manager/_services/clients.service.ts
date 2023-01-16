@@ -15,7 +15,7 @@ export class ClientsService {
      }
 
     getAll() {
-        return this.http.get<Client[]>(this.baseUrl+"manager/get_clients");        
+        return this.http.get<Client[]>(this.baseUrl+"manager/get_clients");     
     }
 
     createClient(client: any) {

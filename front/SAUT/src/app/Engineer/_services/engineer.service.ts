@@ -20,6 +20,10 @@ export class EngineerService {
 //     return this.http.get<Order[]>(this.baseUrl+"medic/get_scenarios_by_spec/"+body);
 //   }
 
+  getAll(){
+    return this.http.get<Client[]>(this.baseUrl+"engineer/get_all_clients");
+  }
+
   getClient(pass: number) {
     let body = "?passport=" + pass;
     return this.http.get<Client>(this.baseUrl+"engineer/get_client_by_passport/" + body);                

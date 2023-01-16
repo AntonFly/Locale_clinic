@@ -1,0 +1,70 @@
+<app-clients-info [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-clients-info>
+<div *ngIf="!showingEditor">
+  <h1 id="tableLabel">Клиенты</h1>
+  <div class="clientsHead">
+    <!-- <div>
+      <button mat-raised-button class="client-btn" color="primary" (click)="openClientDialog()">  
+        Создать клиента
+      </button>
+    </div> -->
+  
+    <div class="right-hand">
+      <div class="search">
+        <mat-form-field class="no-wrapper" >
+          <input matInput placeholder="Поиск..." [formControl]="searchField">
+          <!-- <input matInput placeholder="Поиск...">       -->
+          <button mat-button *ngIf="searchField.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchReset()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field> 
+        <!-- <div > -->
+          <mat-icon class="search-icon" (click)="clientSearch()" >search</mat-icon>        
+        <!--   </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!shownItems&&!clientError" class="container" style="padding-left: 50%;">
+    <mat-icon style="font-size: 60px;">access_time</mat-icon>
+  </div>
+
+
+
+  <table class='table table-striped table-hover' aria-labelledby="tableLabel" *ngIf="shownItems&&!clientError">
+    <thead>
+      <tr>
+        <th>Пасспорт</th>
+        <th>Ф.И.О.</th>
+        <th>Дата рождения</th>
+        <th>Email</th>      
+      </tr>
+    </thead>
+    <tbody>
+      <tr (dblclick)="openEditor(queueItem)" *ngFor="let queueItem of shownItems">
+        <td>{{ queueItem.person.passports[0].passport }}</td>
+        <td>{{ getFIO(queueItem.person) }}</td>      
+        <td>{{ queueItem.person.dateOfBirth | date:'dd.MM.yyyy'}}</td>
+        <td>{{ queueItem.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-paginator *ngIf="shownItems&&!clientError"
+                 #paginator
+                 class="demo-paginator"
+                 (page)="handlePageEvent($event)"
+                 [length]="length"
+                 [pageSize]="pageSize"
+                 [disabled]="disabled"
+                 [showFirstLastButtons]="showFirstLastButtons"
+                 [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                 [hidePageSize]="hidePageSize"
+                 [pageIndex]="pageIndex"
+                 aria-label="Select page">
+  </mat-paginator>
+  <div class="errorBox" *ngIf="clientError"> 
+    <div class="errorItem" style="padding-left: 47.5%;">
+      <mat-icon style="font-size: 60px;">warning</mat-icon>
+    </div>
+    <div class="errorItem" style="text-align: center;font-size: 30px;">Не удалось получить список пользователей</div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+.errorBox{  
+  
+}
+.errorItem{
+  
+}
+
+.clientsHead{
+  padding-bottom: 10px;  
+}
+.clientsHead div{
+  display: inline-block;
+}
+
+.right-hand{
+  float: right;
+}
+.right-hand div{
+  display: inline-block;
+}
+.client-btn{
+  margin-top: 10px;
+}
+.search{
+  padding-right: 15px;    
+}
+
+
+.search-icon {  
+  vertical-align: middle;
+  font-size: 30px;
+  cursor: pointer;  
+}
+
+
+
+
+/* TEST */
+.container {
+    margin-top: 50px;
+  }
+  
+  .section-title {
+    margin-bottom: 20px;
+  }
+  
+  /* .user-details-container {
+    padding: 20px;
+    text-align: center;
+    .user-image
+  
+  {
+    width: 100%;
+    border-radius: 50%;
+  }
+  
+  .user-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 30px;
+    display: block;
+  }
+  
+  .user-bio {
+    font-size: 12px;
+    margin-top: 20px;
+    display: block;
+    color: rgba(0, 0, 0, 0.70);
+  }
+  
+  } */
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+  
+  .submit-btn {
+    margin-top: 30px;
+  }
+  

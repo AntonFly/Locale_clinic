@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     "ROLE_MANAGER": "manager/clients",
     "ROLE_MEDIC": "medic/support",
     "ROLE_ENGINEER": "engineer/clients",
-    "ROLE_SCIENTIST": "scientist/"
+    "ROLE_SCIENTIST": "scientist/scenario"
     };
 
   validation_messages = {

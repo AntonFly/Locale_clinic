@@ -7,6 +7,7 @@ import com.clinic.entities.keys.ModificationScenarioId;
 import com.clinic.entities.keys.StockId;
 import com.clinic.exceptions.*;
 import com.clinic.repositories.*;
+import com.clinic.services.ClientService;
 import com.clinic.services.OrderService;
 import com.clinic.services.ScenarioService;
 import com.clinic.services.StockService;
@@ -37,6 +38,9 @@ class ScientistControllerTest {
     private OrderService orderService;
     @Autowired
     private ScenarioService scenarioService;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     ClientRepository clientRepository;
@@ -76,7 +80,7 @@ class ScientistControllerTest {
     @BeforeEach
     @Transactional(rollbackFor = Exception.class)
     void beforeEach() {
-        sc = new ScientistController(orderService, scenarioService);
+        sc = new ScientistController(orderService, scenarioService, clientService);
 
         createdPerson = createPerson(1000000011);
         createdPersonWithoutClient = createPerson(1000000012);

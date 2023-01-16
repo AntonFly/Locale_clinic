@@ -97,7 +97,7 @@ export class ReportingComponent implements OnInit {
       return  el.person.surname.toLowerCase().includes(filterValue) ||
               el.person.name.toLowerCase().includes(filterValue) ||
               el.person.patronymic.toLowerCase().includes(filterValue) ||
-              String(el.person.id).toLowerCase().includes(filterValue) ||
+              String(el.person.passports[0].passport).toLowerCase().includes(filterValue) ||
               el.person.dateOfBirth.toLowerCase().includes(filterValue) ||
               el.email.toLowerCase().includes(filterValue)
     });
@@ -114,6 +114,8 @@ export class ReportingComponent implements OnInit {
     this.searchField.markAsUntouched();
     this.searchField.updateValueAndValidity();
     this.currentItems = this.allClientItems;
+    this.length = this.currentItems.length;
+    this.show();
   }
 
   openEditor(data){

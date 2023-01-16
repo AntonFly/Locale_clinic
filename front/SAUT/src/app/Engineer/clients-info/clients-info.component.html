@@ -8,12 +8,12 @@
 
 <!-- <app-loader ></app-loader> -->
 <div [ngSwitch]="page">
-  <ng-template ngSwitchCase="changes">    
+  <!-- <ng-template ngSwitchCase="changes">    
       <app-reporting-body-changes [client]="client" [order]="selectedOrder"></app-reporting-body-changes>        
   </ng-template>
   <ng-template ngSwitchCase="implants">
     <app-reporting-implants [client]="client"></app-reporting-implants>
-  </ng-template>  
+  </ng-template>   -->
   
   <ng-template ngSwitchCase="client">
       <table class="table table-striped">
@@ -56,9 +56,9 @@
     
     <br>
         
-    <div *ngIf="isOrderLoading" class="container" style="padding-left: 50%;">
+    <!-- <div *ngIf="isOrderLoading" class="container" style="padding-left: 50%;">
       <mat-icon style="font-size: 60px;">access_time</mat-icon>
-    </div>
+    </div> -->
     
     <div class="errorBox" *ngIf="isOrderError"> 
       <div class="errorItem" style="padding-left: 47.5%;">
@@ -67,7 +67,7 @@
       <div class="errorItem" style="text-align: center;font-size: 30px;">Не удалось получить список заявок</div>
     </div>
 
-    <div *ngIf="!isOrderLoading && !isOrderError">      
+    <!-- <div *ngIf="!isOrderLoading && !isOrderError">      
       <div class="action-btns" *ngIf="currentOrders && currentOrders.length > 0"> 
         <button [disabled]="!selectedOrder || !selectedOrder.confirmation" mat-raised-button class="client-btn" color="primary" (click)="page='implants'">  
             Импланты
@@ -105,9 +105,9 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
 
-    <br><br>
+    <br>
 
     <table class="table table-striped" *ngIf="client.modifications && client.modifications.length > 0">
       <thead>      

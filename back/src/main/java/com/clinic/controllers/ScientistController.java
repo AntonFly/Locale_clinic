@@ -21,16 +21,23 @@ import java.util.Set;
 public class ScientistController {
     private final OrderService orderService;
     private final ScenarioService scenarioService;
+    private final ClientService clientService;
 
     @Autowired
     public ScientistController(
             OrderService os,
-            ScenarioService sc
+            ScenarioService sc,
+            ClientService cs
     )
     {
         this.orderService = os;
         this.scenarioService = sc;
+        this.clientService = cs;
     }
+
+    @GetMapping("/get_all_clients")
+    public List<Client> getAllClients()
+    { return clientService.getAllClients(); }
 
     @GetMapping("/get_ordered_mods_by_spec")
     public List<Modification> getOrderedModsBySpec(@RequestParam long specId)

@@ -1,12 +1,13 @@
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import {ClientsDialogComponent} from '../clients-dialog/clients-dialog.component'
-import { AdvancedSearchDialogComponent } from '../advanced-search-dialog/advanced-search-dialog.component'
+// import {ClientsDialogComponent} from '../clients-dialog/clients-dialog.component'
+// import { AdvancedSearchDialogComponent } from '../advanced-search-dialog/advanced-search-dialog.component'
 import {PageEvent} from '@angular/material/paginator';
 
-import {ClientsService} from '../../_services/clients.service'
-import {Client} from '../../../_models/Client'
+import { EngineerService } from '../_services';
+import {Client} from '../../_models/Client'
+
 
 @Component({
   selector: 'app-clients',
@@ -15,8 +16,8 @@ import {Client} from '../../../_models/Client'
 })
 export class ClientsComponent implements OnInit {
 
-  ClientsDialogRef: MatDialogRef<ClientsDialogComponent>;
-  AdvancedDialogRef: MatDialogRef<AdvancedSearchDialogComponent>;
+  // ClientsDialogRef: MatDialogRef<ClientsDialogComponent>;
+  // AdvancedDialogRef: MatDialogRef<AdvancedSearchDialogComponent>;
 
   allClientItems: Client[];  
   filteredItems: Client[];
@@ -53,7 +54,7 @@ export class ClientsComponent implements OnInit {
   }
   /* pagination */
 
-  constructor(private dialog: MatDialog, private clientService: ClientsService) 
+  constructor(private dialog: MatDialog, private clientService: EngineerService) 
   {
     this.updateUsers();    
   }
@@ -67,23 +68,23 @@ export class ClientsComponent implements OnInit {
     console.log(this.shownItems)
   }
 
-  openClientDialog(){
-    this.ClientsDialogRef = this.dialog.open(ClientsDialogComponent,{
-      hasBackdrop:true
-    });
+  // openClientDialog(){
+  //   this.ClientsDialogRef = this.dialog.open(ClientsDialogComponent,{
+  //     hasBackdrop:true
+  //   });
 
-    this.ClientsDialogRef
-      .afterClosed()
-      .pipe()
-      .subscribe(closed => {this.updateUsers()})
+  //   this.ClientsDialogRef
+  //     .afterClosed()
+  //     .pipe()
+  //     .subscribe(closed => {this.updateUsers()})
 
-  }
+  // }
 
-  openAdvancedDialog(){
-    this.AdvancedDialogRef = this.dialog.open(AdvancedSearchDialogComponent,{
-      hasBackdrop:true
-    });
-  }
+  // openAdvancedDialog(){
+  //   this.AdvancedDialogRef = this.dialog.open(AdvancedSearchDialogComponent,{
+  //     hasBackdrop:true
+  //   });
+  // }
 
   updateUsers(){
     this.clientService.getAll().subscribe(
@@ -156,4 +157,7 @@ export class ClientsComponent implements OnInit {
     this.showingEditor = false;
     this.editedClient = undefined;
   }
+
 }
+
+
