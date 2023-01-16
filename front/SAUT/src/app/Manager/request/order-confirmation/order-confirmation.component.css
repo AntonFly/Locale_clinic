@@ -35,6 +35,11 @@
   margin-right: 5px;
 }
 
+.bottom-btns{
+  float: right;
+  margin-top: 20px;
+}
+
 .tableRow:hover{
     background-color:beige;
     cursor: pointer;

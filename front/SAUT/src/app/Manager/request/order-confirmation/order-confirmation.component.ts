@@ -23,6 +23,9 @@ export class OrderConfirmationComponent implements OnInit {
   isDownloadError: boolean = false;
   downloadMsg: string = "test";
 
+  riskOfferMsg = "";
+  riskOfferError = false;
+
   newFileName:string = "";
   fileDate:string = "";
   
@@ -84,8 +87,8 @@ export class OrderConfirmationComponent implements OnInit {
     this.currentFile = undefined;
   }
 
-  downloadFile(){
-    this.orderService.downloadConfirmation(this.order.confirmation, this.newFileName).subscribe(
+  downloadFile(){    
+    this.orderService.downloadConfirmation('manager/download_confirmation/?file='+this.order.confirmation, this.newFileName).subscribe(
       res =>{
         console.log(res);
       },
@@ -100,6 +103,43 @@ export class OrderConfirmationComponent implements OnInit {
       }
     )
   }
+
+  downloadRisks(){
+    this.orderService.downloadConfirmation('manager/get_risks/'+this.order.id, "risks_"+this.order.id+".pdf").subscribe(
+      res =>{
+        console.log(res);
+      },
+      error => {
+        this.riskOfferMsg = "Не удалось скачать риски";
+        this.riskOfferError = true;
+
+        setTimeout(() => {
+          this.riskOfferMsg = "";
+          this.riskOfferError = false;
+        }, 5000);            
+      }
+    )
+  }
+
+  downloadOffer(){
+    this.orderService.downloadConfirmation('manager/get_commercial/'+this.order.id, "commercial_"+this.order.id+".pdf").subscribe(
+      res =>{
+        console.log(res);
+      },
+      error => {
+        console.log(error)
+        this.riskOfferMsg = "Не удалось скачать предложение";
+        this.riskOfferError = true;
+
+        setTimeout(() => {
+          this.riskOfferMsg = "";
+          this.riskOfferError = false;
+        }, 5000);            
+      }
+    )
+  }
+
+  downloadConfirmation(){}
 
   changeFile(){
     this.order.confirmation = undefined;

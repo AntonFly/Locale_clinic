@@ -9,9 +9,10 @@
     <span style="font-size: 18px;">{{"Заявка №"+order.id}}</span>
     <br>
     <button 
-        mat-raised-button color="primary" type="submit"  (click)="onSubmitClient()">
+        mat-raised-button color="primary" type="submit"  (click)="downloadScenario()">
         Сценарий модификации
     </button>
+    <span *ngIf="isScenarioError" class="message" style="margin-left:10px;color: red;">{{scenarioMsg}}</span>
 </div>
 <br>
 
@@ -57,7 +58,7 @@
     </div>
     <div class="box-right">
         <span *ngIf="isDownloadError" class="message" style="color: red;">{{downloadMsg}}</span>
-        <button mat-raised-button class="file-btn" color="primary" (click)="downloadFile()">  
+        <button mat-raised-button class="file-btn" color="primary" (click)="downloadGenome()">  
             Скачать
         </button>        
         <button mat-raised-button class="file-btn" color="primary" (click)="changeFile()">  

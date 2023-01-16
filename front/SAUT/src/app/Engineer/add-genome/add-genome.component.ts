@@ -18,9 +18,13 @@ export class AddGenomeComponent implements OnInit {
   isChosen: boolean = false;
 
   isUploadError: boolean = false;
-  uploadMsg: string = "test";
+  uploadMsg: string = "";
+  
   isDownloadError: boolean = false;
-  downloadMsg: string = "test";
+  downloadMsg: string = "";
+
+  isScenarioError: boolean = false;
+  scenarioMsg: string = ""
 
   newFileName:string = "";
   fileDate:string = "";
@@ -81,8 +85,8 @@ export class AddGenomeComponent implements OnInit {
     this.currentFile = undefined;
   }
 
-  downloadFile(){
-    this.engService.downloadGenome(this.order.genome, this.newFileName).subscribe(
+  downloadGenome(){
+    this.engService.downloadFile('engineer/downloadGenome/?file='+this.order.genome, this.newFileName).subscribe(
       res =>{
         console.log(res);
       },
@@ -93,6 +97,23 @@ export class AddGenomeComponent implements OnInit {
         setTimeout(() => {
           this.downloadMsg = "";
           this.isDownloadError = false;
+        }, 5000);            
+      }
+    )
+  }
+
+  downloadScenario(){
+    this.engService.downloadFile('engineer/getScenario/'+this.order.id, 'scenario_'+this.order.id+'.pdf').subscribe(
+      res =>{
+        console.log(res);
+      },
+      error => {
+        this.scenarioMsg = "Не удалось скачать файл";
+        this.isScenarioError = true;
+
+        setTimeout(() => {
+          this.scenarioMsg = "";
+          this.isScenarioError = false;
         }, 5000);            
       }
     )

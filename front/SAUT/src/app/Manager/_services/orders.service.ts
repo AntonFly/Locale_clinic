@@ -48,14 +48,15 @@ export class OrderService {
         return this.http.post(this.baseUrl+'manager/uploadConfirmation/'+orderId, formData);
     }
 
-    downloadConfirmation(oldName: string, filename:string){
+    downloadConfirmation(url, filename:string){
         return this.http.get(
-            this.baseUrl+'manager/download_confirmation/?file='+oldName,
+            this.baseUrl+url,
         { responseType: 'blob' as 'json' }
         )
           .pipe(map(
             (response: any) =>
             {
+              console.log(response)
               if (response)
               {            
                 let dataType = response.type;
@@ -76,7 +77,7 @@ export class OrderService {
                 return response;
               }
             },
-            err => {console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")}
+            error => {console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")}
           ));
     }
 }

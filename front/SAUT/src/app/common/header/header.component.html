@@ -21,7 +21,7 @@
       >
         <ul class="navbar-nav flex-grow">
           <div *ngIf="token;else toLogin">
-            {{token.email}}
+            <span class="user-email">{{token.email}}</span>
             <button mat-button [matMenuTriggerFor]="menu"><mat-icon style="font-size: 30px;margin-bottom: 8px;">list</mat-icon></button>
 
             <mat-menu #menu="matMenu">

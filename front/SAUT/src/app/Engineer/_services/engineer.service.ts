@@ -36,9 +36,9 @@ export class EngineerService {
     return this.http.post(this.baseUrl+'engineer/uploadGenome/'+orderId, formData);
 }
 
-downloadGenome(oldName: string, filename:string){
+downloadFile(url, filename:string){
     return this.http.get(
-        this.baseUrl+'engineer/downloadGenome/?file='+oldName,
+        this.baseUrl+url,
     { responseType: 'blob' as 'json' }
     )
       .pipe(map(

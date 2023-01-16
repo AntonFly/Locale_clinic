@@ -8,7 +8,17 @@
 
 <h5>Согласие на медицинское вмешательство</h5>
 
-<br>
+<div class="bottom-btns">
+    <span *ngIf="riskOfferError" class="message" style="color: red;">{{riskOfferMsg}}</span>
+    <button mat-raised-button class="file-btn" color="primary" (click)="downloadRisks()">  
+        Риски
+    </button>        
+    <button mat-raised-button class="file-btn" color="primary" (click)="downloadOffer()">  
+        Ком. предложение
+    </button>        
+</div>
+
+<br><br><br><br>
 
 <input style="display: none" type="file" (change)="uploadFiles($event)" #selectFile>
 <div *ngIf="!isChosen && !order.confirmation" class="dropzone" appDnd (fileDropped)="uploadFiles($event)">
@@ -39,26 +49,28 @@
     </div>
 </div>
 
-<div class="chosen-file-box" *ngIf="order.confirmation">
-    <div class="box-left">
-        <img alt="Download" src="/assets/download.png">
-        <div>
-            <h6>Загруженный файл</h6>
-            <span>{{"Наименование: "}}<b>{{newFileName}}</b></span><br>
-            <span>{{"Дата изменения: "+fileDate | date:'dd.MM.yyyy'}}</span>
-            <!-- {{newFileName}}<br>
-            {{fileDate}} -->
+<div>    
+    <div class="chosen-file-box" *ngIf="order.confirmation">
+        <div class="box-left">
+            <img alt="Download" src="/assets/download.png">
+            <div>
+                <h6>Загруженный файл</h6>
+                <span>{{"Наименование: "}}<b>{{newFileName}}</b></span><br>
+                <span>{{"Дата изменения: "+fileDate | date:'dd.MM.yyyy'}}</span>
+                <!-- {{newFileName}}<br>
+                {{fileDate}} -->
+            </div>
         </div>
-    </div>
-    <div class="box-right">
-        <span *ngIf="isDownloadError" class="message" style="color: red;">{{downloadMsg}}</span>
-        <button mat-raised-button class="file-btn" color="primary" (click)="downloadFile()">  
-            Скачать
-        </button>        
-        <button mat-raised-button class="file-btn" color="primary" (click)="changeFile()">  
-            Заменить
-        </button>        
-    </div>
+        <div class="box-right">
+            <span *ngIf="isDownloadError" class="message" style="color: red;">{{downloadMsg}}</span>
+            <button mat-raised-button class="file-btn" color="primary" (click)="downloadFile()">  
+                Скачать
+            </button>        
+            <button mat-raised-button class="file-btn" color="primary" (click)="changeFile()">  
+                Заменить
+            </button>        
+        </div>
+    </div>    
 </div>
 
 <br>

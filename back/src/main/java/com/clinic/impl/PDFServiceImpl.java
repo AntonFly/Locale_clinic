@@ -87,6 +87,15 @@ public class PDFServiceImpl implements PDFService {
         document.add(new Paragraph("\n"));
 
         header = new Paragraph(
+                "С возможными осложнениями ознакомился: ___________/"+currentPerson.getSurname()+" "+currentPerson.getName().charAt(0)+". "+currentPerson.getPatronymic().charAt(0)+".",
+                new Font(baseFont,12)
+        );
+        header.setAlignment(Element.ALIGN_RIGHT);
+        document.add(header);
+
+        document.add(new Paragraph("\n"));
+
+        header = new Paragraph(
                 "Подпись заказчика: ___________/"+currentPerson.getSurname()+" "+currentPerson.getName().charAt(0)+". "+currentPerson.getPatronymic().charAt(0)+".",
                 new Font(baseFont,12)
         );
@@ -136,14 +145,14 @@ public class PDFServiceImpl implements PDFService {
         document.add(new Paragraph("\n"));
         document.add(new Paragraph("\n"));
 
-        header = new Paragraph(
-                "С возможными осложнениями ознакомился: ___________/"+currentPerson.getSurname()+" "+currentPerson.getName().charAt(0)+". "+currentPerson.getPatronymic().charAt(0)+".",
-                new Font(baseFont,12)
-        );
-
-        header.setAlignment(Element.ALIGN_RIGHT);
-
-        document.add(header);
+//        header = new Paragraph(
+//                "С возможными осложнениями ознакомился: ___________/"+currentPerson.getSurname()+" "+currentPerson.getName().charAt(0)+". "+currentPerson.getPatronymic().charAt(0)+".",
+//                new Font(baseFont,12)
+//        );
+//
+//        header.setAlignment(Element.ALIGN_RIGHT);
+//
+//        document.add(header);
 
         document.close();
 
