@@ -14,7 +14,7 @@ export class SupportService {
   }
 
 
-  getSupportBySpecializId(orderId) {
+  getSupportBySpecializId(orderId: number) {
     const body = '?orderId=' + orderId;
     return this.http.get<Order[]>(this.baseUrl+"medic/get_script_by_order/"+body);
   }

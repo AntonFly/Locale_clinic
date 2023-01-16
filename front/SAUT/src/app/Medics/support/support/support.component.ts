@@ -19,8 +19,8 @@ export class SupportComponent implements OnInit {
 
   panelOpenState = false;
 
-  isClientError: boolean = false;
-  clientErrorMsg: string = '';
+  isClientError = false;
+  clientErrorMsg = '';
   currentClient: Client;
 
   currentOrders: Order[];
@@ -30,13 +30,13 @@ export class SupportComponent implements OnInit {
     'passport': [
       { type: 'required', message: 'Требуется паспорт клиента' }
     ]
-  }
+  };
 
   passport = new FormControl('', Validators.required);
 
   constructor(private dialog: MatDialog,
-              private supportService:SupportService,
-              private clientService:ClientsService) { }
+              private supportService: SupportService,
+              private clientService: ClientsService) { }
 
   ngOnInit() {
 
@@ -46,21 +46,21 @@ export class SupportComponent implements OnInit {
     return this.passport;
   }
 
-  generateScenario(){
+  generateScenario() {
     this.supportService.getSupportBySpecializId(this.selectedOrder.id).subscribe(
       result => {
-        this.ScenarioDialogRef = this.dialog.open(SupportDialogComponent,{
-          hasBackdrop:true,
-          data:{
+        this.ScenarioDialogRef = this.dialog.open(SupportDialogComponent, {
+          hasBackdrop: true,
+          data: {
             order: this.selectedOrder,
             scenario: result
           }
         });
       },
       error => {
-        this.ScenarioDialogRef = this.dialog.open(SupportDialogComponent,{
-          hasBackdrop:true,
-          data:{
+        this.ScenarioDialogRef = this.dialog.open(SupportDialogComponent, {
+          hasBackdrop: true,
+          data: {
             order: this.selectedOrder,
             error: error.error
           }
@@ -69,56 +69,58 @@ export class SupportComponent implements OnInit {
 
   }
 
-  getFIO(client:any){
-    return client.surname+' '+client.name.substring(0,1)+'. '+client.patronymic.substring(0,1)+'.'
+  getFIO(client: any) {
+    return client.surname + ' ' + client.name.substring(0, 1) + '. ' + client.patronymic.substring(0, 1) + '.';
   }
 
-  selectRow(order: Order){
+  selectRow(order: Order) {
     console.log(order);
-    if(this.selectedOrder == order)
-      this.selectedOrder = undefined
-    else
+    if (this.selectedOrder === order) {
+      this.selectedOrder = undefined;
+    } else {
       this.selectedOrder = order;
+    }
   }
 
   clientExists(id: any) {
-    console.log(id)
-    if(id=="" || id===NaN || id === undefined)
-    {
+    console.log(id);
+    if (id === '' || isNaN(id) || id === undefined) {
       this.isClientError = false;
-      this.clientErrorMsg = "";
+      this.clientErrorMsg = '';
       this.currentClient = undefined;
       return;
     }
 
-    this.selectedOrder=undefined;
+    this.selectedOrder = undefined;
+    // tslint:disable-next-line:radix
     this.supportService.getClient(parseInt(id)).subscribe(
       result => {
         this.isClientError = false;
-        this.clientErrorMsg = "";
+        this.clientErrorMsg = '';
         this.currentClient = result;
+        // tslint:disable-next-line:radix
         this.getOrdersById(parseInt(id));
       },
       error => {
         this.isClientError = true;
 
-        if(error.error.status == "NOT_FOUND")
-          this.clientErrorMsg = "Такого клиента не существует";
-        else this.clientErrorMsg = "Не удалось найти клиента";
+        if (error.error.status === 'NOT_FOUND') {
+          this.clientErrorMsg = 'Такого клиента не существует';
+        } else { this.clientErrorMsg = 'Не удалось найти клиента'; }
 
         this.currentClient = undefined;
         this.currentOrders = [];
       });
   }
 
-  getOrdersById(id: number){
+  getOrdersById(id: number) {
     this.supportService.getOrdersByPassport(id).subscribe(
       result => {
         this.currentOrders = result;
       },
       error => {
 
-      })
+      });
   }
 
 }

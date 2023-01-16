@@ -10,13 +10,15 @@
 
 .stock-btn{
     margin-left: auto;
+    display: flex;
+    align-items: flex-end;
 }
 
 .refresh-list-button {
     cursor: pointer;
-  
+
   }
-  
+
 .refresh-list-button-animation {
       animation: rotate 1s ease-in-out 0s;
   }
@@ -24,12 +26,12 @@
     from {
       transform: rotate(0deg);
     }
-  
+
     to {
       transform: rotate(360deg);
     }
 }
-  
+
 .tooltiptext-short{
       font-size: 14px;
 }
@@ -40,5 +42,6 @@
 }
 
 .tooltip1{
-      height: 30px
+      margin-right: 5px;
+      height: 100%;
 }
