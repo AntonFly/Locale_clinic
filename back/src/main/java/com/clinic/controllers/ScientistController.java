@@ -39,6 +39,11 @@ public class ScientistController {
     public List<Client> getAllClients()
     { return clientService.getAllClients(); }
 
+    @GetMapping("/get_client_by_passport")
+    public Client getClientByPassport(@RequestParam long passport) throws
+            PassportNotFoundException, NoPersonToClientException
+    { return clientService.getClientByPassport(passport); }
+
     @GetMapping("/get_ordered_mods_by_spec")
     public List<Modification> getOrderedModsBySpec(@RequestParam long specId)
             throws SpecializationNotFoundException

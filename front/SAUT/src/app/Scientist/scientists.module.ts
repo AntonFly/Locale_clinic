@@ -16,9 +16,13 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
+import {DragDropModule} from '@angular/cdk/drag-drop'
+
 import { ScientistClientsComponent } from './scientist-clients/scientist-clients.component';
 import { ScientistClientsInfoComponent } from './scientist-clients-info/scientist-clients-info.component';
 import { ScenarioMainComponent } from './scenario-main/scenario-main.component';
+import { ScientistService } from './_services';
+import { ScenarioOrderComponent } from './scenario-order/scenario-order.component';
 
 
  
@@ -34,8 +38,10 @@ const routes: Routes = [
   declarations: [
    ScientistClientsComponent,
    ScientistClientsInfoComponent,
-   ScenarioMainComponent],
+   ScenarioMainComponent,
+   ScenarioOrderComponent],
   imports: [
+    DragDropModule,
     MatButtonModule,
     CommonModule,
     RouterModule.forChild(routes),
@@ -56,6 +62,7 @@ const routes: Routes = [
     MatExpansionModule
   ],
   providers: [    
+    ScientistService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }
   ],
   entryComponents: []

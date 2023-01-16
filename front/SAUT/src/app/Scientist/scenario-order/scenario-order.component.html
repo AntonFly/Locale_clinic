@@ -1,0 +1,32 @@
+
+<div class = "header-div">
+    <span class="icon-div" (click)="closeClick()">
+        <mat-icon class="top-icon" [inline]="true">arrow_forward_ios</mat-icon>
+    </span>
+    <span class="header-name">{{getFIO()}}</span>
+</div>
+
+<div *ngIf="isEditor">
+    <button class="RequestButtons" mat-raised-button color="primary" (click)="isEditor=false" >Сохранить</button>
+    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let movie of modsToEdit" cdkDrag>
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+        {{movie}}
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!isEditor">
+    <button class="RequestButtons" mat-raised-button color="primary" (click)="isEditor=true">Изменить</button>
+    <div *ngFor="let mod of curScenario">{{mod.modification.name}}</div>
+</div>
+
+<!-- <div
+cdkDropList
+#doneList="cdkDropList"
+[cdkDropListData]="modsToEdit"
+[cdkDropListConnectedTo]="[todoList]"
+class="example-list"
+(cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let item of modsToEdit" cdkDrag>{{item}}</div>
+</div> -->
