@@ -3,7 +3,7 @@
   Вы действительно хотите сбросить пароль для пользователя <b>{{this.data.value}}</b>?
 
 </div>
-<span *ngIf="send===true" >{{formMsg}}</span>
+<span *ngIf="send===true" class="form-ok">{{formMsg}}</span>
 <span *ngIf="send===false"  class="form-error">{{formMsg}}</span>
 <br>
 <div mat-dialog-actions>

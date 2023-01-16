@@ -4,7 +4,7 @@
   <mat-divider></mat-divider>
 </div>
 
-<!-- 
+<!--
 FIO
 Email
 BirthDate
@@ -13,7 +13,7 @@ Address
 Note -->
 <form [formGroup]="ClientForm" (ngSubmit)="onSubmitClient(ClientForm.value)">
   <div mat-dialog-content>
-    
+
     <mat-form-field class="full-width">
       <input matInput placeholder="Паспортные данные" formControlName="passport" required>
       <mat-error *ngFor="let validation of validation_messages.passport">
@@ -27,21 +27,21 @@ Note -->
         <mat-error class="error-message" *ngIf="formControlName.hasError(validation.type) && (formControlName.dirty || formControlName.touched)">{{validation.message}}</mat-error>
       </mat-error>
     </mat-form-field>
-    
+
     <mat-form-field class="full-width">
       <input matInput placeholder="Фамилия" formControlName="surname" required>
       <mat-error *ngFor="let validation of validation_messages.surname">
         <mat-error class="error-message" *ngIf="formControlSurname.hasError(validation.type) && (formControlSurname.dirty || formControlSurname.touched)">{{validation.message}}</mat-error>
       </mat-error>
     </mat-form-field>
-    
+
     <mat-form-field class="full-width">
       <input matInput placeholder="Отчество" formControlName="patronymic" required>
       <mat-error *ngFor="let validation of validation_messages.patronymic">
         <mat-error class="error-message" *ngIf="formControlPatronymic.hasError(validation.type) && (formControlPatronymic.dirty || formControlPatronymic.touched)">{{validation.message}}</mat-error>
       </mat-error>
     </mat-form-field>
-    
+
     <mat-form-field class="full-width">
       <input matInput placeholder="Email" formControlName="email" required>
       <mat-error *ngFor="let validation of validation_messages.email">
@@ -65,11 +65,11 @@ Note -->
     </mat-form-field>
 
   </div>
-  
+
   <div mat-dialog-actions>
     <button mat-raised-button color="primary" type="submit" [disabled]="!ClientForm.valid" >Создать</button>
     <button mat-button mat-dialog-close>Отмена</button>
-    <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+    <span *ngIf="formError===false && sendSuccessfully" style="color: green;padding-left: 10px;" class="form-ok">{{formMsg}}</span>
     <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
   </div>
 

@@ -39,6 +39,11 @@ export class RecoverDialogComponent implements OnInit {
         this.loading = false;
         this.loadingComplete = true;
         this.resultMsg = "Пароль успешно сгенерирован";
+        setTimeout
+        (
+          () => this.dialogRef.close(),
+          4000
+        );
       },
       error => {
         this.loading = false;

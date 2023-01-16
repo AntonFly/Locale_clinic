@@ -14,7 +14,8 @@ export class ClientsDialogComponent implements OnInit {
 
   ClientForm: FormGroup;
   formMsg: string;
-  formError: boolean;
+  formError: boolean = null;
+  sendSuccessfully = false;
 
   validation_messages = {
     'name': [
@@ -34,28 +35,28 @@ export class ClientsDialogComponent implements OnInit {
     'passport': [
       { type: 'required', message: 'Требуются данные паспорта' }
     ],
-        
+
     'dateOfBirth': [
       { type: 'required', message: 'Пожалуйста, укажите дату рождения' },
-    ]    
+    ]
   };
 
   myDatepipe: DatePipe;
 
-  constructor( private dialogRef: MatDialogRef<ClientsDialogComponent>,  
-    private fb: FormBuilder, 
+  constructor( private dialogRef: MatDialogRef<ClientsDialogComponent>,
+    private fb: FormBuilder,
     private clientService: ClientsService,
-    datepipe: DatePipe) { 
+    datepipe: DatePipe) {
       this.myDatepipe = datepipe;
     }
 
   ngOnInit() {
-    this.createForms();    
+    this.createForms();
     this.formMsg = "";
     this.formError = false;
   }
 
-  
+
   get formControlName() {
     return this.ClientForm.get('name');
   }
@@ -73,7 +74,7 @@ export class ClientsDialogComponent implements OnInit {
 
   get formControlPassport() {
     return this.ClientForm.get('passport');
-  }  
+  }
 
   get formControlDate() {
     return this.ClientForm.get('dateOfBirth');
@@ -90,7 +91,7 @@ export class ClientsDialogComponent implements OnInit {
       ])),
       passport: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      comment:['', Validators.maxLength]      
+      comment:['', Validators.maxLength]
     })
   }
 
@@ -98,21 +99,22 @@ export class ClientsDialogComponent implements OnInit {
     event.dateOfBirth = this.myDatepipe.transform(this.ClientForm.value.dateOfBirth, 'yyyy-MM-dd');
     console.log(event);
     this.clientService.createClient(event).subscribe(
-      (data: any) => {        
+      (data: any) => {
         console.log(data);
         this.formMsg = "Пользователь успешно добавлен";
         this.formError = false;
+        this.sendSuccessfully = true;
 
         setTimeout( () => {
             this.formMsg = "";
             this.dialogRef.close();
           }
-          , 2000
+          , 3000
         );
-                                        
+
       },
-      
-      error => {                            
+
+      error => {
         console.log(error);
         this.formError = true;
           if(error.error.status === "CONFLICT")
@@ -123,10 +125,10 @@ export class ClientsDialogComponent implements OnInit {
           setTimeout(() => {
             this.formMsg = "";
             this.formError = false;
-          }, 5000);            
+          }, 5000);
       }
     );
-              
+
   }
 
 }

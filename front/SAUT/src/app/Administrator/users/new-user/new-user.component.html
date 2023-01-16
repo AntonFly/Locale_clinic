@@ -70,7 +70,7 @@
 
     <div>
       <button mat-raised-button color="primary" type="submit" [disabled]="!UserForm.valid" mat-dialog-close>Создать</button>
-      <span *ngIf="formError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+      <span *ngIf="formError===false" style="color: green;padding-left: 10px;" class="form-ok">{{formMsg}}</span>
       <span *ngIf="formError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
     </div>
 

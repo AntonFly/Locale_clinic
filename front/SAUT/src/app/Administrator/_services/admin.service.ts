@@ -29,6 +29,6 @@ export class AdminService {
   }
 
   generatePass(data): Observable<any> {
-    return this.http.put<any>(this.baseUrl + `admin/satisfy_pwd_drop_request`,  {'id' : 1});
+    return this.http.put<any>(this.baseUrl + `admin/satisfy_pwd_drop_request`,  {'id' : data.id});
   }
 }
