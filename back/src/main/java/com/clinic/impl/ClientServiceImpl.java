@@ -9,6 +9,7 @@ import com.clinic.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -35,7 +36,8 @@ public class ClientServiceImpl implements ClientService {
             PersonRepository personRepository,
             ModificationRepository mr,
             ImplantRepository im
-    ){
+    )
+    {
         this.personService = ps;
         this.clientRepository = cr;
         this.passportRepository = pr;
@@ -112,32 +114,39 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
-    }
+    public List<Client> getAllClients()
+    { return clientRepository.findAll(); }
 
     @Override
-    public Client updateClient(SimpleClientRegistration clientInfo, Long clientId) {
-        Client currentClient = clientRepository.getOne(clientId);
+    public Client updateClient(SimpleClientRegistration clientInfo, Long clientId)
+            throws ClientNotFoundException
+    {
+        Client currentClient = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ClientNotFoundException(clientId));
 
         currentClient.setEmail(clientInfo.getEmail());
         currentClient.setComment(clientInfo.getComment());
 
-        Person currentPerson = personRepository.getOne(currentClient.getPerson().getId());
+        Person person = new Person();
+        Optional<Person> optionalPerson = personService.getPersonByPassportNum(clientInfo.getPerson().getPassport());
+        if (optionalPerson.isPresent())
+            person = optionalPerson.get();
+        person.setName(clientInfo.getPerson().getName());
+        person.setSurname(clientInfo.getPerson().getSurname());
+        person.setPatronymic(clientInfo.getPerson().getPatronymic());
+        person.setDateOfBirth(clientInfo.getPerson().getDateOfBirth());
+        person = personRepository.save(person);
 
-        if(currentPerson.getPassports().stream().noneMatch(item -> item.getPassport() == clientInfo.getPerson().getPassport()))
-            passportRepository.save(new Passport(currentPerson,clientInfo.getPerson().getPassport()));
+        Passport passport = new Passport();
+        passport.setPassport(clientInfo.getPerson().getPassport());
+        passport.setPerson(person);
 
-        currentPerson.setName(clientInfo.getPerson().getName());
-        currentPerson.setSurname(clientInfo.getPerson().getSurname());
-        currentPerson.setPatronymic(clientInfo.getPerson().getPatronymic());
-        currentPerson.setDateOfBirth(clientInfo.getPerson().getDateOfBirth());
+        passport = passportRepository.save(passport);
+        person.setPassports(Collections.singletonList(passport));
 
-        personRepository.save(currentPerson);
-
-
-        return clientRepository.save(currentClient);
-
+        currentClient = clientRepository.save(currentClient);
+        currentClient.setPerson(person);
+        return currentClient;
     }
 
     @Override

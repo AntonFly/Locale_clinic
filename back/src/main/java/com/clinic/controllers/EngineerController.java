@@ -29,7 +29,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@PreAuthorize("hasRole('ROLE_ENGINEER')")
+//@PreAuthorize("hasRole('ROLE_ENGINEER')")
 @RequestMapping("/engineer")
 public class EngineerController {
 

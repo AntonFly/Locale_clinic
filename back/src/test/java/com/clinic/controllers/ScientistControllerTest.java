@@ -201,20 +201,6 @@ class ScientistControllerTest {
         return scenario;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    User createUser(Person person) {
-        String createdUserPassword = "TEST_PASSWORD";
-        String encodedPassword = passwordEncoder.encode(createdUserPassword);
-
-        User user = new User();
-        user.setRole(roleRepository.findByName(ERole.ROLE_MEDIC));
-        user.setPassword(encodedPassword);
-        user.setEmail("black.hornetnikita+admintest@gmail.com");
-        user.setPerson(person);
-
-        return userRepository.save(user);
-    }
-
     @AfterEach
     @Transactional(rollbackFor = Exception.class)
     void afterEach()

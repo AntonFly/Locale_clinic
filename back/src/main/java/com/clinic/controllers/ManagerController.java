@@ -28,7 +28,7 @@ import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@PreAuthorize("hasRole('ROLE_MANAGER')")
+//@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/manager")
 public class ManagerController {
 
@@ -122,6 +122,7 @@ public class ManagerController {
 
     @PostMapping("/update_client")
     public Client changeClient(@RequestBody SimpleClientRegistration clientInfo, @RequestParam Long clientId)
+            throws ClientNotFoundException
     { return clientService.updateClient(clientInfo, clientId); }
 
     @PostMapping("/add_previous_modification")

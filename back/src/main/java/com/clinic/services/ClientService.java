@@ -31,10 +31,11 @@ public interface ClientService {
 
     List<Client> getAllClients();
 
-    Client updateClient(SimpleClientRegistration clientInfo, Long clientId);
+    Client updateClient(SimpleClientRegistration clientInfo, Long clientId)
+            throws ClientNotFoundException;
 
     Client addPreviousModifications(SimpleModificationAdd modificationAdd)
-            throws ClientNotFoundException, ModificationNotFoundException;;
+            throws ClientNotFoundException, ModificationNotFoundException;
 
     Client addImplants(SimpleImplantsUpdate implantsUpdate)
             throws ClientNotFoundException;

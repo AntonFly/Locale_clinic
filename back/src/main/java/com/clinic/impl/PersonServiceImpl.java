@@ -60,7 +60,8 @@ public class PersonServiceImpl implements PersonService {
         passport.setPassport(personData.getPassport());
         passport.setPerson(person);
 
-        passportRepository.save(passport);
+        passport = passportRepository.save(passport);
+        person.setPassports(Collections.singletonList(passport));
 
         return person;
     }
