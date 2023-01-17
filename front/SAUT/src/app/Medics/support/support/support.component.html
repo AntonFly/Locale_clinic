@@ -3,7 +3,7 @@
       <form class="example-form">
         <h3>Введите идентификатор клиента</h3>
         <mat-form-field class="full-width">
-          <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" [formControl]="passport" required>
+          <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" [formControl]="passport" required id="client-id-input">
           <mat-error *ngFor="let validation of validation_messages.passport">
             <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
           </mat-error>

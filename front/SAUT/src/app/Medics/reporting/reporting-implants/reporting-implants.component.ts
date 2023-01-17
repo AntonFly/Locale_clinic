@@ -24,7 +24,8 @@ export class ReportingImplantsComponent implements OnInit {
   isDisabled: boolean = true;
   isUpdateError: boolean = false;
   updateMsg: string = "";
- 
+  implantsSent = false;
+
   columns_schema = [
     {
       key: 'name',
@@ -45,7 +46,7 @@ export class ReportingImplantsComponent implements OnInit {
       key: 'implantation_date',
       type: 'date',
       label: 'Дата установки'
-    },  
+    },
     {
       key: 'isEdit',
       type: 'isEdit',
@@ -68,14 +69,15 @@ export class ReportingImplantsComponent implements OnInit {
   saveImplants()
   {
     this.reportingService.updateImplants(this.client.id, this.currentImplants).subscribe(
-      res => {        
+      res => {
         this.isDisabled = true;
         this.isUpdateError = false;
         this.updateMsg = "Изменения сохранены";
+        this.implantsSent = true;
         setTimeout(() => {
           this.updateMsg = "";
           this.isUpdateError = false;
-        }, 5000);            
+        }, 5000);
       },
       error => {
         this.isUpdateError = true;
@@ -83,15 +85,15 @@ export class ReportingImplantsComponent implements OnInit {
         setTimeout(() => {
           this.updateMsg = "";
           this.isUpdateError = false;
-        }, 5000);            
+        }, 5000);
       }
-    ); 
+    );
   }
 
   previousChanged(event)
   {
-    this.isDisabled = false;    
-    this.currentImplants = event;    
-  }  
+    this.isDisabled = false;
+    this.currentImplants = event;
+  }
 
 }

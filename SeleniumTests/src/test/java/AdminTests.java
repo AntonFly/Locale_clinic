@@ -1,7 +1,7 @@
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.AddUserPage;
@@ -9,6 +9,8 @@ import pages.LoginPage;
 import pages.RecoverPassPage;
 
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AdminTests {
     public static LoginPage loginPage;
@@ -20,8 +22,8 @@ public class AdminTests {
     static String userEmail;
     //profilePage = new ProfilePage(driver);
 
-    @BeforeClass
-    public static void setup() {
+    @BeforeEach
+    public void setup() {
         System.setProperty("webdriver.chrome.driver", "static/chromedriver.exe");
         driver = new ChromeDriver();
 
@@ -37,8 +39,8 @@ public class AdminTests {
 
     }
 
-    @AfterClass
-    public static void tearDown() throws InterruptedException {
+    @AfterEach
+    public void tearDown() throws InterruptedException {
         Thread.sleep(5000);
         addUserPage.logOff();
         driver.close();
@@ -55,7 +57,7 @@ public class AdminTests {
                 "FrontTestName",
                 "FrontTestSurname",
                 "FrontTestPat");
-        Assert.assertEquals("Пользователь успешно добавлен", status);
+        assertEquals("Пользователь успешно добавлен", status);
     }
 
     @Test
@@ -69,14 +71,14 @@ public class AdminTests {
 
 
         String resetStatus = loginPage.resetPassword();
-        Assert.assertEquals("Запрос на сброс пароля успешно отправлен, " +
+        assertEquals("Запрос на сброс пароля успешно отправлен, " +
                 "после сброса пароля на указанную почту прийдет новый пароль.", resetStatus);
         Thread.sleep(5000);
         adminLogIn();
         driver.get("http://localhost:4200/admin/recoverPass");
         String status = recoverPassPage.resetPassword(userEmail);
 
-        Assert.assertEquals("Пароль успешно сгенерирован", status);
+        assertEquals("Пароль успешно сгенерирован", status);
         Thread.sleep(4000);
 
     }
@@ -85,6 +87,6 @@ public class AdminTests {
         loginPage.inputPwd(ConfProperties.getProperty("adminPwd"));
         loginPage.logIn();
         String user = addUserPage.getUserName();
-        Assert.assertEquals(ConfProperties.getProperty("adminLogin"), user);
+        assertEquals(ConfProperties.getProperty("adminLogin"), user);
     }
 }

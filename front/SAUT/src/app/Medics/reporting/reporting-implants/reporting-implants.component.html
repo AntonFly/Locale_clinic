@@ -1,8 +1,8 @@
 <h5>Список имплантов</h5>
 <div class="first-line">
-    <span *ngIf="!isUpdateError" class="message" style="color: green;">{{updateMsg}}</span>
+    <span *ngIf="!isUpdateError && implantsSent " class="message" style="color: green;" class="form-ok">{{updateMsg}}</span>
     <span *ngIf="isUpdateError" class="message" style="color: red;">{{updateMsg}}</span>
-    <button style="float: right;" [disabled]="isDisabled" mat-raised-button class="client-btn" color="primary" (click)="saveImplants()">  
+    <button style="float: right;" [disabled]="isDisabled" mat-raised-button class="client-btn" color="primary" (click)="saveImplants()">
         Сохранить
     </button>
 </div>

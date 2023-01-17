@@ -1,24 +1,24 @@
-<app-reporting-clients class="reporting-client" [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-reporting-clients> 
+<app-reporting-clients class="reporting-client" [client]="editedClient" (close)="closeEditor()" *ngIf="showingEditor"></app-reporting-clients>
 <div *ngIf="!showingEditor">
   <h1 id="tableLabel">Клиенты</h1>
   <div class="clientsHead">
     <div>
-      <!-- <button mat-raised-button class="client-btn" color="primary" (click)="openClientDialog()">  
+      <!-- <button mat-raised-button class="client-btn" color="primary" (click)="openClientDialog()">
         Создать клиента
       </button> -->
     </div>
-  
+
     <div class="right-hand">
       <div class="search">
         <mat-form-field class="no-wrapper" >
-          <input matInput placeholder="Поиск..." [formControl]="searchField">
+          <input matInput placeholder="Поиск..." [formControl]="searchField" class="search-field">
           <!-- <input matInput placeholder="Поиск...">       -->
           <button mat-button *ngIf="searchField.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchReset()">
             <mat-icon>close</mat-icon>
           </button>
-        </mat-form-field> 
+        </mat-form-field>
         <!-- <div > -->
-          <mat-icon class="search-icon" (click)="clientSearch()" >search</mat-icon>        
+          <mat-icon class="search-icon" (click)="clientSearch()" >search</mat-icon>
         <!--   </div> -->
       </div>
 
@@ -26,7 +26,7 @@
         <!-- <button mat-raised-button [matMenuTriggerFor]="menu">Еще</button> -->
 
         <mat-menu #menu="matMenu">
-          <button (click)="openAdvancedDialog()" mat-menu-item>Расширенный поиск</button>        
+          <button (click)="openAdvancedDialog()" mat-menu-item>Расширенный поиск</button>
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="quit()">ыы 313</button>
         </mat-menu>
@@ -47,19 +47,19 @@
         <th>Пасспорт</th>
         <th>Ф.И.О.</th>
         <th>Дата рождения</th>
-        <th>Email</th>      
+        <th>Email</th>
       </tr>
     </thead>
     <tbody>
       <tr (dblclick)="openEditor(queueItem)" *ngFor="let queueItem of shownItems">
         <td>{{ queueItem.person.passports[0].passport }}</td>
-        <td>{{ getFIO(queueItem.person) }}</td>      
+        <td>{{ getFIO(queueItem.person) }}</td>
         <td>{{ queueItem.person.dateOfBirth | date:'dd.MM.yyyy'}}</td>
         <td>{{ queueItem.email }}</td>
       </tr>
     </tbody>
   </table>
-  <mat-paginator *ngIf="!clientError" 
+  <mat-paginator *ngIf="!clientError"
                  #paginator
                  class="demo-paginator"
                  (page)="handlePageEvent($event)"
@@ -72,7 +72,7 @@
                  [pageIndex]="pageIndex"
                  aria-label="Select page">
   </mat-paginator>
-  <div class="errorBox" *ngIf="clientError"> 
+  <div class="errorBox" *ngIf="clientError">
     <div class="errorItem" style="padding-left: 47.5%;">
       <mat-icon style="font-size: 60px;">warning</mat-icon>
     </div>
