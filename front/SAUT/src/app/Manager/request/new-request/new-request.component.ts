@@ -18,7 +18,7 @@ import { Order, Mod, Spec } from '../../../_models/Order';
   styleUrls: ['./new-request.component.css']
 })
 export class NewRequestComponent implements OnInit {
-  
+
   ClientsDialogRef: MatDialogRef<ClientsDialogComponent>;
 
   RequestForm: FormGroup;
@@ -27,7 +27,7 @@ export class NewRequestComponent implements OnInit {
 
   toSelect = [];
   selected = [];
-  
+
   currentClient: Client;
   isClientError: boolean = false;
   clientErrorMsg: string = "";
@@ -35,7 +35,7 @@ export class NewRequestComponent implements OnInit {
   specList: Spec[];
   isSpecError: boolean = false;
   specErrorMsg: string = "";
-  
+
   currentMods: Mod[];
   isModsError: boolean = false;
   modsErrorMsg: string = "";
@@ -43,20 +43,22 @@ export class NewRequestComponent implements OnInit {
   isFormError: boolean = false;
   formMsg: string = "";
 
+  orderSent = false;
+
   optionsSpec: String[] = [];
   filteredOptionsSpec: Observable<String[]>;
   nameToId= {};
 
-  constructor(  
+  constructor(
                 private dialog: MatDialog,
-                private orderService: OrderService, 
+                private orderService: OrderService,
                 private clientService: ClientsService,
                 private fb: FormBuilder) { }
 
   ngOnInit() {
     this.selected = [];
     this.optionsSpec = [];
-    this.nameToId= {};      
+    this.nameToId= {};
 
     this.biuldForm();
     this.updateSpecs();
@@ -84,7 +86,7 @@ export class NewRequestComponent implements OnInit {
     this.RequestForm = this.fb.group({
       passport: ['', Validators.required],
       Specialization: ['', Validators.required],
-      comment:['', Validators.maxLength]            
+      comment:['', Validators.maxLength]
     })
   }
   get formControlPassport() {
@@ -116,9 +118,9 @@ export class NewRequestComponent implements OnInit {
         event.currentIndex,
       );
     }
-  }  
+  }
 
-  getFIO(client:any){    
+  getFIO(client:any){
     return client.surname+' '+client.name.substring(0,1)+'. '+client.patronymic.substring(0,1)+'.'
   }
 
@@ -126,19 +128,19 @@ export class NewRequestComponent implements OnInit {
     return this.isClientError || this.isModsError || this.isSpecError || this.selected.length===0;
   }
 
-  clearForm(f:any){    
+  clearForm(f:any){
     Object.keys(f.controls).forEach(key => {
       f.controls[key].reset();
       f.controls[key].clearValidators();
       f.controls[key].markAsPristine();
       f.controls[key].markAsUntouched();
-      f.controls[key].updateValueAndValidity();                    
-    })  
+      f.controls[key].updateValueAndValidity();
+    })
     f.reset();
     f.clearValidators();
     f.markAsPristine();
     f.markAsUntouched();
-    f.updateValueAndValidity();                  
+    f.updateValueAndValidity();
     this.selected = [];
     this.toSelect = [];
     this.currentClient = undefined;
@@ -157,22 +159,23 @@ export class NewRequestComponent implements OnInit {
   }
 
   //~~~~~~~~~~~~~~~~REQUESTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-  onSubmitRequest(event: any){      
+  onSubmitRequest(event: any){
       var modIds = this.selected.map(el => { return this.modsToId[el]});
 
       this.orderService.createOrder(this.currentClient.id,this.nameToId[event.Specialization],event.comment,modIds).subscribe(
-        result => {          
+        result => {
           this.formMsg = "Заявка успешно добавлена";
           this.isFormError = false;
+          this.orderSent = true;
 
           setTimeout( () =>
             this.formMsg = ""
           , 5000);
           this.clearForm(this.RequestForm);
-          
+
 
         },
-        error => {          
+        error => {
           this.isFormError = true;
           if(error.error.status === "CONFLICT")
             this.formMsg = error.error.message;
@@ -182,7 +185,7 @@ export class NewRequestComponent implements OnInit {
           setTimeout(() => {
             this.formMsg = "";
             this.isFormError = false;
-          }, 5000);            
+          }, 5000);
         }
 
       );
@@ -190,16 +193,16 @@ export class NewRequestComponent implements OnInit {
 
   updateSpecs(){
     this.orderService.getSpecializations().subscribe(
-      result => {        
+      result => {
         result.forEach(item => {
           this.optionsSpec.push(item.name);
           this.nameToId[item.name] = item.id;
         });
         this.specList = result;
-        this.isSpecError = false;        
+        this.isSpecError = false;
         this.specErrorMsg = "";
       },
-      error => {        
+      error => {
         // this.isSpecError = true;
         // this.
         console.log("Не удалось получить список специализаций");
@@ -216,60 +219,60 @@ export class NewRequestComponent implements OnInit {
     }
 
     this.clientService.getClient(parseInt(id)).subscribe(
-      result => {                              
+      result => {
         this.isClientError = false;
         this.clientErrorMsg = "";
         this.currentClient = result;
       },
-      error => {                
+      error => {
         this.isClientError = true;
-        
+
         if(error.error.status == "NOT_FOUND")
           this.clientErrorMsg = "Такого клиента не существует";
         else this.clientErrorMsg = "Не удалось найти клиента";
 
         this.currentClient = undefined;
-      });        
+      });
   }
 
   modsToId = {};
   getModsBySpec(){
-    let spec = this.formControlSpec.value;    
+    let spec = this.formControlSpec.value;
     if( this.optionsSpec.indexOf(spec) > -1)
-    {    
+    {
       this.isSpecError = false;
       this.specErrorMsg = "";
 
       this.orderService.getModsBySpec(this.nameToId[spec]).subscribe(
-        result => {                                          
+        result => {
           this.toSelect = [];
           this.selected = [];
 
           this.currentMods = result;
-          result.forEach(item => {            
+          result.forEach(item => {
             this.toSelect.push(item.name);
             this.modsToId[item.name] = item.id;
           });
           this.isModsError = false;
           this.modsErrorMsg = "";
         },
-        error => {                  
-          console.log(error);                  
+        error => {
+          console.log(error);
           this.toSelect = [];
           this.selected = [];
           this.currentMods = [];
 
           this.isModsError = true;
           this.modsErrorMsg = "Не удалось получить список модификаций"
-        });            
+        });
     }
-    else 
+    else
     {
       this.isSpecError = true;
       this.specErrorMsg = "Такой специализации не существует";
     }
   }
-  checkPatch(opt){    
+  checkPatch(opt){
     this.RequestForm.patchValue({Specialization: opt})
     this.getModsBySpec();
   }

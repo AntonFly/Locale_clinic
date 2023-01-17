@@ -2,20 +2,20 @@
     <span class="icon-div" (click)="closeClick()">
         <mat-icon class="top-icon" [inline]="true">arrow_forward_ios</mat-icon>
     </span>
-    <span class="header-name"> Список заявок </span>    
+    <span class="header-name"> Список заявок </span>
 </div>
 <h5>Ф.И.О.: {{getFIO()}}</h5>
 
 <h5>Согласие на медицинское вмешательство</h5>
 
 <div class="bottom-btns">
-    <span *ngIf="riskOfferError" class="message" style="color: red;">{{riskOfferMsg}}</span>
-    <button mat-raised-button class="file-btn" color="primary" (click)="downloadRisks()">  
+    <span *ngIf="riskOfferError" class="message" style="color: red;" class="button-err">{{riskOfferMsg}}</span>
+    <button mat-raised-button class="file-btn" color="primary" (click)="downloadRisks()">
         Риски
-    </button>        
-    <button mat-raised-button class="file-btn" color="primary" (click)="downloadOffer()">  
+    </button>
+    <button mat-raised-button class="file-btn" color="primary" (click)="downloadOffer()">
         Ком. предложение
-    </button>        
+    </button>
 </div>
 
 <br><br><br><br>
@@ -40,16 +40,16 @@
     </div>
     <div class="box-right">
         <span *ngIf="isUploadError" class="message" style="color: red;">{{uploadMsg}}</span>
-        <button mat-raised-button class="file-btn" color="primary" (click)="confirmFile()">  
+        <button mat-raised-button class="file-btn" color="primary" (click)="confirmFile()">
             Подтвердить
         </button>
-        <button mat-raised-button class="file-btn" color="primary" (click)="cancelFile()">  
+        <button mat-raised-button class="file-btn" color="primary" (click)="cancelFile()">
             Отмена
         </button>
     </div>
 </div>
 
-<div>    
+<div>
     <div class="chosen-file-box" *ngIf="order.confirmation">
         <div class="box-left">
             <img alt="Download" src="/assets/download.png">
@@ -63,14 +63,14 @@
         </div>
         <div class="box-right">
             <span *ngIf="isDownloadError" class="message" style="color: red;">{{downloadMsg}}</span>
-            <button mat-raised-button class="file-btn" color="primary" (click)="downloadFile()">  
+            <button mat-raised-button class="file-btn" color="primary" (click)="downloadFile()">
                 Скачать
-            </button>        
-            <button mat-raised-button class="file-btn" color="primary" (click)="changeFile()">  
+            </button>
+            <button mat-raised-button class="file-btn" color="primary" (click)="changeFile()">
                 Заменить
-            </button>        
+            </button>
         </div>
-    </div>    
+    </div>
 </div>
 
 <br>

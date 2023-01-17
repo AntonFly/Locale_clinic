@@ -1,14 +1,15 @@
 <div class="formContainer">
   <button mat-raised-button color="primary" class="new-client-btn" (click)="openClientDialog()">Создать клиента</button>
   <div class="form-header">
-    <h3>Введите идентификатор клиента</h3>    
+    <h3>Введите идентификатор клиента</h3>
   </div>
 
-  <form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">    
+  <form class="Requestform" [formGroup]="RequestForm" (ngSubmit)="onSubmitRequest(RequestForm.value)">
     <div class="client-id-div">
-    
+
       <mat-form-field class="full-width">
-      <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" formControlName="passport" required >
+      <input (input)="clientExists($event.target.value)" matInput placeholder="Идентификатор клиента" formControlName="passport" required
+            class="client-passport">
       <mat-error *ngFor="let validation of validation_messages.passport">
         <mat-error class="error-message" *ngIf="formControlPassport.hasError(validation.type) && (formControlPassport.dirty || formControlPassport.touched)">{{validation.message}}</mat-error>
       </mat-error>
@@ -18,7 +19,7 @@
       <mat-hint style="color: red;" *ngIf="isClientError">
         {{clientErrorMsg}}
       </mat-hint>
-    </mat-form-field>    
+    </mat-form-field>
     </div>
 
     <mat-accordion *ngIf="currentClient!==undefined" class="headers-align">
@@ -131,7 +132,7 @@
       <button class="RequestButtons" mat-raised-button color="primary" [disabled]="true">Отобразить риски</button> -->
     <!-- !RequestForm.valid&&selected.length===0 <button mat-button >Отмена</button> -->
     </div>
-    <span *ngIf="isFormError===false" style="color: green;padding-left: 10px;">{{formMsg}}</span>
+    <span *ngIf="isFormError===false && orderSent" style="color: green;padding-left: 10px;" class="form-ok">{{formMsg}}</span>
     <span *ngIf="isFormError===true" style="color: red;padding-left: 10px;">{{formMsg}}</span>
   </form>
 

@@ -1,7 +1,11 @@
 package pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import java.util.List;
@@ -46,9 +50,32 @@ public class MangerClientsPage {
     public WebElement status;
 
 
+    @FindBy(css = ".comment-field")
+    public WebElement commentFieldClientEditor;
+    
+
     // No page elements added
 
+
+    @FindBy(xpath = "//span[normalize-space(text()) = 'Сохранить']")
+    public WebElement clietnEditSaveBtn;
+
+    @FindBy(css = ".edit-ok")
+    public WebElement clientEditStatus;
+
+    WebDriver driver;
+
+    @FindBy(css = ".search-field")
+    public WebElement clientSearchField;
+
+    @FindBy(xpath = "//mat-icon[text()='search']")
+    public WebElement searchBnt;
+
+    @FindBy(css = ".search-icon")
+    public WebElement searchIconMat;
+
     public MangerClientsPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
@@ -63,6 +90,22 @@ public class MangerClientsPage {
     public void logOff(){
         openMenu();
         MenuItemButtonLogOff.click();
+    }
+
+    public void openClient(String passport){
+        new Actions(driver).doubleClick(driver.findElement(By.xpath(String.format("//td[text()='%s']", passport)))).perform();
+    }
+
+    public String changeClient(String passport, String comment) throws InterruptedException {
+        clientSearchField.clear();
+        Thread.sleep(10000);
+        clientSearchField.sendKeys(passport+Keys.ENTER);
+        clientSearchField.sendKeys(Keys.ENTER);
+        searchIconMat.click();
+        openClient(passport);
+        commentFieldClientEditor.sendKeys(comment);
+        clietnEditSaveBtn.click();
+        return clientEditStatus.getText();
     }
 
     public String createClient(String passport, String date, String email, String name,

@@ -12,9 +12,9 @@
       <button mat-button *ngIf="searchField.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchReset()">
         <mat-icon>close</mat-icon>
       </button>
-    </mat-form-field> 
+    </mat-form-field>
     <!-- <div > -->
-      <mat-icon class="search-icon" (click)="orderSearch()" >search</mat-icon>        
+      <mat-icon class="search-icon" (click)="orderSearch()" >search</mat-icon>
     <!--   </div> -->
   </div>
 </div>
@@ -27,13 +27,13 @@
         <th>Специализация</th>
         <th>Номер заявки</th>
         <th>Комментарий</th>
-        <th>Подтверждение</th>     
+        <th>Подтверждение</th>
       </tr>
     </thead>
     <tbody>
       <tr (dblclick)="openOrder(queueItem)" *ngFor="let queueItem of shownItems">
-        <td>{{ queueItem.client.person.id }}</td>
-        <td>{{ getFIO(queueItem.client.person) }}</td>      
+        <td>{{ queueItem.client.person.passports[0].passport }}</td>
+        <td>{{ getFIO(queueItem.client.person) }}</td>
         <td>{{ queueItem.specialization.name ? queueItem.specialization.name : "-"}}</td>
         <td>{{ queueItem.id}}</td>
         <td>{{ queueItem.comment ? queueItem.comment : "-"}}</td>
@@ -55,8 +55,8 @@
                  [pageIndex]="pageIndex"
                  aria-label="Select page">
   </mat-paginator>
-  
-<div class="errorBox" *ngIf="clientError"> 
+
+<div class="errorBox" *ngIf="clientError">
     <div class="errorItem" style="padding-left: 47.5%;">
       <mat-icon style="font-size: 60px;">warning</mat-icon>
     </div>

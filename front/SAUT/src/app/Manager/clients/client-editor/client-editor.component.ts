@@ -17,36 +17,38 @@ export class ClientEditorComponent implements OnInit {
   @Output('close') close: EventEmitter<boolean> = new EventEmitter();
 
   ClientForm: FormGroup;
-  
+
   formMsg: string;
   formError: boolean;
 
   tableMsg: string;
   tableError: boolean;
 
+  editSent = false;
+
 
   myDatepipe: DatePipe;
-  
+
   user_data;
   auto_data;
 
   tableValid: boolean = false;
-  
+
   tableChosen;
-  
+
   columns_schema = [
     {
       key: 'name',
       type: 'text',
       label: 'Модификация',
       autoComplete: true
-    },    
+    },
     {
       key: 'risk',
       type: 'text',
       label: 'Риск',
       notEditable: true
-    },  
+    },
     {
       key: 'price',
       type: 'text',
@@ -84,15 +86,15 @@ export class ClientEditorComponent implements OnInit {
     'passport': [
       { type: 'required', message: 'Требуются данные паспорта' }
     ],
-        
+
     'dateOfBirth': [
       { type: 'required', message: 'Пожалуйста, укажите дату рождения' },
-    ]    
+    ]
   };
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private clientService: ClientsService,
     datepipe: DatePipe
     ) { this.myDatepipe = datepipe;}
@@ -100,9 +102,9 @@ export class ClientEditorComponent implements OnInit {
   ngOnInit() {
     this.user_data = this.client.modifications;
     this.getAllMods();
-    this.createForms();    
+    this.createForms();
     this.formMsg = "";
-    this.formError = false;    
+    this.formError = false;
   }
 
   getAllMods(){
@@ -135,7 +137,7 @@ export class ClientEditorComponent implements OnInit {
 
   get formControlPassport() {
     return this.ClientForm.get('passport');
-  }  
+  }
 
   get formControlDate() {
     return this.ClientForm.get('dateOfBirth');
@@ -154,31 +156,32 @@ export class ClientEditorComponent implements OnInit {
       ])),
       passport: [this.client.person.passports[0].passport, Validators.required],
       dateOfBirth: [date, Validators.required],
-      comment:[this.client.comment, Validators.maxLength]      
+      comment:[this.client.comment, Validators.maxLength]
     })
 
     this.cdr.detectChanges();
   }
 
-  getFIO(){        
+  getFIO(){
     return this.client.person.surname+' '+this.client.person.name.substring(0,1)+'. '+this.client.person.patronymic.substring(0,1)+'.';
   }
   closeClick() { this.close.emit(true); }
 
 
   onSubmitClient(value)
-  {    
+  {
     value.dateOfBirth = this.myDatepipe.transform(this.ClientForm.value.dateOfBirth, 'yyyy-MM-dd');
-    
+
     this.clientService.updateClient(value, this.client.id).subscribe(
       res => {
           console.log(res);
         this.formError = false;
+        this.editSent = true;
         this.formMsg = "Изменения сохранены";
         setTimeout(() => {
           this.formMsg = "";
           this.formError = false;
-        }, 5000);            
+        }, 5000);
       },
       error => {
         console.log(error)
@@ -187,15 +190,15 @@ export class ClientEditorComponent implements OnInit {
         setTimeout(() => {
           this.formMsg = "";
           this.formError = false;
-        }, 5000);            
+        }, 5000);
       }
-    )    
+    )
   }
 
   updateTable(){
     if(!this.tableValid)
       return;
-      
+
       var ids = this.tableChosen.map(obj =>{
         return [obj.id]
       }).flat();
@@ -208,7 +211,7 @@ export class ClientEditorComponent implements OnInit {
           setTimeout(() => {
             this.tableMsg = "";
             this.tableError = false;
-          }, 5000);            
+          }, 5000);
         },
         error => {
           console.log(error)
@@ -217,16 +220,16 @@ export class ClientEditorComponent implements OnInit {
           setTimeout(() => {
             this.tableMsg = "";
             this.tableError = false;
-          }, 5000);            
+          }, 5000);
         }
       )
-    
+
   }
 
   previousChanged(data)
   {
     this.tableValid = true;
-    
+
     data.forEach(el => {
       if(!el.id || !el.name)
         this.tableValid = false;
