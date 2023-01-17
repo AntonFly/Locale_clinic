@@ -34,6 +34,18 @@ export class ScientistService {
     return this.http.get<Order[]>(this.baseUrl+"scientist/get_all_orders_by_passport/"+body);
   }
 
+  registerScenario(spec, order, mods:number[])
+  {
+    var body = {"spec_id": spec, "order_id": order, "mods": mods}
+    return this.http.post(this.baseUrl+'scientist/create_scenario', body)
+  }
+
+  updateScenario(scen_id, mods){
+    var body = {"scenario_id":scen_id, "mods": mods}
+    
+    return this.http.put(this.baseUrl+'scientist/update_scenario', body)
+  }
+
   uploadGenome(file: File, orderId){
     var formData = new FormData()
     formData.append('file', file)

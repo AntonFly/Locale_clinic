@@ -67,14 +67,14 @@
           </div>
         </ng-template>
 
-      <ng-template ngSwitchCase="ROLE_SCIENTISTS">
+      <ng-template ngSwitchCase="ROLE_SCIENTIST">
             <div class="side-header">
               <div><h2> Разделы </h2></div>
               <div style="float:right;"><mat-icon style="font-size: 30px; cursor: pointer;" (click)="drawer.toggle()" [inline]="true">arrow_back_ios</mat-icon></div>
             </div>
             <mat-divider></mat-divider>
             <div class="side-link">
-              <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['scientists/test']">TEST</a>
+              <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['scientist/scenario']">TEST</a>
             </div>
       </ng-template>
     </div>

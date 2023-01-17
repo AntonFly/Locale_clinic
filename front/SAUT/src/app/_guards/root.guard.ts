@@ -14,7 +14,7 @@ export class RootGuard implements CanActivate
         ROLE_ENGINEER: "/engineer/",
         ROLE_ADMIN: "/admin/",
         ROLE_MANAGER: "/manager/",
-        ROLE_SCIENTIST: "/scientists/"
+        ROLE_SCIENTIST: "/scientist/"
     }
 
     constructor(private authService: AuthenticationService, private router: Router) { }
@@ -23,13 +23,15 @@ export class RootGuard implements CanActivate
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        return new Promise(
+        return new Promise(            
             (resolve) => 
-            {                
+            {              
+                console.log("ROOT")  
                 var user = this.authService.token;
                 if(!user)
                     return resolve(this.router.parseUrl("/login"));            
-                        
+                
+                
                 resolve (this.router.parseUrl(this.root_paths[user.roles[0]]));                      
         }
     )      

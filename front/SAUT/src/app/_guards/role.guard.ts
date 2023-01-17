@@ -9,6 +9,14 @@ import { AuthenticationService } from '../_services/authentication.service';
 })
 export class RoleGuard implements CanActivate//, CanActivateChild
 {
+  root_paths = {
+    ROLE_MEDIC: "/medic/support",
+    ROLE_ENGINEER: "/engineer/clients",
+    ROLE_ADMIN: "/admin/addUser",
+    ROLE_MANAGER: "/manager/clients",
+    ROLE_SCIENTIST: "/scientist/scenario"
+  }
+
   constructor(private authService: AuthenticationService, private router: Router) { }
 
 //   canActivateChild (
@@ -70,9 +78,10 @@ export class RoleGuard implements CanActivate//, CanActivateChild
             // var user;
                 // console.log("GUUUUARD");
 
+            console.log("ROLE")
             var user = this.authService.token;
             if(!user)
-                return resolve(this.router.parseUrl("/login"));            
+                return resolve(this.router.parseUrl("/login"));                     
             
             var redirect = "";
             switch (user.roles[0])
@@ -95,11 +104,12 @@ export class RoleGuard implements CanActivate//, CanActivateChild
               default:
                 resolve(this.router.parseUrl("/autherr"));
             }
-
+            console.log(state.url)
             if (!state.url.includes(redirect))
-              resolve (this.router.parseUrl("/roleErr"));
+              resolve (this.router.parseUrl(this.root_paths[user.roles[0]]));                      
+              // resolve (this.router.parseUrl("/roleErr"));
             else resolve(true);
-          // }})
+          
         }
     )      
   }

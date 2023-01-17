@@ -1,0 +1,19 @@
+<div class="item-body">
+    <div class="info">
+        <span><b>Наименование: </b>{{mod.name}}</span><br>
+        <span><b>Риск: </b>{{mod.risk?mod.risk:"-"}}</span><br>
+        <span><b>Шанс: </b>{{mod.chance}}</span><br>
+    </div>
+    <ng-container>
+        <mat-form-field class="form-input">
+            <input
+            matInput      
+            type="number"
+            min="1"
+            max="100"
+            [(ngModel)]="mod.priority"
+            (change)="input()"
+            />
+        </mat-form-field>
+    </ng-container>
+</div>

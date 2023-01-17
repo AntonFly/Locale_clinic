@@ -44,7 +44,8 @@ export interface Modification {
   currency: string, 
   risk: string,
   chance: number,
-  accompaniment: string
+  accompaniment: string,
+  priority: number
 }
 
 // TODO not full

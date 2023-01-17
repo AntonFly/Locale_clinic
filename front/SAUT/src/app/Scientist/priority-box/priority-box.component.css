@@ -1,0 +1,13 @@
+.form-input{
+    width:50px;
+    margin-left: auto;
+}
+
+.item-body{
+    display: flex;
+    align-items: baseline;
+}
+
+.info{
+
+}

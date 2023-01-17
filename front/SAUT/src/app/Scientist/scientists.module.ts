@@ -23,6 +23,7 @@ import { ScientistClientsInfoComponent } from './scientist-clients-info/scientis
 import { ScenarioMainComponent } from './scenario-main/scenario-main.component';
 import { ScientistService } from './_services';
 import { ScenarioOrderComponent } from './scenario-order/scenario-order.component';
+import { PriorityBoxComponent } from './priority-box/priority-box.component';
 
 
  
@@ -39,7 +40,8 @@ const routes: Routes = [
    ScientistClientsComponent,
    ScientistClientsInfoComponent,
    ScenarioMainComponent,
-   ScenarioOrderComponent],
+   ScenarioOrderComponent,
+   PriorityBoxComponent],
   imports: [
     DragDropModule,
     MatButtonModule,

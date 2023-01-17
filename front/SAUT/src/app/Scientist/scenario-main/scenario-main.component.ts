@@ -100,7 +100,7 @@ export class ScenarioMainComponent implements OnInit {
   }
 
   selectOrder(order){    
-    if(order.scenario && order.confirmation)
+    if(order.confirmation)
     {
       this.isGenomePage=!this.isGenomePage; 
       this.selectedOrder=order;

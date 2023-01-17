@@ -1,4 +1,56 @@
+.editor-div{
+margin-left: auto;
+margin-right: auto;
+margin-top: 20px;
+}
+
+.container{
+  display: flex;
+}
+.prior-box{
+  width: 100%;
+}
+
+.one-liner{
+  display: flex;
+  align-items: baseline;
+}
+
+.second-row{
+margin-left: 45px;
+}
+
+.icon-div{  
+    /* position: fixed; */
+  /* left: 0; */
+  /* top: 0; */
+  font-size: 36px;
+  cursor: pointer;
+  width: min-content;
+  /* height: 100vh !important; */
+  /*width: 5%;*/  
+}
+
+.top-icon {
+    transform: rotate(180deg);
+    position: relative;
+    /* rotate: 180.0; */
+    /*left: 20%;*/
+    top: 50%;  
+}
+.header-div {    
+    width: 100%;
+    display: flex;
+    align-items: center;    
+}
+
+.header-name {
+    font-size: 18px;
+    margin-left: 10px;
+}
+
 .example-list {
+    margin-top: 20px;
     width: 500px;
     max-width: 100%;
     border: solid 1px #ccc;
@@ -19,6 +71,18 @@
     justify-content: space-between;
     box-sizing: border-box;
     cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+  .example-box-immove{
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;    
     background: white;
     font-size: 14px;
   }
