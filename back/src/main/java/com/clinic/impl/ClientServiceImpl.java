@@ -124,29 +124,25 @@ public class ClientServiceImpl implements ClientService {
         Client currentClient = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ClientNotFoundException(clientId));
 
-        currentClient.setEmail(clientInfo.getEmail());
-        currentClient.setComment(clientInfo.getComment());
+        Passport passport = currentClient.getPerson().getPassports().get(0);
+        passport.setPassport(clientInfo.getPerson().getPassport());
 
-        Person person = new Person();
-        Optional<Person> optionalPerson = personService.getPersonByPassportNum(clientInfo.getPerson().getPassport());
-        if (optionalPerson.isPresent())
-            person = optionalPerson.get();
+        passport = passportRepository.save(passport);
+
+        Person person = passport.getPerson();
         person.setName(clientInfo.getPerson().getName());
         person.setSurname(clientInfo.getPerson().getSurname());
         person.setPatronymic(clientInfo.getPerson().getPatronymic());
         person.setDateOfBirth(clientInfo.getPerson().getDateOfBirth());
-        person = personRepository.save(person);
+        personRepository.save(person);
 
-        Passport passport = new Passport();
-        passport.setPassport(clientInfo.getPerson().getPassport());
-        passport.setPerson(person);
+        currentClient = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ClientNotFoundException(clientId));
 
-        passport = passportRepository.save(passport);
-        person.setPassports(Collections.singletonList(passport));
+        currentClient.setEmail(clientInfo.getEmail());
+        currentClient.setComment(clientInfo.getComment());
 
-        currentClient = clientRepository.save(currentClient);
-        currentClient.setPerson(person);
-        return currentClient;
+        return clientRepository.save(currentClient);
     }
 
     @Override

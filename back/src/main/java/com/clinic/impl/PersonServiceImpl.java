@@ -23,10 +23,10 @@ import java.util.*;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private PassportService passportService;
+    private final PassportService passportService;
 
-    private PassportRepository passportRepository;
-    private PersonRepository personRepository;
+    private final PassportRepository passportRepository;
+    private final PersonRepository personRepository;
 
 
 
