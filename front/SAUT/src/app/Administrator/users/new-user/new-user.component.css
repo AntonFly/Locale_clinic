@@ -7,7 +7,15 @@
     font-size: 12px;
   }
   
-  .double-line-hint {
+  .lower-button{
+    display: inline-block;
+    /* align-items: baseline; */
+  }
+  .time-icon{
+    vertical-align: middle;
+    font-size: 24px;
+  }
+  /* .double-line-hint {
     .mat-input-hint-wrapper
   
   {
@@ -19,4 +27,4 @@
   }
   
   }
-  }
+  } */

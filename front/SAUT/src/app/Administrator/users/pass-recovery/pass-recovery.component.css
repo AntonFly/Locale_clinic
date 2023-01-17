@@ -11,9 +11,14 @@
     cursor: pointer;
     border-radius: 10px;
     border: 1px solid lightgray;
+    display: flex;
+    align-items: center;
 }
 .bublik-event{
     float: right;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 }
 
 .bublik-event-body{
@@ -24,6 +29,7 @@
 
 .bublik-email{
     font: 20px bold;
+    margin-bottom: 5px;
 
     /* float: left; */
 }

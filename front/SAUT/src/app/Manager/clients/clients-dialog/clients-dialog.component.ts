@@ -33,7 +33,8 @@ export class ClientsDialogComponent implements OnInit {
     ],
 
     'passport': [
-      { type: 'required', message: 'Требуются данные паспорта' }
+      { type: 'required', message: 'Требуются данные паспорта' },
+      { type: 'pattern', message: 'Должен состоять из 10 цифр' }
     ],
 
     'dateOfBirth': [
@@ -88,8 +89,11 @@ export class ClientsDialogComponent implements OnInit {
       email : new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ])),
-      passport: ['', Validators.required],
+      ])),      
+      passport : ['', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[0-9]{10}$')
+      ])],
       dateOfBirth: ['', Validators.required],
       comment:['', Validators.maxLength]
     })

@@ -11,8 +11,9 @@ import { DatePipe } from '@angular/common';
 export class NewUserComponent implements OnInit {
 
   UserForm: FormGroup;
-  formMsg: string;
-  formError: boolean;
+  formMsg: string = "";
+  formError: boolean = false;
+  isLoading: boolean = false;
 
   RolesToBd = {
     'Администратор': 'ROLE_ADMIN',
@@ -55,13 +56,14 @@ export class NewUserComponent implements OnInit {
     // ],
     'Passport': [
       { type: 'required', message: 'Требуется паспорт' },
+      { type: 'pattern', message: 'Должен состоять из 10 цифр' }
     ],
     'dateOfBirth': [
       { type: 'required', message: 'Пожалуйста, укажите дату рождения' },
     ]
   };
 
-  myDatepipe: DatePipe;
+  myDatepipe: DatePipe;  
 
   constructor(private fb: FormBuilder, private adminService: AdminService, datepipe: DatePipe) {
     this.myDatepipe = datepipe;
@@ -117,7 +119,10 @@ export class NewUserComponent implements OnInit {
         patronymic : ['', Validators.required],
         role : new FormControl(this.Roles[0], Validators.required),
         // password : ['', Validators.required],
-        passport : ['', Validators.required],
+        passport : ['', Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$')
+        ])],
         dateOfBirth: ['', Validators.required],
       });
     }
@@ -125,12 +130,14 @@ export class NewUserComponent implements OnInit {
 
 
     onSubmitClient(event: any) {
+      this.isLoading = true;
       event.role = this.RolesToBd[event.role];
       event.dateOfBirth = this.myDatepipe.transform(this.UserForm.value.dateOfBirth, 'yyyy-MM-dd');
       console.log(event);
 
       this.adminService.addUser(event).subscribe(
         (data: any) => {
+          this.isLoading = false;
           console.log(JSON.stringify(data));
 
           this.formMsg = 'Пользователь успешно добавлен';
@@ -144,6 +151,7 @@ export class NewUserComponent implements OnInit {
         },
 
         error => {
+          this.isLoading = false;
           console.log(error);
           this.formError = true;
           if (error.error.status === 'CONFLICT') {
