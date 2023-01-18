@@ -34,9 +34,10 @@ export class ScenarioOrderComponent implements OnInit {
     }
     else {
       this.serv.registerScenario(this.order.specialization.id, this.order.id, this.order.modifications.map(el => el.id)).subscribe(
-        res => {
+        (res : any) => {
           console.log("AAAA");
           console.log(res);
+          this.order.scenario = res;
         },
         error => {
           console.log(error);
@@ -147,6 +148,7 @@ export class ScenarioOrderComponent implements OnInit {
   saveRes(){
     //id scen = this.order.scenario
     //[{id_mod, prior}]
+    console.log(this.modsToEdit)
     var mods = this.modsToEdit.map(el => { return {"id":el.id, "priority":el.priority}})
     this.serv.updateScenario(this.order.scenario.id, mods).subscribe(
       res => {

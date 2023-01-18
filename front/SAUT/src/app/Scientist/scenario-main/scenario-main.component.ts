@@ -32,6 +32,7 @@ export class ScenarioMainComponent implements OnInit {
     ]
   }
 
+  curId;
   passport = new FormControl('', Validators.required);  
 
   constructor(
@@ -91,6 +92,7 @@ export class ScenarioMainComponent implements OnInit {
   getOrdersById(id: number){
     this.engService.getOrdersByPassport(id).subscribe(
       result => {
+        this.curId = id;
         this.currentOrders = result;
         console.log(result)
       },
@@ -105,6 +107,11 @@ export class ScenarioMainComponent implements OnInit {
       this.isGenomePage=!this.isGenomePage; 
       this.selectedOrder=order;
     }
+  }
+
+  closePage(){
+    this.isGenomePage=!this.isGenomePage
+    this.getOrdersById(this.curId);
   }
 
 }

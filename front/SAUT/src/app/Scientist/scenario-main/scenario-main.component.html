@@ -1,4 +1,4 @@
-<app-scenario-order [client]="currentClient" [order]="selectedOrder" (close)="isGenomePage=!isGenomePage" *ngIf="isGenomePage"> </app-scenario-order>
+<app-scenario-order [client]="currentClient" [order]="selectedOrder" (close)="closePage()" *ngIf="isGenomePage"> </app-scenario-order>
 <div *ngIf="!isGenomePage">
   <h1>Сопровождение трансформации</h1>
   <div class="formContainer">
