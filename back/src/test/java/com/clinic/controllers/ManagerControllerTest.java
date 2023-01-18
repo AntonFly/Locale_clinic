@@ -323,16 +323,17 @@ class ManagerControllerTest {
         simpleClientRegistration.setComment("MANAGER CHANGE TEST");
         simpleClientRegistration.setPerson(simplePersonRegistration);
 
+        List<Long> checkPassports = createdClient.getPerson().getPassports().stream().map(Passport::getPassport).collect(Collectors.toList());
+        checkPassports.add(simplePersonRegistration.getPassport());
+
         Client changedClient = assertDoesNotThrow(() -> mc.changeClient(simpleClientRegistration, createdClient.getId()));
         Optional<Client> checkClient = clientRepository.findById(changedClient.getId());
 
         assertTrue(checkClient.isPresent());
         assertEquals(changedClient, checkClient.get());
 
-        List<Long> checkPassports = new ArrayList<>();
-        checkPassports.add(simplePersonRegistration.getPassport());
 
-        assertIterableEquals(changedClient.getPerson().getPassports().stream().map(Passport::getPassport).collect(Collectors.toList()), checkPassports);
+        assertIterableEquals(checkPassports,changedClient.getPerson().getPassports().stream().map(Passport::getPassport).collect(Collectors.toList()));
         assertEquals(changedClient.getPerson().getName(), simplePersonRegistration.getName());
         assertEquals(changedClient.getPerson().getSurname(), simplePersonRegistration.getSurname());
         assertEquals(changedClient.getPerson().getPatronymic(), simplePersonRegistration.getPatronymic());

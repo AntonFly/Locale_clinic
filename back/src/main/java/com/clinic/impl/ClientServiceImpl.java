@@ -124,16 +124,18 @@ public class ClientServiceImpl implements ClientService {
         Client currentClient = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ClientNotFoundException(clientId));
 
-        Passport passport = currentClient.getPerson().getPassports().get(0);
-        passport.setPassport(clientInfo.getPerson().getPassport());
+        List<Passport> passports = currentClient.getPerson().getPassports();
 
-        passport = passportRepository.save(passport);
+        if(currentClient.getPerson().getPassports().stream().noneMatch(item -> item.getPassport() == clientInfo.getPerson().getPassport()))
+            passports.add(passportRepository.save(new Passport(currentClient.getPerson(),clientInfo.getPerson().getPassport())));
 
-        Person person = passport.getPerson();
+
+        Person person = passports.get(0).getPerson();
         person.setName(clientInfo.getPerson().getName());
         person.setSurname(clientInfo.getPerson().getSurname());
         person.setPatronymic(clientInfo.getPerson().getPatronymic());
         person.setDateOfBirth(clientInfo.getPerson().getDateOfBirth());
+        person.setPassports(passports);
         personRepository.save(person);
 
         currentClient = clientRepository.findById(clientId)
