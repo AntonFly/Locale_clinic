@@ -20,9 +20,9 @@ export class AuthenticationService {
   }
   renewToken() {
     let token = localStorage.getItem('token');
-    this._token.next(JSON.parse(token));
-
-    console.log('HOW TO CHECK TOKEN LMAO');
+    if(token)
+      this._token.next(JSON.parse(atob(token)));
+    
   }
   login(user) {// : User) {
 
@@ -38,7 +38,7 @@ export class AuthenticationService {
       .pipe( map(
         (token: any) => {
           this._token.next(token);
-          localStorage.setItem('token', JSON.stringify(token));
+          localStorage.setItem('token', btoa(JSON.stringify(token)));
           return token.roles[0];
         }
       ));
@@ -53,6 +53,8 @@ export class AuthenticationService {
   }
 
   get token(): Token { return this._token.value; }
+
+  get id(){ return this._token.value.id;}
 
   resetPWD(email: any) {
 

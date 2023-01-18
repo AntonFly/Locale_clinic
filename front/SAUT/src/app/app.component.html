@@ -15,12 +15,6 @@
           <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/requests']">Заявки</a>
         </div>
         <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/contracts']">Договора</a>
-        </div>
-        <div class="side-link">
-          <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/services']">Услуги</a>
-        </div>
-        <div class="side-link">
           <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['manager/stock']">Склад</a>
         </div>
       </ng-template>
@@ -74,7 +68,7 @@
             </div>
             <mat-divider></mat-divider>
             <div class="side-link">
-              <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['scientist/scenario']">TEST</a>
+              <a (click)="drawer.toggle()" class="nav-link text-dark" [routerLink]="['scientist/scenario']">Сценарии</a>
             </div>
       </ng-template>
     </div>

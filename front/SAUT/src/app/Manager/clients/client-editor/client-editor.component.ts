@@ -84,7 +84,8 @@ export class ClientEditorComponent implements OnInit {
     ],
 
     'passport': [
-      { type: 'required', message: 'Требуются данные паспорта' }
+      { type: 'required', message: 'Требуются данные паспорта' },
+      { type: 'pattern', message: 'Должен состоять из 10 цифр' }
     ],
 
     'dateOfBirth': [
@@ -153,8 +154,11 @@ export class ClientEditorComponent implements OnInit {
       email : new FormControl(this.client.email, Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ])),
-      passport: [this.client.person.passports[0].passport, Validators.required],
+      ])),      
+      passport : [this.client.person.passports[0].passport, Validators.compose([
+        Validators.required,
+        Validators.pattern('^[0-9]{10}$')
+      ])],
       dateOfBirth: [date, Validators.required],
       comment:[this.client.comment, Validators.maxLength]
     })

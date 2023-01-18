@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Stock } from 'src/app/_models/Stock';
 import { StockService } from '../../_services';
+import { AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'app-stock-main',
@@ -59,10 +60,10 @@ export class StockMainComponent implements OnInit {
   updateMsg: string = "";
   isUpdateError: boolean = false;
 
-  constructor(private stockService: StockService) { }
+  constructor(private auth:AuthenticationService, private stockService: StockService) { }
 
   ngOnInit() {
-    this.currentUserId = JSON.parse(localStorage.getItem("token")).id;    
+    this.currentUserId = this.auth.id;//JSON.parse(localStorage.getItem("token")).id;    
     this.refreshList();
   }
 
