@@ -5,17 +5,17 @@ SELECT person_invalid(person_id => floor(313 + random( ) *10000 )::int);
 -- passports
 SELECT passport_valid
     (
-        person_id   => floor(313 + random( ) *10000 )::int,
+        person_id   => floor(3133 + random( ) *10000 )::int,
         passport_id => 1234567890
     );
 SELECT passport_invalid
     (
-        person_id   => floor(313 + random( ) *10000 )::int,
+        person_id   => floor(3133 + random( ) *10000 )::int,
         passport_id => 4
     );
 SELECT passport_fk_invalid
     (
-        person_id   => floor(313 + random( ) *10000 )::int,
+        person_id   => floor(3133 + random( ) *10000 )::int,
         passport_id => 1234567890
     );
 

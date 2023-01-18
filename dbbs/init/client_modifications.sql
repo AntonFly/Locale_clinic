@@ -73,7 +73,7 @@ BEGIN
         RETURN false;
     END;
     
-    DELETE FROM client_modification WHERE id_client=client_id AND id_spec=spec_id;
+    DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;
     DELETE FROM modifications WHERE id=mod_id;
     DELETE FROM clients WHERE id=client_id;
     DELETE FROM person WHERE id=person_id;

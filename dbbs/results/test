@@ -128,11 +128,11 @@
  t
 (1 row)
 
-psql:main.sql:136: ERROR:  column "id_spec" does not exist
-LINE 1: ...client_modification WHERE id_client=client_id AND id_spec=sp...
-                                                             ^
-QUERY:  DELETE FROM client_modification WHERE id_client=client_id AND id_spec=spec_id
-CONTEXT:  PL/pgSQL function client_mod_valid(integer,integer,integer) line 72 at SQL statement
+ client_mod_valid 
+------------------
+ t
+(1 row)
+
  client_fk_mod_invalid 
 -----------------------
  t
@@ -246,6 +246,7 @@ CONTEXT:  PL/pgSQL function client_mod_valid(integer,integer,integer) line 72 at
  accompaniment_invalid       | t      | null value in column "scenarios" of relation "accompaniment_script" violates not-null constraint
  specialization_valid        | t      | -
  specializations_invalid     | t      | null value in column "name" of relation "specializations" violates not-null constraint
+ client_mod_valid            | t      | -
  client_fk_mod_invalid       | t      | insert or update on table "client_modification" violates foreign key constraint "client_specialization_clients_id_fk"
  scenario_valid              | t      | -
  scenario_fk_invalid         | t      | insert or update on table "scenario" violates foreign key constraint "scenario_specializations_id_fk"
@@ -263,10 +264,10 @@ CONTEXT:  PL/pgSQL function client_mod_valid(integer,integer,integer) line 72 at
  order_mod_valid             | t      | -
  order_fk_mod_invalid        | t      | insert or update on table "orders_modifications" violates foreign key constraint "orders_modifications_orders_id_fk"
  order_mod_fk_invalid        | t      | insert or update on table "orders_modifications" violates foreign key constraint "orders_modifications_modifications_id_fk"
-(43 rows)
+(44 rows)
 
  amount | ok | not_ok 
 --------+----+--------
-     43 | 43 |      0
+     44 | 44 |      0
 (1 row)
 
