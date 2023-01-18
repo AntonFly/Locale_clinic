@@ -10,6 +10,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -73,14 +74,14 @@ BEGIN
         END IF;
         
     EXCEPTION WHEN OTHERS
-    THEN        
+    THEN 
+        INSERT INTO tests (name, status, comment) VALUES (test_name, false, SQLERRM);       
         DELETE FROM orders WHERE id=order_id;
         DELETE FROM specializations WHERE id=spec_id;
         DELETE FROM accompaniment_script WHERE id=accompaniment_id;
         DELETE FROM clients WHERE id=client_id;
         DELETE FROM person WHERE id=person_id;
-         
-        INSERT INTO tests (name, status, comment) VALUES (test_name, false, SQLERRM);
+                 
         RETURN false;
     END;
     
@@ -108,6 +109,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');        
     END IF;
@@ -194,6 +196,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');        
     END IF;
@@ -280,6 +283,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');        
     END IF;

@@ -9,6 +9,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -50,6 +51,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;

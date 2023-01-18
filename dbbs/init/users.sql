@@ -9,7 +9,8 @@ DECLARE
     person_res integer; role_res integer; users_res integer;
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
-    test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := substring(stack from 'function (.*?) line')::regprocedure::text;
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name)); 
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -27,7 +28,7 @@ BEGIN
             RAISE EXCEPTION 'error setting up person';            
         END IF;
 
-        INSERT INTO user_role (id, role) VALUES (role_id, 'test_role');
+        INSERT INTO user_role (id, name) VALUES (role_id, 'test_role');
 
         SELECT count(*) INTO role_res
             FROM user_role
@@ -78,12 +79,13 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');        
     END IF;
     
     BEGIN
-        INSERT INTO user_role (id, role) VALUES (role_id, 'test_role');
+        INSERT INTO user_role (id, name) VALUES (role_id, 'test_role');
 
         SELECT count(*) INTO role_res
             FROM user_role
@@ -137,6 +139,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');        
     END IF;

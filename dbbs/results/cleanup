@@ -11,8 +11,7 @@ DROP FUNCTION
 DROP FUNCTION
 DROP FUNCTION
 DROP FUNCTION
-psql:clean/clean.sql:20: ОШИБКА:  имя функции "stock_valid" не уникально
-HINT:  Задайте список аргументов для однозначного выбора функции.
+DROP FUNCTION
 DROP FUNCTION
 DROP FUNCTION
 DROP FUNCTION

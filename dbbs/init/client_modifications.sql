@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION client_implant_valid(person_id int, client_id int, implant_id int)
+CREATE OR REPLACE FUNCTION client_mod_valid(person_id int, client_id int, mod_id int)
 RETURNS boolean
 LANGUAGE plpgsql
 as
@@ -6,11 +6,11 @@ $$
 DECLARE    
     stack text; test_name text;
     res integer; 
-    person_res integer; client_res integer; implants_res integer;
+    person_res integer; client_res integer; spec_res integer;
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
-    test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
-    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
+    test_name := substring(stack from 'function (.*?) line')::regprocedure::text;
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));   
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -39,24 +39,24 @@ BEGIN
             RAISE EXCEPTION 'error setting up client';            
         END IF;
 
-        INSERT INTO implants (id, name, description) 
-        VALUES (implant_id, 'test name','test desc');
+        INSERT INTO modifications (id, name, price, currency, risk, chance, accompaniment) 
+        VALUES (mod_id, 'test name', 313,'RUB', 'aaa', 100, 'acccccc');
 
-        SELECT count(*) INTO implants_res
-            FROM implants
-            WHERE id=implant_id;
+        SELECT count(*) INTO spec_res
+            FROM modifications
+            WHERE id=mod_id;
                 
-        IF implants_res != 1 THEN            
-            RAISE EXCEPTION 'error setting up implants';            
+        IF spec_res != 1 THEN            
+            RAISE EXCEPTION 'Record not found';            
         END IF;
 
         
         -- test
-        INSERT INTO client_implant (id_client, id_implant) VALUES (client_id, implant_id);
+        INSERT INTO client_modification (id_client, id_mod) VALUES (client_id, mod_id);
 
         SELECT count(*) INTO res
-            FROM client_implant
-            WHERE id_client=client_id AND id_implant=implant_id;
+            FROM client_modification
+            WHERE id_client=client_id AND id_mod=mod_id;
                 
         IF res != 1 THEN            
             RAISE EXCEPTION 'Record not found';
@@ -64,8 +64,8 @@ BEGIN
         
     EXCEPTION WHEN OTHERS
     THEN
-        DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;
-        DELETE FROM implants WHERE id=implant_id;
+        DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;    
+        DELETE FROM modifications WHERE id=mod_id;
         DELETE FROM clients WHERE id=client_id;
         DELETE FROM person WHERE id=person_id;
          
@@ -73,8 +73,8 @@ BEGIN
         RETURN false;
     END;
     
-    DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;
-    DELETE FROM implants WHERE id=implant_id;
+    DELETE FROM client_modification WHERE id_client=client_id AND id_spec=spec_id;
+    DELETE FROM modifications WHERE id=mod_id;
     DELETE FROM clients WHERE id=client_id;
     DELETE FROM person WHERE id=person_id;
     INSERT INTO tests (name, status, comment) VALUES (test_name, true, '-');
@@ -82,7 +82,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION client_fk_implant_invalid(client_id int, implant_id int)
+CREATE OR REPLACE FUNCTION client_fk_mod_invalid(client_id int, mod_id int)
 RETURNS boolean
 LANGUAGE plpgsql
 as
@@ -90,7 +90,7 @@ $$
 DECLARE    
     stack text; test_name text;
     res integer; 
-    person_res integer; client_res integer; implants_res integer;
+    spec_res integer;
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
@@ -103,24 +103,24 @@ BEGIN
 
     -- prepare        
 
-        INSERT INTO implants (id, name, description) 
-        VALUES (implant_id, 'test name','test desc');
+        INSERT INTO modifications (id, name, price, currency, risk, chance, accompaniment) 
+        VALUES (mod_id, 'test name', 313,'RUB', 'aaa', 100, 'acccccc');
 
-        SELECT count(*) INTO implants_res
-            FROM implants
-            WHERE id=implant_id;
+        SELECT count(*) INTO spec_res
+            FROM modifications
+            WHERE id=mod_id;
                 
-        IF implants_res != 1 THEN            
-            RAISE EXCEPTION 'error setting up implants';            
+        IF spec_res != 1 THEN            
+            RAISE EXCEPTION 'Record not found';            
         END IF;
 
         
         -- test
-        INSERT INTO client_implant (id_client, id_implant) VALUES (client_id, implant_id);
+        INSERT INTO client_modification (id_client, id_mod) VALUES (client_id, mod_id);
 
         SELECT count(*) INTO res
-            FROM client_implant
-            WHERE id_client=client_id AND id_implant=implant_id;
+            FROM client_modification
+            WHERE id_client=client_id AND id_mod=mod_id;
                 
         IF res != 0 THEN            
             RAISE EXCEPTION 'found record';
@@ -128,28 +128,28 @@ BEGIN
         
     EXCEPTION 
     WHEN foreign_key_violation THEN         
-        DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;
-        DELETE FROM implants WHERE id=implant_id;
+        DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;
+        DELETE FROM modifications WHERE id=mod_id;
 
         INSERT INTO tests (name, status, comment) VALUES (test_name, true, SQLERRM);
         RETURN true;
     WHEN OTHERS THEN
-        DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;
-        DELETE FROM implants WHERE id=implant_id;
+        DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;
+        DELETE FROM modifications WHERE id=mod_id;
         
         INSERT INTO tests (name, status, comment) VALUES (test_name, false, SQLERRM);
         RETURN false;
     END;
     
-    DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;
-    DELETE FROM implants WHERE id=implant_id;
+    DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;
+    DELETE FROM modifications WHERE id=mod_id;
 
     INSERT INTO tests (name, status, comment) VALUES (test_name, false, 'No error occured');
     RETURN false;
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION client_implant_fk_invalid(person_id int, client_id int, implant_id int)
+CREATE OR REPLACE FUNCTION client_mod_fk_invalid(person_id int, client_id int, mod_id int)
 RETURNS boolean
 LANGUAGE plpgsql
 as
@@ -157,7 +157,7 @@ $$
 DECLARE    
     stack text; test_name text;
     res integer; 
-    person_res integer; client_res integer; implants_res integer;
+    person_res integer; client_res integer; spec_res integer;
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
@@ -191,11 +191,11 @@ BEGIN
         END IF;
 
         -- test
-        INSERT INTO client_implant (id_client, id_implant) VALUES (client_id, implant_id);
+        INSERT INTO client_modification (id_client, id_mod) VALUES (client_id, mod_id);
 
         SELECT count(*) INTO res
-            FROM client_implant
-            WHERE id_client=client_id AND id_implant=implant_id;
+            FROM client_modification
+            WHERE id_client=client_id AND id_mod=mod_id;
                 
         IF res != 0 THEN            
             RAISE EXCEPTION 'found record';
@@ -209,7 +209,7 @@ BEGIN
         INSERT INTO tests (name, status, comment) VALUES (test_name, true, SQLERRM);
         RETURN true;
     WHEN OTHERS THEN
-        DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;        
+        DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;
         DELETE FROM clients WHERE id=client_id;
         DELETE FROM person WHERE id=person_id;
          
@@ -217,7 +217,7 @@ BEGIN
         RETURN false;
     END;
     
-    DELETE FROM client_implant WHERE id_client=client_id AND id_implant=implant_id;    
+    DELETE FROM client_modification WHERE id_client=client_id AND id_mod=mod_id;
     DELETE FROM clients WHERE id=client_id;
     DELETE FROM person WHERE id=person_id;
     INSERT INTO tests (name, status, comment) VALUES (test_name, false, 'No error occured');

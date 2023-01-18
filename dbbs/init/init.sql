@@ -15,7 +15,8 @@ CREATE TABLE tests (
 \i init/client_implant.sql
 \i init/accompaniment_script.sql
 \i init/specializtions.sql
-\i init/client_specialization.sql
+-- \i init/client_specialization.sql
+\i init/client_modifications.sql
 \i init/scenario.sql
 \i init/modifications.sql
 \i init/modification_scenario.sql

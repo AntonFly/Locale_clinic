@@ -128,18 +128,13 @@
  t
 (1 row)
 
- client_spec_valid 
--------------------
- t
-(1 row)
-
- client_fk_spec_invalid 
-------------------------
- t
-(1 row)
-
- client_spec_fk_invalid 
-------------------------
+psql:main.sql:136: ERROR:  column "id_spec" does not exist
+LINE 1: ...client_modification WHERE id_client=client_id AND id_spec=sp...
+                                                             ^
+QUERY:  DELETE FROM client_modification WHERE id_client=client_id AND id_spec=spec_id
+CONTEXT:  PL/pgSQL function client_mod_valid(integer,integer,integer) line 72 at SQL statement
+ client_fk_mod_invalid 
+-----------------------
  t
 (1 row)
 
@@ -223,57 +218,55 @@
  t
 (1 row)
 
-                                 name                                  | status |                                                                  comment                                                                  
------------------------------------------------------------------------+--------+-------------------------------------------------------------------------------------------------------------------------------------------
- person_valid(integer)                                                 | t      | -
- person_invalid(integer)                                               | t      | нулевое значение в столбце "name" нарушает ограничение NOT NULL
- passport_valid(integer,integer)                                       | t      | -
- passport_invalid(integer,integer)                                     | t      | новая строка в отношении "passports" нарушает ограничение-проверку "passports_passport_check"
- passport_fk_invalid(integer,integer)                                  | t      | INSERT или UPDATE в таблице "passports" нарушает ограничение внешнего ключа "passports_person_id_fk"
- client_valid(integer,integer)                                         | t      | -
- client_fk_invalid(integer,integer)                                    | t      | INSERT или UPDATE в таблице "clients" нарушает ограничение внешнего ключа "clients_person_id_fk"
- user_role_valid(integer)                                              | t      | -
- user_role_unique(integer,integer)                                     | t      | повторяющееся значение ключа нарушает ограничение уникальности "user_role_role_uindex"
- users_valid(integer,integer,integer)                                  | t      | -
- user_person_fk_invalid(integer,integer,integer)                       | t      | INSERT или UPDATE в таблице "users" нарушает ограничение внешнего ключа "users_person_id_fk"
- user_role_fk_invalid(integer,integer,integer)                         | t      | INSERT или UPDATE в таблице "users" нарушает ограничение внешнего ключа "users_userrole_id_fk"
- pwd_drop_request_valid(integer,integer,integer,integer)               | t      | -
- pwd_drop_request_fk_invalid(integer,integer)                          | t      | INSERT или UPDATE в таблице "pwd_drop_requests" нарушает ограничение внешнего ключа "pwd_reset_requests_users_id_fk"
- stock_valid(integer,integer,integer,integer)                          | t      | -
- stock_user_fk_invalid(integer,integer)                                | t      | INSERT или UPDATE в таблице "stock" нарушает ограничение внешнего ключа "stock_users_id_fk"
- stock_vendor_invalid(integer,integer,integer,integer)                 | t      | нулевое значение в столбце "vendor_code" нарушает ограничение NOT NULL
- implants_valid(integer)                                               | t      | -
- implants_invalid(integer)                                             | t      | нулевое значение в столбце "name" нарушает ограничение NOT NULL
- client_implant_valid(integer,integer,integer)                         | t      | -
- client_fk_implant_invalid(integer,integer)                            | t      | INSERT или UPDATE в таблице "client_implant" нарушает ограничение внешнего ключа "client_implant_clients_id_fk"
- client_implant_fk_invalid(integer,integer,integer)                    | t      | INSERT или UPDATE в таблице "client_implant" нарушает ограничение внешнего ключа "client_implant_implants_id_fk"
- accompaniment_valid(integer)                                          | t      | -
- accompaniment_invalid(integer)                                        | t      | нулевое значение в столбце "scenarios" нарушает ограничение NOT NULL
- specialization_valid(integer)                                         | t      | -
- specializations_invalid(integer)                                      | t      | нулевое значение в столбце "name" нарушает ограничение NOT NULL
- client_spec_valid(integer,integer,integer)                            | t      | -
- client_fk_spec_invalid(integer,integer)                               | t      | INSERT или UPDATE в таблице "client_specialization" нарушает ограничение внешнего ключа "client_specialization_clients_id_fk"
- client_spec_fk_invalid(integer,integer,integer)                       | t      | INSERT или UPDATE в таблице "client_specialization" нарушает ограничение внешнего ключа "client_specialization_specializations_id_fk"
- scenario_valid(integer,integer)                                       | t      | -
- scenario_fk_invalid(integer,integer)                                  | t      | INSERT или UPDATE в таблице "scenario" нарушает ограничение внешнего ключа "scenario_specializations_id_fk"
- modification_valid(integer)                                           | t      | -
- modification_invalid(integer)                                         | t      | нулевое значение в столбце "name" нарушает ограничение NOT NULL
- mod_scen_valid(integer,integer,integer)                               | t      | -
- mod_fk_scen_invalid(integer,integer,integer)                          | t      | INSERT или UPDATE в таблице "modification_scenario" нарушает ограничение внешнего ключа "modification_specialization_modifications_id_fk"
- mod_scen_fk_invalid(integer,integer)                                  | t      | INSERT или UPDATE в таблице "modification_scenario" нарушает ограничение внешнего ключа "modification_specialization_scenario_id_fk"
- order_valid(integer,integer,integer,integer,integer)                  | t      | -
- order_spec_fk_invalid(integer,integer,integer,integer,integer)        | t      | INSERT или UPDATE в таблице "orders" нарушает ограничение внешнего ключа "orders_specializations_id_fk"
- order_acc_fk_invalid(integer,integer,integer,integer,integer)         | t      | INSERT или UPDATE в таблице "orders" нарушает ограничение внешнего ключа "orders_accompaniment_script_id_fk"
- order_client_fk_invalid(integer,integer,integer,integer)              | t      | INSERT или UPDATE в таблице "orders" нарушает ограничение внешнего ключа "orders_clients_id_fk"
- body_valid(integer,integer,integer,integer,integer,integer)           | t      | -
- body_fk_invalid(integer,integer)                                      | t      | INSERT или UPDATE в таблице "body_changes" нарушает ограничение внешнего ключа "body_changes_orders_id_fk"
- order_mod_valid(integer,integer,integer,integer,integer,integer)      | t      | -
- order_fk_mod_invalid(integer,integer)                                 | t      | INSERT или UPDATE в таблице "orders_modifications" нарушает ограничение внешнего ключа "orders_modifications_orders_id_fk"
- order_mod_fk_invalid(integer,integer,integer,integer,integer,integer) | t      | INSERT или UPDATE в таблице "orders_modifications" нарушает ограничение внешнего ключа "orders_modifications_modifications_id_fk"
-(45 rows)
+            name             | status |                                                               comment                                                               
+-----------------------------+--------+-------------------------------------------------------------------------------------------------------------------------------------
+ person_valid                | t      | -
+ person_invalid              | t      | null value in column "name" of relation "person" violates not-null constraint
+ passport_valid              | t      | -
+ passport_invalid            | t      | new row for relation "passports" violates check constraint "passports_passport_check"
+ passport_fk_invalid         | t      | insert or update on table "passports" violates foreign key constraint "passports_person_id_fk"
+ client_valid                | t      | -
+ client_fk_invalid           | t      | insert or update on table "clients" violates foreign key constraint "clients_person_id_fk"
+ user_role_valid             | t      | -
+ user_role_unique            | t      | duplicate key value violates unique constraint "user_role_name_uindex"
+ users_valid                 | t      | -
+ user_person_fk_invalid      | t      | insert or update on table "users" violates foreign key constraint "users_person_id_fk"
+ user_role_fk_invalid        | t      | insert or update on table "users" violates foreign key constraint "users_userrole_id_fk"
+ pwd_drop_request_valid      | t      | -
+ pwd_drop_request_fk_invalid | t      | insert or update on table "pwd_drop_requests" violates foreign key constraint "pwd_reset_requests_users_id_fk"
+ stock_valid                 | t      | -
+ stock_user_fk_invalid       | t      | insert or update on table "stock" violates foreign key constraint "stock_users_id_fk"
+ stock_vendor_invalid        | t      | null value in column "vendor_code" of relation "stock" violates not-null constraint
+ implants_valid              | t      | -
+ implants_invalid            | t      | null value in column "name" of relation "implants" violates not-null constraint
+ client_implant_valid        | t      | -
+ client_fk_implant_invalid   | t      | insert or update on table "client_implant" violates foreign key constraint "client_implant_clients_id_fk"
+ client_implant_fk_invalid   | t      | insert or update on table "client_implant" violates foreign key constraint "client_implant_implants_id_fk"
+ accompaniment_valid         | t      | -
+ accompaniment_invalid       | t      | null value in column "scenarios" of relation "accompaniment_script" violates not-null constraint
+ specialization_valid        | t      | -
+ specializations_invalid     | t      | null value in column "name" of relation "specializations" violates not-null constraint
+ client_fk_mod_invalid       | t      | insert or update on table "client_modification" violates foreign key constraint "client_specialization_clients_id_fk"
+ scenario_valid              | t      | -
+ scenario_fk_invalid         | t      | insert or update on table "scenario" violates foreign key constraint "scenario_specializations_id_fk"
+ modification_valid          | t      | -
+ modification_invalid        | t      | null value in column "name" of relation "modifications" violates not-null constraint
+ mod_scen_valid              | t      | -
+ mod_fk_scen_invalid         | t      | insert or update on table "modification_scenario" violates foreign key constraint "modification_specialization_modifications_id_fk"
+ mod_scen_fk_invalid         | t      | insert or update on table "modification_scenario" violates foreign key constraint "modification_specialization_scenario_id_fk"
+ order_valid                 | t      | -
+ order_spec_fk_invalid       | t      | insert or update on table "orders" violates foreign key constraint "orders_specializations_id_fk"
+ order_acc_fk_invalid        | t      | insert or update on table "orders" violates foreign key constraint "orders_accompaniment_script_id_fk"
+ order_client_fk_invalid     | t      | insert or update on table "orders" violates foreign key constraint "orders_clients_id_fk"
+ body_valid                  | t      | -
+ body_fk_invalid             | t      | insert or update on table "body_changes" violates foreign key constraint "body_changes_orders_id_fk"
+ order_mod_valid             | t      | -
+ order_fk_mod_invalid        | t      | insert or update on table "orders_modifications" violates foreign key constraint "orders_modifications_orders_id_fk"
+ order_mod_fk_invalid        | t      | insert or update on table "orders_modifications" violates foreign key constraint "orders_modifications_modifications_id_fk"
+(43 rows)
 
  amount | ok | not_ok 
 --------+----+--------
-     45 | 45 |      0
+     43 | 43 |      0
 (1 row)
 

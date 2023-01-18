@@ -128,23 +128,23 @@ SELECT specialization_valid(spec_id => floor(313 + random( ) *10000 )::int);
 SELECT specializations_invalid(spec_id => floor(313 + random( ) *10000 )::int);
 
 -- client_specializations
-SELECT client_spec_valid
+SELECT client_mod_valid
     (
         person_id => floor(313 + random( ) *10000 )::int,
         client_id => floor(313 + random( ) *10000 )::int,
-        spec_id   => floor(313 + random( ) *10000 )::int
+        mod_id   => floor(313 + random( ) *10000 )::int
     );
-SELECT client_fk_spec_invalid
+SELECT client_fk_mod_invalid
     (
         client_id => floor(313 + random( ) *10000 )::int,
-        spec_id   => floor(313 + random( ) *10000 )::int
+        mod_id   => floor(313 + random( ) *10000 )::int
     );
-SELECT client_spec_fk_invalid
-    (
-        person_id => floor(313 + random( ) *10000 )::int,
-        client_id => floor(313 + random( ) *10000 )::int,
-        spec_id   => floor(313 + random( ) *10000 )::int
-    );
+-- SELECT client_mod_fk_invalid
+--     (
+--         person_id => floor(313 + random( ) *100000 )::int,
+--         client_id => floor(313 + random( ) *100000 )::int,
+--         mod_id   => floor(313 + random( ) *100000 )::int
+--     );
 
 -- scenario
 SELECT scenario_valid

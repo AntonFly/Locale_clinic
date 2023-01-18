@@ -34,9 +34,12 @@ DROP FUNCTION accompaniment_invalid;
 DROP FUNCTION specialization_valid;
 DROP FUNCTION specializations_invalid;
 
-DROP FUNCTION client_spec_valid;
-DROP FUNCTION client_fk_spec_invalid;
-DROP FUNCTION client_spec_fk_invalid;
+-- DROP FUNCTION client_spec_valid;
+-- DROP FUNCTION client_fk_spec_invalid;
+-- DROP FUNCTION client_spec_fk_invalid;
+DROP FUNCTION client_mod_valid;
+DROP FUNCTION client_fk_mod_invalid;
+DROP FUNCTION client_mod_fk_invalid;
 
 DROP FUNCTION scenario_valid;
 DROP FUNCTION scenario_fk_invalid;

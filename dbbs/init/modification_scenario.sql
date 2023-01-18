@@ -10,6 +10,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -51,7 +52,7 @@ BEGIN
         END IF;        
 
         -- test
-        INSERT INTO modification_scenario (scanario_id, mod_id)
+        INSERT INTO modification_scenario (scenario_id, modification_id)
             VALUES (scen_id, id_mod);
 
         SELECT count(*) INTO res
@@ -64,7 +65,7 @@ BEGIN
         
     EXCEPTION WHEN OTHERS
     THEN
-        DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;
+        DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;
         DELETE FROM modifications WHERE id=id_mod;
         DELETE FROM scenario WHERE id=scen_id;
         DELETE FROM specializations WHERE id=id_spec;
@@ -73,7 +74,7 @@ BEGIN
         RETURN false;
     END;
     
-    DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;
+    DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;
     DELETE FROM modifications WHERE id=id_mod;
     DELETE FROM scenario WHERE id=scen_id;
     DELETE FROM specializations WHERE id=id_spec;
@@ -94,6 +95,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -123,7 +125,7 @@ BEGIN
         END IF;        
 
         -- test
-        INSERT INTO modification_scenario (scanario_id, mod_id)
+        INSERT INTO modification_scenario (scenario_id, modification_id)
             VALUES (scen_id, id_mod);
 
         SELECT count(*) INTO res
@@ -136,14 +138,14 @@ BEGIN
         
     EXCEPTION 
     WHEN foreign_key_violation THEN         
-        DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;        
+        DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;        
         DELETE FROM scenario WHERE id=scen_id;
         DELETE FROM specializations WHERE id=id_spec;
 
         INSERT INTO tests (name, status, comment) VALUES (test_name, true, SQLERRM);
         RETURN true;
     WHEN OTHERS THEN
-        DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;        
+        DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;        
         DELETE FROM scenario WHERE id=scen_id;
         DELETE FROM specializations WHERE id=id_spec;
         
@@ -151,7 +153,7 @@ BEGIN
         RETURN false;
     END;
     
-    DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;
+    DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;
     DELETE FROM scenario WHERE id=scen_id;
     DELETE FROM specializations WHERE id=id_spec;
 
@@ -172,6 +174,7 @@ DECLARE
 BEGIN
     GET DIAGNOSTICS stack = PG_CONTEXT;
     test_name := substring(stack from 'function (.*?) line')::regprocedure::text;    
+    test_name := SUBSTRING(test_name,0, POSITION('(' in test_name));
     IF test_name IS NULL THEN        
         test_name := substring(stack from 'SQL (.*?), строка');
     END IF;
@@ -190,7 +193,7 @@ BEGIN
         END IF;        
 
         -- test
-        INSERT INTO modification_scenario (scanario_id, mod_id)
+        INSERT INTO modification_scenario (scenario_id, modification_id)
             VALUES (scen_id, id_mod);
 
         SELECT count(*) INTO res
@@ -203,20 +206,20 @@ BEGIN
         
     EXCEPTION 
     WHEN foreign_key_violation THEN         
-        DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;
+        DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;
         DELETE FROM modifications WHERE id=id_mod;        
 
         INSERT INTO tests (name, status, comment) VALUES (test_name, true, SQLERRM);
         RETURN true;
     WHEN OTHERS THEN
-        DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;
+        DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;
         DELETE FROM modifications WHERE id=id_mod;        
          
         INSERT INTO tests (name, status, comment) VALUES (test_name, false, SQLERRM);
         RETURN false;
     END;
     
-    DELETE FROM modification_scenario WHERE scanario_id=scen_id AND mod_id=id_mod;
+    DELETE FROM modification_scenario WHERE scenario_id=scen_id AND modification_id=id_mod;
     DELETE FROM modifications WHERE id=id_mod;
     
     INSERT INTO tests (name, status, comment) VALUES (test_name, false, 'No error occured');
