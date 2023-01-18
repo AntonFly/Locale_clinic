@@ -18,7 +18,7 @@ import java.nio.file.Files;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-//@PreAuthorize("hasRole('ROLE_MANAGER')")
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequestMapping("/file")
 public class FileController {
 

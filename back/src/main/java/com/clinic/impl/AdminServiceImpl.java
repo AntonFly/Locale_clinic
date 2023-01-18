@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService{
 
         User user = pwdDropRequest.getUser();
 
-        String password = "LMAOOO";//alphaNumericString(10);
+        String password = alphaNumericString(10);
         String encodedPassword = passwordEncoder.encode(password);
 
         user.setPassword(encodedPassword);
@@ -128,7 +128,7 @@ public class AdminServiceImpl implements AdminService{
         user.setRole(role);
         user.setEmail(userData.getEmail());
 
-        String password = "LMAOOO";//alphaNumericString(10);
+        String password = alphaNumericString(10);
         String encodedPassword = passwordEncoder.encode(password);
 
         user.setPassword(encodedPassword);

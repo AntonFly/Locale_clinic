@@ -16,7 +16,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-//@PreAuthorize("hasRole('ROLE_SCIENTIST')")
+@PreAuthorize("hasRole('ROLE_SCIENTIST')")
 @RequestMapping("/scientist")
 public class ScientistController {
     private final OrderService orderService;
