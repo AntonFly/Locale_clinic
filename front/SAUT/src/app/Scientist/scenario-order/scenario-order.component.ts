@@ -10,7 +10,7 @@ import { ScientistService } from '../_services';
   templateUrl: './scenario-order.component.html',
   styleUrls: ['./scenario-order.component.css']
 })
-export class ScenarioOrderComponent implements OnInit {  
+export class ScenarioOrderComponent implements OnInit {
   @Input('client') client: Client;
   @Input('order') order: Order;
   @Output('close') close: EventEmitter<boolean> = new EventEmitter();
@@ -21,6 +21,7 @@ export class ScenarioOrderComponent implements OnInit {
 
   scenarioMsg:string = ""
   isScenarioError: boolean = false;
+  saved = false;
   constructor(private serv: ScientistService) { }
 
   ngOnInit() {
@@ -28,7 +29,7 @@ export class ScenarioOrderComponent implements OnInit {
     if(this.order.scenario)
     {
       this.isEditor = false;
-      this.curScenario = this.order.scenario;            
+      this.curScenario = this.order.scenario;
       this.sortCurScenario();
     }
     else {
@@ -44,29 +45,29 @@ export class ScenarioOrderComponent implements OnInit {
       )
     }
     this.mapScenario()
-        
-    //this.order.modifications.map(el => {return el.name});    
+
+    //this.order.modifications.map(el => {return el.name});
   }
 
-  getFIO(){        
+  getFIO(){
     return this.client.person.surname+' '+this.client.person.name.substring(0,1)+'. '+this.client.person.patronymic.substring(0,1)+'.';
   }
   closeClick() { this.close.emit(true); }
 
-  drop(event: CdkDragDrop<Modification>) {  
+  drop(event: CdkDragDrop<Modification>) {
     moveItemInArray(this.modsToEdit, event.previousIndex, event.currentIndex);
-    if(event.currentIndex == 0) 
+    if(event.currentIndex == 0)
       if(this.modsToEdit[event.currentIndex + 1].priority < this.modsToEdit[event.currentIndex].priority)
-      {                        
+      {
         this.modsToEdit[event.currentIndex].priority = this.modsToEdit[event.currentIndex + 1].priority == 0 ?
-        0 : this.modsToEdit[event.currentIndex + 1].priority - 1;          
+        0 : this.modsToEdit[event.currentIndex + 1].priority - 1;
       }
 
     if(event.currentIndex == this.modsToEdit.length - 1)
       if(this.modsToEdit[event.currentIndex - 1].priority > this.modsToEdit[event.currentIndex].priority)
-      {                        
+      {
         this.modsToEdit[event.currentIndex].priority = this.modsToEdit[event.currentIndex - 1].priority == 100?
-        100 : this.modsToEdit[event.currentIndex - 1].priority + 1;        
+        100 : this.modsToEdit[event.currentIndex - 1].priority + 1;
       }
 
     if( event.currentIndex != this.modsToEdit.length - 1 && event.currentIndex != 0)
@@ -75,7 +76,7 @@ export class ScenarioOrderComponent implements OnInit {
       this.modsToEdit[event.currentIndex].priority = left == 0 ? (this.modsToEdit[event.currentIndex - 1].priority + this.modsToEdit[event.currentIndex + 1].priority) / 2
       : this.modsToEdit[event.currentIndex - 1].priority + 1
     }
-      
+
     console.log(this.modsToEdit)
   }
 
@@ -83,7 +84,7 @@ export class ScenarioOrderComponent implements OnInit {
   {
     console.log(this.modsToEdit)
     if(this.order.scenario)
-    {      
+    {
       this.modsToEdit.forEach(el => {
         var a = this.curScenario.modificationScenarios.find(function(item, index, arr){
           return item.modification.id == el.id;
@@ -118,15 +119,15 @@ export class ScenarioOrderComponent implements OnInit {
     })
 
     var newInd = this.modsToEdit.findIndex(
-      function(item, index, array){                
+      function(item, index, array){
         if(index != ind)
           return mod.priority < item.priority;
         else return false;
     });
 
-    this.modsToEdit[ind].priority = mod.priority;    
+    this.modsToEdit[ind].priority = mod.priority;
     newInd = newInd - 1;
-    newInd = newInd < 0? this.modsToEdit.length - 1: newInd;    
+    newInd = newInd < 0? this.modsToEdit.length - 1: newInd;
     moveItemInArray(this.modsToEdit, ind, newInd);
     console.log(this.modsToEdit)
   }
@@ -143,8 +144,8 @@ export class ScenarioOrderComponent implements OnInit {
     });
   }
 
-  saveRes(){    
-    //id scen = this.order.scenario    
+  saveRes(){
+    //id scen = this.order.scenario
     //[{id_mod, prior}]
     var mods = this.modsToEdit.map(el => { return {"id":el.id, "priority":el.priority}})
     this.serv.updateScenario(this.order.scenario.id, mods).subscribe(
@@ -154,7 +155,8 @@ export class ScenarioOrderComponent implements OnInit {
         this.curScenario = res;
         this.sortCurScenario();
         this.mapScenario();
-        this.scenarioMsg = "Успешно сохранено"
+        this.scenarioMsg = "Успешно сохранено";
+        this.saved = true;
 
         setTimeout(() => {
           this.scenarioMsg = "";

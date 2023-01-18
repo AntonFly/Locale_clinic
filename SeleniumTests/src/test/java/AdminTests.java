@@ -49,7 +49,7 @@ public class AdminTests {
 
 
     @Test
-    public void createNewUser() {
+    public void createNewUser() throws InterruptedException {
         adminLogIn();
         String status = addUserPage.createUser(String.valueOf((long)(Math.random()*Math.pow(10,10))),
                 "04.05.2022",
@@ -62,8 +62,16 @@ public class AdminTests {
 
     @Test
     public void resetPassportAcceptTest() throws InterruptedException {
-        createNewUser();
+        adminLogIn();
+        String status = addUserPage.createUser(String.valueOf((long)(Math.random()*Math.pow(10,10))),
+                "04.05.2022",
+                userEmail,
+                "FrontTestName",
+                "FrontTestSurname",
+                "FrontTestPat");
+        assertEquals("Пользователь успешно добавлен", status);
         addUserPage.logOff();
+        Thread.sleep(1000);
         driver.get(ConfProperties.getProperty("loginpage"));
         loginPage.inputEmail(userEmail);
         loginPage.inputPwd(ConfProperties.getProperty("wrongPWD"));
@@ -75,8 +83,8 @@ public class AdminTests {
                 "после сброса пароля на указанную почту прийдет новый пароль.", resetStatus);
         Thread.sleep(5000);
         adminLogIn();
-        driver.get("http://localhost:4200/admin/recoverPass");
-        String status = recoverPassPage.resetPassword(userEmail);
+        driver.get("http://localhost:4200/#/admin/recoverPass");
+        status = recoverPassPage.resetPassword(userEmail);
 
         assertEquals("Пароль успешно сгенерирован", status);
         Thread.sleep(4000);

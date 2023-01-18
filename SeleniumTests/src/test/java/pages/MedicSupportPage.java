@@ -63,7 +63,7 @@ public class MedicSupportPage {
     @FindBy(xpath = "//tr[.//span[normalize-space(text()) = '17.01.2023']]//span[normalize-space(text()) = 'Изменить']")
     public WebElement matButtonWrapperSpan;
 
-    @FindBy(xpath = "//*[@id='mat-input-1']")
+    @FindBy(css = ".name")
     public WebElement implantNameInput;
 
     @FindBy(xpath = "//span[normalize-space(text()) = 'Готово']")
@@ -74,6 +74,10 @@ public class MedicSupportPage {
 
     @FindBy(css = ".form-ok")
     public WebElement status;
+
+
+
+    
 
     public MedicSupportPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -95,8 +99,9 @@ public class MedicSupportPage {
     }
 
     public String addImplant(String passport, String name, String order) throws InterruptedException {
-        clientSearchField.clear();
         Thread.sleep(5000);
+        clientSearchField.clear();
+        Thread.sleep(1000);
         clientSearchField.sendKeys(passport+ Keys.ENTER);
         clientSearchField.sendKeys(Keys.ENTER);
         searchIconMat.click();

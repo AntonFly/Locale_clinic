@@ -1,13 +1,14 @@
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.AddUserPage;
 import pages.LoginPage;
 
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LoginTest {
 
@@ -18,8 +19,8 @@ public class LoginTest {
 
     //profilePage = new ProfilePage(driver);
 
-    @BeforeClass
-    public static void setup() {
+    @BeforeEach
+    public void setup() {
         System.setProperty("webdriver.chrome.driver", "static/chromedriver.exe");
         driver = new ChromeDriver();
 
@@ -30,10 +31,10 @@ public class LoginTest {
 
     }
 
-    @AfterClass
-    public static void tearDown() throws InterruptedException {
+    @AfterEach
+    public void tearDown() throws InterruptedException {
         Thread.sleep(5000);
-        addUserPage.logOff();
+
         driver.close();
         driver.quit();
     }
@@ -49,11 +50,12 @@ public class LoginTest {
         //получаем отображаемый логин
         String user = addUserPage.getUserName();
         //и сравниваем его с логином из файла настроек
-        Assert.assertEquals(ConfProperties.getProperty("adminLogin"), user);
+        assertEquals(ConfProperties.getProperty("adminLogin"), user);
+        addUserPage.logOff();
     }
 
     @Test
-    public void resetPassportRequestTest(){
+    public void resetPassportRequestTest() throws InterruptedException {
         driver.get(ConfProperties.getProperty("loginpage"));
         loginPage.inputEmail(ConfProperties.getProperty("adminLogin"));
         loginPage.inputPwd(ConfProperties.getProperty("wrongPWD"));
@@ -63,7 +65,7 @@ public class LoginTest {
         //получаем отображаемый логин
         String resetStatus = loginPage.resetPassword();
         //и сравниваем его с логином из файла настроек
-        Assert.assertEquals("Запрос на сброс пароля успешно отправлен, " +
+        assertEquals("Запрос на сброс пароля успешно отправлен, " +
                 "после сброса пароля на указанную почту прийдет новый пароль.", resetStatus);
     }
 

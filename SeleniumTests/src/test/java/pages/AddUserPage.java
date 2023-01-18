@@ -62,7 +62,7 @@ public class AddUserPage {
     }
 
     public String createUser(String passport, String date, String email, String name,
-                             String surname, String patronymic){
+                             String surname, String patronymic) throws InterruptedException {
         passportInput.sendKeys(passport);
         dateInput.sendKeys(date);
         emailInput.sendKeys(email);
@@ -72,6 +72,7 @@ public class AddUserPage {
         roleSelector.click();
         managerRole.click();
         createUserButton.click();
+        Thread.sleep(5000);
         return status.getText();
     }
 

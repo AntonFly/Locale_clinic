@@ -15,6 +15,8 @@ export class NewUserComponent implements OnInit {
   formError: boolean = false;
   isLoading: boolean = false;
 
+  userSent = false;
+
   RolesToBd = {
     'Администратор': 'ROLE_ADMIN',
     'Менеджер': 'ROLE_MANAGER',
@@ -63,7 +65,7 @@ export class NewUserComponent implements OnInit {
     ]
   };
 
-  myDatepipe: DatePipe;  
+  myDatepipe: DatePipe;
 
   constructor(private fb: FormBuilder, private adminService: AdminService, datepipe: DatePipe) {
     this.myDatepipe = datepipe;
@@ -142,6 +144,7 @@ export class NewUserComponent implements OnInit {
 
           this.formMsg = 'Пользователь успешно добавлен';
           this.formError = false;
+          this.userSent = true;
 
           setTimeout( () =>
             this.formMsg = ''

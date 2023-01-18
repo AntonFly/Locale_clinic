@@ -3,18 +3,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.EngineerPage;
 import pages.LoginPage;
 import pages.MedicSupportPage;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MedicTests {
+public class EngineerTests {
     public static LoginPage loginPage;
 
-
-    public static MedicSupportPage medicSupportPage;
+    public static EngineerPage engineerPage;
 
     public static WebDriver driver;
 
@@ -27,7 +28,7 @@ public class MedicTests {
         driver = new ChromeDriver();
 
         loginPage = new LoginPage(driver);
-        medicSupportPage = new MedicSupportPage(driver);
+        engineerPage =  new EngineerPage(driver);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -40,7 +41,7 @@ public class MedicTests {
     @AfterEach
     public void tearDown() throws InterruptedException {
         Thread.sleep(5000);
-        medicSupportPage.logOff();
+        engineerPage.logOff();
         driver.close();
         driver.quit();
     }
@@ -48,25 +49,31 @@ public class MedicTests {
 
     @Test
     public void gettingSupportScript() throws InterruptedException {
-        medicLogIn();
-        String status = medicSupportPage.getSupportScript("1122334465","10");
-        assertEquals("Сценарий для специализации Агент", status);
+        engineerLogIn();
+        driver.get("http://localhost:4200/#/engineer/main");
+        assertTrue(engineerPage.getScenario("1122334465","10"));
     }
+
 
     @Test
-    public void addImplant() throws InterruptedException {
-        medicLogIn();
-        driver.get("http://localhost:4200/#/medic/reporting");
-        String status = medicSupportPage.addImplant("1122334465","FrontTestImplant","10");
-        assertEquals("Изменения сохранены", status);
+    public  void uploadGenome() throws InterruptedException {
+        engineerLogIn();
+        driver.get("http://localhost:4200/#/engineer/main");
+        assertTrue(engineerPage.uploadGenome(
+                "1122334465",
+                "10",
+                "C:\\Users\\antonAdmin\\OneDrive\\Рабочий стол\\test_genome.txt"));
     }
 
 
-    void medicLogIn(){
-        loginPage.inputEmail(ConfProperties.getProperty("medicLogin"));
-        loginPage.inputPwd(ConfProperties.getProperty("medicPwd"));
+
+    void engineerLogIn(){
+        loginPage.inputEmail(ConfProperties.getProperty("engineerLogin"));
+        loginPage.inputPwd(ConfProperties.getProperty("engineerPwd"));
         loginPage.logIn();
-        String user = medicSupportPage.getUserName();
-        assertEquals(ConfProperties.getProperty("medicLogin"), user);
+        String user = engineerPage.getUserName();
+        assertEquals(ConfProperties.getProperty("engineerLogin"), user);
     }
+
+
 }

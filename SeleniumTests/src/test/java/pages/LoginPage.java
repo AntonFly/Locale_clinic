@@ -40,9 +40,10 @@ public class LoginPage {
         this.button.click();
     }
     
-    public String resetPassword() {
+    public String resetPassword() throws InterruptedException {
         this.forgotpassSpan.click();
         this.resetConfirmationButton.click();
+        Thread.sleep(1000);
         return  this.formOkSpan.getText();
     }
 

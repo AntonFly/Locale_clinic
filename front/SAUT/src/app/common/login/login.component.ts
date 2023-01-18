@@ -146,9 +146,9 @@ export class LoginComponent implements OnInit {
       this.authenticationService.resetPWD(this.data.value).subscribe(
           res => {
             console.log(res);
-            this.send = true;
             this.formMsg = 'Запрос на сброс пароля успешно отправлен, ' +
               'после сброса пароля на указанную почту прийдет новый пароль.';
+            this.send = true;
             setTimeout
             (
               () => this.dialogRef.close(),

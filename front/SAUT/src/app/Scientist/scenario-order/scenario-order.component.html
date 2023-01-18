@@ -9,21 +9,21 @@
 <h4>Изменение сценария</h4>
 
 <div class="container">
-    <div class="editor-div" *ngIf="isEditor">    
+    <div class="editor-div" *ngIf="isEditor">
         <button class="RequestButtons" mat-raised-button color="primary" (click)="saveRes()" >Сохранить</button>
-        <span *ngIf="isScenarioError" class="message" style="margin-left:10px;color: red;">{{scenarioMsg}}</span>
-        <span *ngIf="!isScenarioError" class="message" style="margin-left:10px;color: green;">{{scenarioMsg}}</span>
+        <span *ngIf="isScenarioError" class="message" style="margin-left:10px;color: red;" >{{scenarioMsg}}</span>
+        <span *ngIf="!isScenarioError && saved" class="message" style="margin-left:10px;color: green;" id="save-ok">{{scenarioMsg}}</span>
         <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
             <div class="example-box" *ngFor="let movie of modsToEdit; let i = index" [attr.data-index]="i" cdkDrag>
             <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
             <!-- {{movie.name}} -->
             <app-priority-box
                 class="prior-box"
-                [mod]="movie" 
-                [index]="i+1" 
-                [prevIndex]="i ==0 ? -100 : modsToEdit[i-1].priority" 
+                [mod]="movie"
+                [index]="i+1"
+                [prevIndex]="i ==0 ? -100 : modsToEdit[i-1].priority"
                 (changeP)="priorityChanged($event)"
-                > 
+                >
             </app-priority-box>
 
             </div>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="editor-div" *ngIf="!isEditor">
-        <button class="RequestButtons" mat-raised-button color="primary" (click)="isEditor=true">Изменить</button>        
+        <button class="RequestButtons" mat-raised-button color="primary" (click)="isEditor=true">Изменить</button>
         <span *ngIf="isScenarioError" class="message" style="margin-left:10px;color: red;">{{scenarioMsg}}</span>
         <span *ngIf="!isScenarioError" class="message" style="margin-left:10px;color: green;">{{scenarioMsg}}</span>
         <!-- <div *ngFor="let mod of curScenario.modificationScenarios">{{mod.modification.name}}</div> -->
