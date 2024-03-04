@@ -2,6 +2,8 @@
 !.mvn/wrapper/maven-wrapper.jar
 /out/
 
+application.properties
+
 ### STS ###
 .apt_generated
 .classpath

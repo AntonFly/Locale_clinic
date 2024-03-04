@@ -1,0 +1,51 @@
+#Server
+server.port=7313
+
+#DB
+
+#spring.datasource.url=jdbc:postgresql://*
+#spring.datasource.username=*
+#spring.datasource.password=*
+#FOR deploy on helios
+spring.datasource.url=jdbc:postgresql://localhost:5432/studs
+spring.datasource.username=*
+spring.datasource.password=*
+
+
+#spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
+spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults = false
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans = true
+
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL9Dialect
+
+spring.datasource.initialization-mode=never
+#REST
+
+#Mailing
+
+spring.mail.host=smtp-mail.outlook.com
+spring.mail.port=587
+spring.mail.username=*
+spring.mail.password=*
+
+spring.mail.properties.mail.protocol=smtp
+spring.mail.properties.mail.tls=true
+
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.ssl.trust=smtp-mail.outlook.com
+
+##Debug JPA
+#logging.level.org.hibernate.SQL=DEBUG
+#logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+logging.level.org.springframework.web=INFO
+logging.level.org.hibernate=INFO
+server.tomcat.accesslog.enabled=true
+logging.file=../logs/SPRING_LOGS.log
+#JWT
+
+clinic.app.jwtSecret = INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313INAINAINA313
+clinic.app.jwtExpirationMs = 864000000
+
